@@ -28,7 +28,7 @@ public class Main {
                 play=false;
         }
         */
-
+        //Tests you can delete them if you want
         String[] temp = {"Proti Erotisi","Deuteri","Triti","Tetarti"};
         Question obj = new Question("Edo einai errotisi",5,temp);
         String[] A = obj.getResponses();
