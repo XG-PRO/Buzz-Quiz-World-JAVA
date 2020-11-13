@@ -31,8 +31,7 @@ public class Questions {
             type = 0;
         }
         if (type==0){
-            ArrayList<Integer> hash_keys = new ArrayList<>();
-            hash_keys.addAll(hash.keySet());
+            ArrayList<Integer> hash_keys = new ArrayList<>(hash.keySet());
             type = hash_keys.get(getRandomNumberUsingNextInt(0,hash_keys.size()));
         }
         ArrayList<Question> temp = hash.get(type);
