@@ -28,9 +28,15 @@ public class Questions {
         hash.get(type).add(new Question(name,type,responses_array));
     }
     public void get_random_question(int type){
-        if (type==0){
-            int random =getRandomNumberUsingNextInt(1,hash.keySet().size());
+        if (type<0 || type>5)
+        {
+
         }
+
+        if (type==0){
+            type = getRandomNumberUsingNextInt(1,hash.keySet().size());
+        }
+
 
     }
     public static int getRandomNumberUsingNextInt(int min, int max) {
