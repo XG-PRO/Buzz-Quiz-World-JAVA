@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.logging.SocketHandler;
+
 public class Main {
     public static void main(String[] args) {
     /*
@@ -27,13 +30,29 @@ public class Main {
             else
                 play=false;
         }
-        */
+
         //Tests you can delete them if you want
-        String[] temp = {"Proti Erotisi","Deuteri","Triti","Tetarti"};
-        Question obj = new Question("Edo einai errotisi",5,temp);
-        String[] A = obj.getResponses();
-        A[0] = "AAA";
+        */
+        Questions temp = new Questions();
+        temp.add_Question("Edo einai errotisi",1,new String[] {"Proti","Deuteri","Triti","Tetarti"});
+        temp.add_Question("Edo einai errotisi 1",2,new String[] {"Proti","Deuteri","Triti","Tetarti"});
+        temp.add_Question("Edo einai errotisi 1",2,new String[] {"Proti","Deuteri","Triti","Tetarti"});
+
+        Question obj = temp.get_random_question(0);
+
+        System.out.println(obj.getQuestion());
+        System.out.println(obj.getType());
+        System.out.println(obj.getVisited());
         System.out.println(obj.getResponses()[0]);
+        System.out.println(obj.getResponses()[1]);
+        System.out.println(obj.getResponses()[2]);
+        System.out.println(obj.getResponses()[3]);
+
+
+
+
+
+
     }
 }
 

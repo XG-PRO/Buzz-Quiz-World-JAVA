@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public class Questions {
 
@@ -10,6 +7,7 @@ public class Questions {
 
     public Questions() {
         question_array = new ArrayList<>();
+        hash = new HashMap<>();
     }
 
     /**
@@ -27,15 +25,33 @@ public class Questions {
         }
         hash.get(type).add(new Question(name,type,responses_array));
     }
-    public void get_random_question(int type){
+    public Question get_random_question(int type){
         if (type<0 || type>5)
         {
-
+            type = 0;
         }
-
         if (type==0){
-            type = getRandomNumberUsingNextInt(1,hash.keySet().size());
+            ArrayList<Integer> hash_keys = new ArrayList<>();
+            hash_keys.addAll(hash.keySet());
+            type = hash_keys.get(getRandomNumberUsingNextInt(0,hash_keys.size()));
         }
+        ArrayList<Question> temp = hash.get(type);
+        int pos = getRandomNumberUsingNextInt(0,temp.size());
+        if (!temp.get(pos).getVisited()){
+            return temp.get(pos);
+        }
+        for (int i = pos+1; i!=pos; i++)
+        {
+            if (i>=temp.size()){
+                i =0;
+            }
+            if(!temp.get(i).getVisited()){
+                return temp.get(pos);
+            }
+
+        }
+        System.out.println("Error!!!!!!!!!!!!!!!!");
+        return new Question("ERROR",-1, new String[]{"Error"});
 
 
     }
