@@ -1,30 +1,30 @@
 import java.util.*;
 
 public class Questions {
-
-    private ArrayList<Question> question_array;
-    private HashMap<Integer, ArrayList<Question>> hash;
-
+    private HashMap<String,ArrayList<Question>> hash; // A HashMap that key = category of question,
+                                                     // value =  an arraylist(question) that contains all the questions of the same category
+    private HashMap<String, Iterator<Question>> hashIterators;
     public Questions() {
-        question_array = new ArrayList<>();
+        //question_array = new ArrayList<>();
+        //hash = new HashMap<>();
         hash = new HashMap<>();
+        hashIterators = new HashMap<>();
+
     }
 
-    /**
-     *
-     * @param name The name of the question
-     * @param type The type of the question
-     * @param responses_array String array that contains the responses,
-     *                        THE FIRST RESPONSE IS THE RIGHT ONE
-     */
 
-    public void add_Question(String name, int type, String[] responses_array) {
+    /*
+    public void add_Question(String name, String type, String[] responses_array) {
         //question_array.add(new Question(name,type,responses_array));
         if (!hash.containsKey(type)){
             hash.put(type,new ArrayList<>());
         }
         hash.get(type).add(new Question(name,type,responses_array));
     }
+
+
+     */
+    /*
     public Question get_random_question(int type){
         if (type<0 || type>5)
         {
@@ -57,5 +57,58 @@ public class Questions {
     public static int getRandomNumberUsingNextInt(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min) + min;
+    }*/
+
+    public void addQuestion(String name,String type, ArrayList<String> responses_array){
+        Question obj = new Question(name,type,responses_array);
+        hash.putIfAbsent(obj.getType(), new ArrayList<>());
+        hash.get(obj.getType()).add(obj);
+        if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
+            Collections.shuffle(hash.get(obj.getType()));
+        }
+
+
+        hashIterators.putIfAbsent(obj.getType(), hash.get(obj.getType()).iterator());
+    }
+
+
+    /**
+     *
+     * @param type A string that contains the type of the question to be returned .
+     * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object is found it returns NULL
+     */
+    public Question getRandomQuestionWithType(String type){
+        Iterator<Question> it_current_type = hashIterators.get(type);
+        if (it_current_type.hasNext()){ return it_current_type.next();}
+        return null;
+    }
+
+    /**
+     * @return An object Question from a random type.
+     */
+    public Question getRandomQuestion(){
+        int pos = randint(0,hashIterators.size());
+        ArrayList<String> hash_keys = new ArrayList<>(hash.keySet());
+        if (hashIterators.get(hash_keys.get(pos)).hasNext()){
+            return getRandomQuestionWithType(hash_keys.get(pos));
+        }
+
+        for (int i = pos+1; i!=pos; i++)
+        {
+            if (i>=hash_keys.size()){
+                i =0;
+            }
+            if(hashIterators.get(hash_keys.get(pos)).hasNext()){
+                return getRandomQuestionWithType(hash_keys.get(pos));
+            }
+        }
+        return null;
+
+    }
+    private int randint(int min, int max) {
+        Random random = new Random();
+        return random.ints(min, max)
+                .findFirst()
+                .getAsInt();
     }
 }

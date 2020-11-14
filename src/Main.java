@@ -1,5 +1,4 @@
-import java.util.HashSet;
-import java.util.logging.SocketHandler;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,14 +31,13 @@ public class Main {
         }
 
         //Tests you can delete them if you want
-        */
+
         Questions temp = new Questions();
         temp.add_Question("Edo einai errotisi",1,new String[] {"Proti","Deuteri","Triti","Tetarti"});
         temp.add_Question("Edo einai errotisi 1",2,new String[] {"Proti","Deuteri","Triti","Tetarti"});
         temp.add_Question("Edo einai errotisi 1",2,new String[] {"Proti","Deuteri","Triti","Tetarti"});
 
         Question obj = temp.get_random_question(0);
-
         System.out.println(obj.getQuestion());
         System.out.println(obj.getType());
         System.out.println(obj.getVisited());
@@ -47,9 +45,40 @@ public class Main {
         System.out.println(obj.getResponses()[1]);
         System.out.println(obj.getResponses()[2]);
         System.out.println(obj.getResponses()[3]);
+*/
+
+        ArrayList<String> arr = new ArrayList<>();
+        arr.add("R1");arr.add("R2");
+
+        Questions qs = new Questions();
+
+        for (int i = 0; i<10; i++){
+            qs.addQuestion("Question","Type "+i,arr);
+        }
+        qs.getRandomQuestionWithType("Type 1");
+        for (int i =0; i<10; i++){
+            qs.getRandomQuestion();
+        }
 
 
 
+
+/*
+        HashMap<String,Integer> temp = new HashMap<>();
+        temp.putIfAbsent("Α",1);
+        temp.putIfAbsent("Α",2);
+
+        Iterator<String> it = temp.keySet().iterator();
+
+
+
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
+        it = temp.keySet().iterator();
+        System.out.println(it.next());
+        System.out.println(it.next());
+         */
 
 
 
