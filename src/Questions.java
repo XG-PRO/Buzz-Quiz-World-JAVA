@@ -83,32 +83,43 @@ public class Questions {
         return null;
     }
 
+
     /**
-     * @return An object Question from a random type.
+     * @return An object Question from a random type. if
      */
     public Question getRandomQuestion(){
         int pos = randint(0,hashIterators.size());
-        ArrayList<String> hash_keys = new ArrayList<>(hash.keySet());
-        if (hashIterators.get(hash_keys.get(pos)).hasNext()){
+        ArrayList<String> hash_keys = new ArrayList<>(hashIterators.keySet());
+        if(hashIterators.get(hash_keys.get(pos)).hasNext()){
             return getRandomQuestionWithType(hash_keys.get(pos));
         }
-
-        for (int i = pos+1; i!=pos; i++)
+        //System.out.println(pos);
+        for (int i = (pos+1)%hash_keys.size(); i!=pos; i=(i+1)%hash_keys.size())
         {
-            if (i>=hash_keys.size()){
-                i =0;
-            }
-            if(hashIterators.get(hash_keys.get(pos)).hasNext()){
-                return getRandomQuestionWithType(hash_keys.get(pos));
+            //System.out.println(i);
+            if(hashIterators.get(hash_keys.get(i)).hasNext()){
+                return getRandomQuestionWithType(hash_keys.get(i));
             }
         }
         return null;
 
     }
+
+    /**
+     * Resets all questions status to not shown before
+     */
+    public void resetAllViewed(){
+        for (String key: hash.keySet()){
+            hashIterators.put(key,hash.get(key).iterator());
+        }
+    }
+
+
     private int randint(int min, int max) {
         Random random = new Random();
         return random.ints(min, max)
                 .findFirst()
                 .getAsInt();
     }
+
 }

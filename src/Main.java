@@ -52,13 +52,19 @@ public class Main {
 
         Questions qs = new Questions();
 
-        for (int i = 0; i<10; i++){
-            qs.addQuestion("Question","Type "+i,arr);
+        for (int i = 0; i<5; i++){
+            qs.addQuestion("Question","Type "+(i+1),arr);
         }
-        qs.getRandomQuestionWithType("Type 1");
-        for (int i =0; i<10; i++){
-            qs.getRandomQuestion();
+        qs.getRandomQuestionWithType("Type 1").debugShowInfo();
+        for (int i = 0; i < 10; i++){
+            Question temp = qs.getRandomQuestion();
+            if(temp != null){
+                System.out.println("Type = "+temp.getType());
+            }
+            else System.out.println("Null");
+            //System.out.println("----");
         }
+
 
 
 
