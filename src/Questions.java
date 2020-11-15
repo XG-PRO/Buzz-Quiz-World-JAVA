@@ -30,7 +30,7 @@ public class Questions {
         hashIterators.putIfAbsent(obj.getType(), hash.get(obj.getType()).iterator());
     }
 
-    public void addQuestion(String name,String type, String[] responses_array){
+    public void addQuestion(String type,String name, String[] responses_array){
         List<String> al = new ArrayList<String>();
         al = Arrays.asList(responses_array);
         ArrayList temp = new ArrayList(al);
@@ -47,6 +47,7 @@ public class Questions {
     public Question getRandomQuestionWithType(String type){
         Iterator<Question> it_current_type = hashIterators.get(type);
         if (it_current_type.hasNext()){ return it_current_type.next();}
+        System.out.println("teleiosame");
         return null;
     }
 
@@ -87,6 +88,11 @@ public class Questions {
         return random.ints(min, max)
                 .findFirst()
                 .getAsInt();
+    }
+
+    public int show_number()
+    {
+        return hash.size();
     }
 
 }

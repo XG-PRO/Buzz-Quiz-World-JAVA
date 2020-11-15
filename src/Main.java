@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
     /*
@@ -51,24 +49,6 @@ public class Main {
 
         Game main_game = new Game();
         main_game.play();
-
-        ArrayList<String> arr = new ArrayList<>();
-        arr.add("R1");arr.add("R2");
-
-        Questions qs = new Questions();
-
-        for (int i = 0; i<5; i++){
-            qs.addQuestion("Question","Type "+(i+1), new String[]{"1", "2", "3", "4"} );
-        }
-        //qs.getRandomQuestionWithType("Type 1").debugShowInfo();
-        for (int i = 0; i < 10; i++){
-            Question temp = qs.getRandomQuestion();
-            if(temp != null){
-                temp.debugShowInfo();
-            }
-            else System.out.println("Null");
-            //System.out.println("----");
-        }
 
 
 
