@@ -21,11 +21,13 @@ public class Game {
     void play() {
         readFileQuestions();
         // Debug code
+        /*
         Question temp = qs.getRandomQuestion();
         while (temp != null) {
             temp.debugShowInfo();
             temp = qs.getRandomQuestion();
         }
+        */
     }
 
 
@@ -53,12 +55,12 @@ public class Game {
                 ArrayList<String> responses = new ArrayList<>(4);
                 for (int i = 2; i < 6; i++) {
                     responses.add(lineItems[i]);
-                    if (!lineItems[6].equals(lineItems[i])) {
-                        System.out.println("The question '"+lineItems[1]+"' has the true response at wrong pos");
+                    if (lineItems[6].equals(lineItems[i])) {
                         correct_pos = i - 2;
                     }
                 }
                 if (0 != correct_pos) { // The correct response isn't at pos 0
+                    System.out.println("The correct response isn't at pos 0 : '" + lineItems[1] + "' ");
                     Collections.swap(responses, correct_pos, 0); // Move the correct response at pos 1
                 }
                 correct_pos = 0;
