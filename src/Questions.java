@@ -1,25 +1,28 @@
 import java.util.*;
 
 public class Questions {
-    private HashMap<String,ArrayList<Question>> hash; // A HashMap that key = category of question,
-                                                     // value =  an arraylist(question) that contains all the questions of the same category
-    private HashMap<String, Iterator<Question>> hashIterators;
+    // @field hash is a hashMap (type of question : arraylist(question)) it contains all the questions filtered by type
+    private final HashMap<String,ArrayList<Question>> hash;
+
+    // @field hashIterators is a hash map (type of question : iterators) it contains iterators for every type of questions
+    private final HashMap<String, Iterator<Question>> hashIterators;
+
+
+    /**
+     * Default Constructor
+     */
     public Questions() {
-        //question_array = new ArrayList<>();
-        //hash = new HashMap<>();
         hash = new HashMap<>();
         hashIterators = new HashMap<>();
-
     }
 
 
     /**
-     *
-     * @param name
-     * @param type
-     * @param responses_array
+     * @param name A string that contains the question itself.
+     * @param type A string that contains the type of the question.
+     * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
-    public void addQuestion(String name,String type, ArrayList<String> responses_array){
+    public void addQuestion(String type, String name, ArrayList<String> responses_array){
         Question obj = new Question(name,type,responses_array);
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
         hash.get(obj.getType()).add(obj);
@@ -27,24 +30,7 @@ public class Questions {
             Collections.shuffle(hash.get(obj.getType()));
         }
 
-        hashIterators.putIfAbsent(type, hash.get(obj.getType()).iterator());
-    }
-
-    public void addQuestion(String type,String name, String[] responses_array){
-        List<String> al = new ArrayList<String>();
-        al = Arrays.asList(responses_array);
-        ArrayList temp = new ArrayList(al);
-        addQuestion(name,type,temp);
-
-    }
-    public void addQuestion(String type,String name, String res1, String res2, String res3, String res4){
-        ArrayList<String> temp = new ArrayList<>(4);
-        temp.add(res1);
-        temp.add(res2);
-        temp.add(res3);
-        temp.add(res4);
-        addQuestion(name,type,temp);
-
+        hashIterators.put(type, hash.get(obj.getType()).iterator());
     }
 
 
@@ -65,7 +51,7 @@ public class Questions {
      * @return An object Question from a random type. if
      */
     public Question getRandomQuestion(){
-        int pos = randint(0,hashIterators.size());
+        int pos = random_int(0,hashIterators.size());
         ArrayList<String> hash_keys = new ArrayList<>(hashIterators.keySet());
         if(hashIterators.get(hash_keys.get(pos)).hasNext()){
             return getRandomQuestionWithType(hash_keys.get(pos));
@@ -82,8 +68,9 @@ public class Questions {
 
     }
 
+
     /**
-     * Resets all questions status to not shown before
+     * Resets all questions status, to not shown before
      */
     public void resetAllViewed(){
         for (String key: hash.keySet()){
@@ -91,17 +78,14 @@ public class Questions {
         }
     }
 
-
-    private int randint(int min, int max) {
+    /**
+     *
+     * @param min The min int
+     * @param max The max int
+     * @return An random integer in [min,man]
+     */
+    private int random_int(int min, int max) {
         Random random = new Random();
-        return random.ints(min, max)
-                .findFirst()
-                .getAsInt();
+        return random.ints(min, max).findFirst().getAsInt();
     }
-
-    public int show_number()
-    {
-        return hash.size();
-    }
-
 }

@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class Question {
-    private String name;
-    private String type;
-    private ArrayList<String> responses_array;
+    private final String name;
+    private final String type;
+    private final ArrayList<String> responses_array;
     //private String path_to_image; TO BE ADDED TO THE NEXT VERSION
 
 
@@ -11,33 +11,30 @@ public class Question {
      * Default constructor
      * @param name A string that contains the question itself.
      * @param type A string that contains the type of the question.
-     * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS THE RIGHT ONE.
+     * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
     public Question(String name,String type, ArrayList<String> responses_array) {
         this.name = name;
         this.type = type;
         //Defensive Copying
-        this.responses_array = new ArrayList(responses_array.size());
-        for (String item: responses_array){
-            this.responses_array.add(item);
-        }
+        this.responses_array = new ArrayList<>(responses_array.size());
+        this.responses_array.addAll(responses_array);
     }
+
 
     /**
      * @return An ArrayList(String) that contains the responses, THE FIRST ONE IS THE CORRECT ONE.
      */
     public final ArrayList<String> getResponses(){
         //Defensive Copying
-        ArrayList<String> temp = new ArrayList(responses_array.size());
-        for(String item: this.responses_array){
-            temp.add(item);
-        }
+        ArrayList<String> temp = new ArrayList<>(responses_array.size());
+        temp.addAll(this.responses_array);
         return temp;
     }
 
 
     /**
-     * @return A string that contains the question itself.
+     * @return A string contain the question
      */
     public final String getQuestion() {
         return name;
@@ -51,7 +48,11 @@ public class Question {
     public final String  getType() {
         return type;
     }
-    public void debugShowInfo(){
+
+    /**
+     * Prints all the field of the question
+     */
+    public final void debugShowInfo(){
         System.out.println("----------");
         System.out.println("ID        : "+this.hashCode());
         System.out.println("Name      : "+this.name);
