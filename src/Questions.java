@@ -12,6 +12,7 @@ public class Questions {
 
     }
 
+
     /**
      *
      * @param name
@@ -26,14 +27,22 @@ public class Questions {
             Collections.shuffle(hash.get(obj.getType()));
         }
 
-
-        hashIterators.putIfAbsent(obj.getType(), hash.get(obj.getType()).iterator());
+        hashIterators.putIfAbsent(type, hash.get(obj.getType()).iterator());
     }
 
     public void addQuestion(String type,String name, String[] responses_array){
         List<String> al = new ArrayList<String>();
         al = Arrays.asList(responses_array);
         ArrayList temp = new ArrayList(al);
+        addQuestion(name,type,temp);
+
+    }
+    public void addQuestion(String type,String name, String res1, String res2, String res3, String res4){
+        ArrayList<String> temp = new ArrayList<>(4);
+        temp.add(res1);
+        temp.add(res2);
+        temp.add(res3);
+        temp.add(res4);
         addQuestion(name,type,temp);
 
     }
@@ -45,10 +54,10 @@ public class Questions {
      * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object is found it returns NULL
      */
     public Question getRandomQuestionWithType(String type){
-        Iterator<Question> it_current_type = hashIterators.get(type);
-        if (it_current_type.hasNext()){ return it_current_type.next();}
-        System.out.println("teleiosame");
-        return null;
+        if (hashIterators.get(type).hasNext()){
+            return hashIterators.get(type).next();
+        }
+        return null; // no more questions of this type exist
     }
 
 

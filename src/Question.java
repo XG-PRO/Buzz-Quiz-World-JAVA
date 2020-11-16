@@ -26,7 +26,7 @@ public class Question {
     /**
      * @return An ArrayList(String) that contains the responses, THE FIRST ONE IS THE CORRECT ONE.
      */
-    public ArrayList<String> getResponses(){
+    public final ArrayList<String> getResponses(){
         //Defensive Copying
         ArrayList<String> temp = new ArrayList(responses_array.size());
         for(String item: this.responses_array){
@@ -39,7 +39,7 @@ public class Question {
     /**
      * @return A string that contains the question itself.
      */
-    public String getQuestion() {
+    public final String getQuestion() {
         return name;
     }
 
@@ -48,7 +48,7 @@ public class Question {
      *
      * @return A string that contains the type of the question.
      */
-    public String getType() {
+    public final String  getType() {
         return type;
     }
     public void debugShowInfo(){

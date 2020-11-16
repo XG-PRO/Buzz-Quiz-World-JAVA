@@ -45,10 +45,17 @@ public class Main {
         System.out.println(obj.getResponses()[3]);
 */
 
-
-
+/*
         Game main_game = new Game();
         main_game.play();
+        */
+
+        Questions qs = new Questions();
+        for (int i = 0; i< 80; i++){
+            qs.addQuestion("Science"+(i%3),"How many different blood types can be found in the human body?","4","3","2","a4");
+        }
+
+        System.out.println(qs.getRandomQuestionWithType("Science2").getType());
 
 
 
