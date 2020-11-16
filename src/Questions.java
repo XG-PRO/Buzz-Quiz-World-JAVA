@@ -23,24 +23,39 @@ public class Questions {
      * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
     public void addQuestion(String type, String name, ArrayList<String> responses_array){
-        Question obj = new Question(name,type,responses_array);
+        Question obj = new Question(name, type, responses_array);
+        /*
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
         hash.get(obj.getType()).add(obj);
         if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
             Collections.shuffle(hash.get(obj.getType()));
         }
-
         hashIterators.put(type, hash.get(obj.getType()).iterator());
+        */
+        addQuestion(obj);
     }
 
 
     /**
-     *
-     * @param type A string that contains the type of the question to be returned .
-     * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object is found it returns NULL
+     * @param obj A question object
      */
-    public Question getRandomQuestionWithType(String type){
-        if (hashIterators.get(type).hasNext()){
+    public void addQuestion(Question obj) {
+
+        hash.putIfAbsent(obj.getType(), new ArrayList<>());
+        hash.get(obj.getType()).add(obj);
+        if (hash.get(obj.getType()).size() % 10 == 0) { // Every 5th element the arraylist that contains the questions will be shuffled;
+            Collections.shuffle(hash.get(obj.getType()));
+        }
+        hashIterators.put(obj.getType(), hash.get(obj.getType()).iterator());
+    }
+
+
+    /**
+     * @param type A string that contains the type of the question to be returned .
+     * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object found it returns NULL
+     */
+    public Question getRandomQuestionWithType(String type) {
+        if (hashIterators.get(type).hasNext()) {
             return hashIterators.get(type).next();
         }
         return null; // no more questions of this type exist
@@ -78,6 +93,7 @@ public class Questions {
         }
     }
 
+
     /**
      *
      * @param min The min int
@@ -88,4 +104,6 @@ public class Questions {
         Random random = new Random();
         return random.ints(min, max).findFirst().getAsInt();
     }
+
+
 }
