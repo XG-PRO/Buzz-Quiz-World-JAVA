@@ -64,5 +64,7 @@ public class Question {
         }
         System.out.println("----------");
     }
-
+    public String getRightResponse(){
+        return responses_array.get(0);
+    }
 }

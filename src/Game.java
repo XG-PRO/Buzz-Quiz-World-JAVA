@@ -5,8 +5,9 @@ import java.util.Collections;
 
 public class Game {
     // @field a questions object that keeps all the questions inside
-    private final Questions qs;
+    private Questions qs;
     private Parser ps;
+    private Rounds rs;
 
 
     /**
@@ -15,6 +16,7 @@ public class Game {
     public Game() {
         qs = new Questions();
         ps = new Parser();
+        rs = new Rounds(qs, ps);
     }
 
     /**
@@ -26,14 +28,7 @@ public class Game {
 
 
         // Debug code
-        Question temp = qs.getRandomQuestion();
-        ArrayList<Character> valid_responses = new ArrayList<>();
-        valid_responses.add('a');
-        valid_responses.add('b');
-        valid_responses.add('c');
-        valid_responses.add('d');
-        char current_respons = ps.showQuestion(temp, valid_responses);
-        System.out.println("You answered: " + current_respons);
+        rs.StartRound();
 
 
         /*
@@ -42,7 +37,6 @@ public class Game {
             temp = qs.getRandomQuestion();
         }
         */
-
 
     }
 
