@@ -30,6 +30,7 @@ public class Rounds{
     private void RoundType1(int n)
     {
         for (int i=0;i<n;i++) {
+
             Question temp = qs.getRandomQuestion();
             ArrayList<Character> valid_responses = new ArrayList<>();
             valid_responses.add('a');
@@ -42,7 +43,7 @@ public class Rounds{
 
            String current_respons = ps.showQuestion(temp, valid_responses);
 
-            if(current_respons==temp.getRightResponse())
+            if(current_respons.equals(temp.getRightResponse()))
                 System.out.println("You answered correctly :D");
             else
             {

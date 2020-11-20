@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Parser {
     private Scanner reader;
-    private String inputLine;
 
 
 
