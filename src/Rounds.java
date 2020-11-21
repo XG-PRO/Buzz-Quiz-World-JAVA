@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Rounds{
     private Questions qs;
     private Parser ps;
+    private String current_type= null;
 
 
     public Rounds(Questions qs, Parser ps) {
@@ -20,8 +21,9 @@ public class Rounds{
          * 4 - Quick Answer
          * 5 - Thermometer
          */
+        String current_type = null;
+        //MENU
         RoundType1(5);
-
 
 
 
@@ -30,8 +32,14 @@ public class Rounds{
     private void RoundType1(int n)
     {
         for (int i=0;i<n;i++) {
+            Question temp = qs.getRandomQuestionWithType(current_type);
+            if (temp == null) {
+                current_type = null;
+                temp = qs.getRandomQuestionWithType(current_type);
+            }
+            if (temp == null)
+                ps.Exit(0);  //RAN OUT OF QUESTIONS
 
-            Question temp = qs.getRandomQuestion();
             ArrayList<Character> valid_responses = new ArrayList<>();
             valid_responses.add('a');
             valid_responses.add('b');
@@ -39,22 +47,13 @@ public class Rounds{
             valid_responses.add('d');
 
 
+            String current_respons = ps.showQuestion(temp, valid_responses);
 
-
-           String current_respons = ps.showQuestion(temp, valid_responses);
-
-            if(current_respons.equals(temp.getRightResponse()))
-                System.out.println("You answered correctly :D");
-            else
-            {
-                System.out.println("You answered incorrectly :(");
-                System.out.println("The actual asnwer was: " + temp.getRightResponse());
-            }
-
-
-            System.out.println("You answered: " + current_respons);
+            ps.showAnswerResult(temp, current_respons);
         }
-        System.out.println("The round has ended");
+        ps.endRound();
+
+
     }
 
     private void RoundType2()

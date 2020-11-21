@@ -55,6 +55,10 @@ public class Questions {
      * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object found it returns NULL
      */
     public Question getRandomQuestionWithType(String type) {
+        if (type==null)
+        {
+            return getRandomQuestion();
+        }
         if (hashIterators.get(type).hasNext()) {
             return hashIterators.get(type).next();
         }
@@ -65,7 +69,7 @@ public class Questions {
     /**
      * @return An object Question from a random type. if
      */
-    public Question getRandomQuestion(){
+    private Question getRandomQuestion(){
         int pos = random_int(0,hashIterators.size());
         ArrayList<String> hash_keys = new ArrayList<>(hashIterators.keySet());
         if(hashIterators.get(hash_keys.get(pos)).hasNext()){
@@ -93,12 +97,18 @@ public class Questions {
         }
     }
 
-
+    public ArrayList<String> getTypes(){
+        ArrayList<String> temp = new ArrayList<>();
+        for (String key: hash.keySet()){
+            temp.add(key);
+        }
+        return temp;
+    }
     /**
      *
      * @param min The min int
      * @param max The max int
-     * @return An random integer in [min,man]
+     * @return A random integer in [min,man]
      */
     private int random_int(int min, int max) {
         Random random = new Random();
