@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Parser {
     private Scanner reader;
+    private Rounds rs;
 
 
 
@@ -30,9 +31,25 @@ public class Parser {
         return rp;
 
     }
+
+    public void Welcome()
+    {
+        System.out.println("Welcome to Buzz Quiz World! ");
+
+        System.out.println("\n" +
+                "██████╗░██╗░░░██╗███████╗███████╗  ░██████╗░██╗░░░██╗██╗███████╗\n" +
+                "██╔══██╗██║░░░██║╚════██║╚════██║  ██╔═══██╗██║░░░██║██║╚════██║\n" +
+                "██████╦╝██║░░░██║░░███╔═╝░░███╔═╝  ██║██╗██║██║░░░██║██║░░███╔═╝\n" +
+                "██╔══██╗██║░░░██║██╔══╝░░██╔══╝░░  ╚██████╔╝██║░░░██║██║██╔══╝░░\n" +
+                "██████╦╝╚██████╔╝███████╗███████╗  ░╚═██╔═╝░╚██████╔╝██║███████╗\n" +
+                "╚═════╝░░╚═════╝░╚══════╝╚══════╝  ░░░╚═╝░░░░╚═════╝░╚═╝╚══════╝");
+    }
+
+
+
     public String showQuestion(Question current_qs, ArrayList<Character> valid_responses){
         System.out.println("------------");
-        System.out.println(current_qs.getQuestion());
+        System.out.println(current_qs.getQuestion()+"\t ("+current_qs.getType()+")");
         ArrayList<String> resp = current_qs.getResponses();
         Collections.shuffle(resp);
         for (int i = 0; i < Math.min(valid_responses.size(),resp.size()); i++)
@@ -54,6 +71,81 @@ public class Parser {
         System.out.println("You answered: " + current_respons);
 
     }
+
+    public String[] showOptions(ArrayList<String> question_types, String old_question_type, String old_round_type)
+    {
+        String current_question_type = old_question_type;
+        String current_round_type = old_round_type;
+        char current_answer = 'a';
+        /*
+        ArrayList<Character> menu_question = new ArrayList<>();
+        menu_question.add('a');
+        menu_question.add('b');
+        menu_question.add('c');
+        ArrayList<Character> round_question = new ArrayList<>();
+        round_question.add('a'); // Right Answer
+        round_question.add('b');
+        */
+        //ArrayList<Character> menu_question = Utilities.CreateArrayListCharacter(new Character[] {'a','b','c'});
+        ArrayList<Character> menu_question = Utilities.generateLetters(3);
+        ArrayList<Character> round_question = Utilities.generateLetters(question_types.size());
+
+
+        while(current_answer != 'c')
+        {
+            current_answer = 'c';
+            System.out.println("------------");
+            System.out.println("MENOU");
+            System.out.println("    a. Change Round Type");
+            System.out.println("    b. Change Question Type");
+            System.out.println("    c. Start Round");
+            current_answer = getUserInput(menu_question);
+            switch (current_answer)
+            {
+                case 'a':
+                    System.out.println("------------");
+                    System.out.println("Current Round Type is: ");
+                    switch(current_round_type)
+                    {
+                        case "a":
+                            System.out.println("Right Answer");
+                            break;
+                        case "b":
+                            System.out.println("Bet");
+                            break;
+                        default:
+                            break;
+                    }
+                    System.out.println("Choose a Round Type: ");
+                    System.out.println("    a. Right Answer");
+                    System.out.println("    b. Bet");
+                    getUserInput(round_question);
+                    break;
+                case 'b':
+                    System.out.println("------------");
+                    System.out.println("Current Question Type is: ");
+                    if (current_question_type==null)
+                        System.out.println("    Random");
+                    else
+                        System.out.println("    " + current_question_type);
+
+
+                    System.out.println("Choose a Question Type: ");
+                    for (int i = 0; i < Math.min(round_question.size(),question_types.size()); i++)
+                        System.out.println(round_question.get(i)+" : "+question_types.get(i));
+
+                    current_question_type =  question_types.get(round_question.indexOf(getUserInput(round_question)));
+
+
+                    break;
+                default:
+                    break;
+            }
+        }
+        return new String[] {current_question_type, current_round_type};
+
+    }
+
 
     public void endRound()
     {

@@ -26,7 +26,7 @@ public class Game {
         readFileQuestions("files/quiz.tsv");
         //ask player name
 
-
+        ps.Welcome();
         // Debug code
         rs.StartRound();
 
