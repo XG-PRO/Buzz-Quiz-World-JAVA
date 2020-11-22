@@ -56,16 +56,20 @@ public class Parser {
         return resp.get(valid_responses.indexOf(getUserInput(valid_responses)));
     }
 
-    public void showAnswerResult(Question qs, String current_respons)
+    public boolean showAnswerResult(Question qs, String current_response)
     {
-        System.out.println("You answered: " + current_respons);
+        System.out.println("You answered: " + current_response);
 
-        if(current_respons.equals(qs.getRightResponse()))
+        if(current_response.equals(qs.getRightResponse()))
+        {
             System.out.println("You answered correctly :D");
+            return true;
+        }
         else
         {
             System.out.println("You answered incorrectly :(");
             System.out.println("The actual answer was: " + qs.getRightResponse());
+            return false;
         }
 
     }
@@ -74,9 +78,10 @@ public class Parser {
     {
         String current_question_type = old_question_type;
         String current_round_type = old_round_type;
+        question_types.add("Random");
         char current_answer = 'a';
 
-        ArrayList<Character> abc_menu_question = Utilities.generateLetters(3);
+        ArrayList<Character> abc_menu_question = Utilities.generateLetters(5);
         ArrayList<Character> abc_type_question = Utilities.generateLetters(question_types.size());
         ArrayList<Character> abc_type_round = Utilities.generateLetters(round_types.size());
 
@@ -84,10 +89,13 @@ public class Parser {
         while(current_answer != 'c')
         {
             System.out.println("------------");
-            System.out.println("MENOU");
-            System.out.println("\ta. Change Round Type");
-            System.out.println("\tb. Change Question Type");
+            System.out.println("MENU");
+            System.out.println("\ta. Change Round Type, current Round Type is: ["+ current_round_type +"]");
+            System.out.println("\tb. Change Question Type, current Question Type is: ["+ current_question_type +"]");
             System.out.println("\tc. Start Round");
+            System.out.println("\td. Info");
+            System.out.println("\te. End Game");
+
             current_answer = getUserInput(abc_menu_question);
             switch (current_answer)
             {
@@ -103,10 +111,7 @@ public class Parser {
                 case 'b':
                     System.out.println("------------");
                     System.out.println("Current Question Type is: ");
-                    if (current_question_type==null)
-                        System.out.println("\tRandom");
-                    else
-                        System.out.println("\t" + current_question_type);
+                    System.out.println("\t" + current_question_type);
 
 
                     System.out.println("Choose a Question Type: ");
@@ -115,8 +120,18 @@ public class Parser {
 
                     current_question_type =  question_types.get(abc_type_question.indexOf(getUserInput(abc_type_question)));
 
-
                     break;
+                case 'd':
+                    System.out.println("Welcome to Buzz Quiz World!\nThere are 2 types of rounds. " +
+                            "In each round you answer a set number of random questions from either a random category or a category of your selection.\n" +
+                            "By default, every round at the start is random, but you can change it from the MENU.\n" +
+                            "In Right Answer, the player get 1000 point for every right answer and loses none when answering incorrectly\n" +
+                            "In Bet, the player places a Bet regardless of their current point count, and gains double the amount of the points bet if he \n" +
+                            "answers correctly, and loses the sum if he answers incorrectly.");
+                    break;
+                case 'e':
+                    Exit(1);
+
                 default:
                     break;
             }
@@ -126,9 +141,11 @@ public class Parser {
     }
 
 
-    public void endRound()
+    public void endRound(int current_points)
     {
+
         System.out.println("The round has ended");
+        System.out.println("Your current points are: "+ current_points);
     }
 
 /*
@@ -145,7 +162,31 @@ public char showQuestion(Question current_qs, ArrayList<Character> valid_respons
     }
 
 
+
      */
+
+    public void showPoints(int points)
+    {
+        System.out.println("Your current score is: ["+points+"]");
+    }
+
+
+    public int Bet(ArrayList<String> bet_types, String current_question_type)
+    {
+        ArrayList<Character> abc_type_bet = Utilities.generateLetters(bet_types.size());
+
+
+        System.out.println("------------");
+        System.out.println("The current question category is: ["+current_question_type+"]");
+        System.out.println("Place your bet: ");
+        for (int i = 0; i < Math.min(abc_type_bet.size(),bet_types.size()); i++)
+            System.out.println(abc_type_bet.get(i)+" : "+bet_types.get(i));
+
+
+        String current_bet=  bet_types.get(abc_type_bet.indexOf(getUserInput(abc_type_bet)));
+
+        return Integer.parseInt(current_bet);
+    }
 
     public void Exit(int error){
         if (error == 1){// Normal exit

@@ -8,6 +8,7 @@ public class Game {
     private Questions qs;
     private Parser ps;
     private Rounds rs;
+    private Player pl;
 
 
     /**
@@ -16,7 +17,10 @@ public class Game {
     public Game() {
         qs = new Questions();
         ps = new Parser();
-        rs = new Rounds(qs, ps);
+        pl = new Player();
+        rs = new Rounds(qs, ps, pl);
+
+
     }
 
     /**
@@ -81,7 +85,7 @@ public class Game {
                     //System.out.println("The correct response isn't at pos 0 : '" + lineItems[index_question] + "' ");
                     Collections.swap(responses, correct_pos, 0); // Move the correct response at pos 1
                 }
-                correct_pos = 0;
+                
                 qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
 
             }

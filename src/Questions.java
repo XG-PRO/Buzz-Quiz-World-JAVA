@@ -55,7 +55,7 @@ public class Questions {
      * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object found it returns NULL
      */
     public Question getRandomQuestionWithType(String type) {
-        if (type==null)
+        if (type.equals("Random"))
         {
             return getRandomQuestion();
         }

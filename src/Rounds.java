@@ -1,19 +1,22 @@
 import java.util.ArrayList;
 
 public class Rounds{
-    private Questions qs;
-    private Parser ps;
-    private int number_of_rounds = 6;
-    private int number_of_questions = 5;
+    private final Questions qs;
+    private final Parser ps;
+    private final Player pl;
+    private final int number_of_rounds = 6;
+    private final int number_of_questions = 5;
 
-    private String current_question_type = null;
+    private String current_question_type = "Random";
 
-    private String current_round_type = "Right Answer";
+    private String current_round_type ;
     private ArrayList<String> rounds_types;
+    private ArrayList<String> bet_types;
 
-    public Rounds(Questions qs, Parser ps) {
+    public Rounds(Questions qs, Parser ps, Player pl) {
         this.qs = qs;
         this.ps = ps;
+        this.pl = pl;
 
 
         /*
@@ -26,6 +29,7 @@ public class Rounds{
          */
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
         rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet"});
+        bet_types = Utilities.CreateArrayListString(new String[] {"250","500","750","1000"});
 
     }
 
@@ -34,8 +38,9 @@ public class Rounds{
 
         for (int i = 0; i<number_of_rounds;i++) {
 
+            current_round_type = rounds_types.get(Utilities.random_int(0, rounds_types.size()));
+            System.out.println("Current Round Count: " + (i+1)+"/"+number_of_rounds);
             Menu();
-            System.out.println("Current Round Count: " + (i+1));
             switch (current_round_type)
             {
                 case "Bet":
@@ -56,12 +61,14 @@ public class Rounds{
             }
 
         }
+        ps.Exit(1);
 
 
     }
 
     private void Menu()
     {
+        ps.showPoints(pl.getPoints());
         String [] me = ps.showOptions(qs.getTypes(), rounds_types, current_question_type, current_round_type);
         current_round_type = me[1];
         current_question_type = me[0];
@@ -76,33 +83,58 @@ public class Rounds{
         for (int i=0;i<number_of_questions;i++) {
             Question temp = qs.getRandomQuestionWithType(current_question_type);
             if (temp == null) {
-                current_question_type = null;
-                temp = qs.getRandomQuestionWithType(null);
+                current_question_type = "Random";
+                temp = qs.getRandomQuestionWithType("Random");
             }
             if (temp == null)
                 ps.Exit(0);  //RAN OUT OF QUESTIONS
 
-            /*
-            ArrayList<Character> valid_responses = new ArrayList<>();
-            valid_responses.add('a');
-            valid_responses.add('b');
-            valid_responses.add('c');
-            valid_responses.add('d');
-            */
+
             ArrayList<Character> valid_responses = Utilities.generateLetters(4);
 
 
-            String current_respons = ps.showQuestion(temp, valid_responses);
 
-            ps.showAnswerResult(temp, current_respons);
+            String current_response = ps.showQuestion(temp, valid_responses);
+            if (ps.showAnswerResult(temp, current_response))
+            {
+                pl.increasePoints(1000);
+            }
+            ps.showPoints(pl.getPoints());
         }
-        ps.endRound();
+        ps.endRound(pl.getPoints());
 
 
     }
 
     private void RoundType_Bet()
     {
+        System.out.println("Round Type: Bet");
+        for (int i=0;i<number_of_questions;i++) {
+            Question temp = qs.getRandomQuestionWithType(current_question_type);
+            if (temp == null) {
+                current_question_type = "Random";
+                temp = qs.getRandomQuestionWithType("Random");
+            }
+            if (temp == null)
+                ps.Exit(0);  //RAN OUT OF QUESTIONS
+
+
+            ArrayList<Character> valid_responses = Utilities.generateLetters(4);
+
+            int bet = ps.Bet(bet_types, temp.getType());
+
+            String current_response = ps.showQuestion(temp, valid_responses);
+            if (ps.showAnswerResult(temp, current_response))
+            {
+                pl.increasePoints(bet*2);// Duplicate the points of the player
+            }
+            else
+            {
+                pl.decreasePoints(bet);
+            }
+            ps.showPoints(pl.getPoints());
+        }
+        ps.endRound(pl.getPoints());
 
     }
 

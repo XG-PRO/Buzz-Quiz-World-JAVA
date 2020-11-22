@@ -3,5 +3,6 @@ public class Main {
 
         Game main_game = new Game();
         main_game.play();
+
     }
 }
