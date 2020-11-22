@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Parser {
-    private Scanner reader;
+    private final Scanner reader;
 
 
 
@@ -51,13 +51,15 @@ public class Parser {
         ArrayList<String> resp = current_qs.getResponses();
         Collections.shuffle(resp);
         for (int i = 0; i < Math.min(valid_responses.size(),resp.size()); i++)
-            System.out.println(valid_responses.get(i)+" : "+resp.get(i));
+            System.out.println("\t" + valid_responses.get(i)+" : "+resp.get(i));
 
         return resp.get(valid_responses.indexOf(getUserInput(valid_responses)));
     }
 
     public void showAnswerResult(Question qs, String current_respons)
     {
+        System.out.println("You answered: " + current_respons);
+
         if(current_respons.equals(qs.getRightResponse()))
             System.out.println("You answered correctly :D");
         else
@@ -65,8 +67,6 @@ public class Parser {
             System.out.println("You answered incorrectly :(");
             System.out.println("The actual answer was: " + qs.getRightResponse());
         }
-
-        System.out.println("You answered: " + current_respons);
 
     }
 

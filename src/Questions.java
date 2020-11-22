@@ -67,7 +67,7 @@ public class Questions {
 
 
     /**
-     * @return An object Question from a random type. if
+     * @return An object Question from a random type.
      */
     private Question getRandomQuestion(){
         int pos = random_int(0,hashIterators.size());
@@ -98,11 +98,17 @@ public class Questions {
     }
 
     public ArrayList<String> getTypes(){
+        /*
         ArrayList<String> temp = new ArrayList<>();
         for (String key: hash.keySet()){
             temp.add(key);
         }
         return temp;
+         */
+
+        //ArrayList<String> temp = new ArrayList<>(hash.keySet());
+
+        return new ArrayList<>(hash.keySet());
     }
     /**
      *

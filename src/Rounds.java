@@ -32,7 +32,6 @@ public class Rounds{
 
     public void StartRound(){
 
-        String current_type = null;
         for (int i = 0; i<number_of_rounds;i++) {
 
             Menu();

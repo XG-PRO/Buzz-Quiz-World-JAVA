@@ -1,16 +1,15 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Utilities {
     public static ArrayList<String> CreateArrayListString(String [] IN) {
         ArrayList<String> OUT = new ArrayList<>(IN.length);
-        for (String item : IN)
-            OUT.add(item);
+        Collections.addAll(OUT, IN);
         return OUT;
     }
     public static ArrayList<Character> CreateArrayListCharacter(Character [] IN) {
         ArrayList<Character> OUT = new ArrayList<>(IN.length);
-        for (Character item : IN)
-            OUT.add(item);
+        Collections.addAll(OUT, IN);
         return OUT;
     }
     public static ArrayList<Character> generateLetters(int count){
