@@ -127,7 +127,9 @@ public class Parser {
                             "By default, every round at the start is random, but you can change it from the MENU.\n" +
                             "In Right Answer, the player get 1000 point for every right answer and loses none when answering incorrectly\n" +
                             "In Bet, the player places a Bet regardless of their current point count, and gains double the amount of the points bet if he \n" +
-                            "answers correctly, and loses the sum if he answers incorrectly.");
+                            "answers correctly, and loses the sum if he answers incorrectly.\n" +
+                            "If you've selected a category and the questions presented are not from the category you originally selected,\n" +
+                            "this means that there are no more questions remaining from that category and they are presented at random");
                     break;
                 case 'e':
                     Exit(1);
