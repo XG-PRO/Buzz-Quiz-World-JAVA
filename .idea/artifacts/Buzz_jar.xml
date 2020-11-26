@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Buzz:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Buzz_jar</output-path>
+    <root id="archive" name="Buzz.jar">
+      <element id="module-output" name="Buzz" />
+    </root>
+  </artifact>
+</component>
