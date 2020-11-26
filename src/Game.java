@@ -16,10 +16,8 @@ public class Game {
      */
     public Game() {
         qs = new Questions();
-        ps = new Parser();
         pl = new Player();
-        rs = new Rounds(qs, ps, pl);
-
+        rs = new Rounds(qs, pl);
 
     }
 
@@ -30,7 +28,7 @@ public class Game {
         readFileQuestions("files/quiz.tsv");
         //ask player name
 
-        ps.Welcome();
+        ps.printWelcome();
         // Debug code
         rs.StartRound();
 

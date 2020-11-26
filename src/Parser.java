@@ -2,79 +2,120 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/**
+ * This class implements the user interface.
+ * It is responsible to print and to get input to/from the terminal.
+ */
 public class Parser {
 
 
-    public Parser() {
-    }
-    private char getUserInput(ArrayList<Character> valid_responses){
+    /**
+     * A function that prints in the terminal responses and gets the user choice.
+     * If the user provides an responses that is not valid, it asks again for an input.
+     *
+     * @param abc_valid_responses An ArrayList(Character) containing the valid responses
+     * @return The response from the user. where response is <b>INSIDE</b> the provided parameter.
+     */
+    private static char getUserInput(ArrayList<Character> abc_valid_responses){
         Scanner reader = new Scanner(System.in);
-        String sp;
-        char rp = ' ';
+        String in_str;
+        char in_char = ' ';
         System.out.print("> ");
-        sp = reader.nextLine();
-        if (!sp.isEmpty()){
-            rp = sp.charAt(0);
+        in_str = reader.nextLine();
+        if (!in_str.isEmpty()){
+            in_char = in_str.charAt(0);
         }
-        while(!valid_responses.contains(rp)){
+        while(!abc_valid_responses.contains(in_char)){ // While the user doesn't give an proper response
             System.out.println("Please enter an acceptable response key (Only the first character of your answer will be counted):");
             System.out.print("> ");
-            sp = reader.nextLine();
-            if (!sp.isEmpty()){
-                rp = sp.charAt(0);
+            in_str = reader.nextLine();
+            if (!in_str.isEmpty()){
+                in_char = in_str.charAt(0);
             }
         }
-
-        return rp;
-
+        return in_char;
     }
 
-    public void Welcome()
+
+    /**
+     * Prints a welcome message
+     */
+    public static void printWelcome()
     {
         System.out.println("Welcome to ...");
-        System.out.println("\n" +
-                "██████╗░██╗░░░██╗███████╗███████╗  ░██████╗░██╗░░░██╗██╗███████╗\n" +
-                "██╔══██╗██║░░░██║╚════██║╚════██║  ██╔═══██╗██║░░░██║██║╚════██║\n" +
-                "██████╦╝██║░░░██║░░███╔═╝░░███╔═╝  ██║██╗██║██║░░░██║██║░░███╔═╝\n" +
-                "██╔══██╗██║░░░██║██╔══╝░░██╔══╝░░  ╚██████╔╝██║░░░██║██║██╔══╝░░\n" +
-                "██████╦╝╚██████╔╝███████╗███████╗  ░╚═██╔═╝░╚██████╔╝██║███████╗\n" +
-                "╚═════╝░░╚═════╝░╚══════╝╚══════╝  ░░░╚═╝░░░░╚═════╝░╚═╝╚══════╝");
-                
-
+        System.out.println(" ██████╗░██╗░░░██╗███████╗███████╗  ░██████╗░██╗░░░██╗██╗███████╗\n" +
+                            "██╔══██╗██║░░░██║╚════██║╚════██║  ██╔═══██╗██║░░░██║██║╚════██║\n" +
+                            "██████╦╝██║░░░██║░░███╔═╝░░███╔═╝  ██║██╗██║██║░░░██║██║░░███╔═╝\n" +
+                            "██╔══██╗██║░░░██║██╔══╝░░██╔══╝░░  ╚██████╔╝██║░░░██║██║██╔══╝░░\n" +
+                            "██████╦╝╚██████╔╝███████╗███████╗  ░╚═██╔═╝░╚██████╔╝██║███████╗\n" +
+                            "╚═════╝░░╚═════╝░╚══════╝╚══════╝  ░░░╚═╝░░░░╚═════╝░╚═╝╚══════╝\n\n");
     }
 
 
+    /**
+     * <p>This function prints the following:</p>
+     * <i>
+     *     a : Response 1
+     *     b : Response 2
+     *     c : Response 3
+     *         ...
+     * </i>
+     * @param abc_responses An ArrayList that contains the characters that the user can press.
+     * @param responses An ArrayList that contains the responses.
+     * @param shuffle_responses Boolean if true will shuffle the responses ArrayList <b>IT WILL CHANGE THE ORDER OF THE PROVIDED ARRAYLIST!</b>.
+     * @return A string that is INSIDE the responses ArrayList.
+     */
+    private static String printResponsesGetInput(ArrayList<Character> abc_responses,ArrayList<String> responses, boolean shuffle_responses){
+        if (shuffle_responses)
+            Collections.shuffle(responses);
+        for (int i = 0; i < Math.min(abc_responses.size(),responses.size()); i++)
+            System.out.println("\t" + abc_responses.get(i)+" : "+responses.get(i));
+        return responses.get(abc_responses.indexOf(getUserInput(abc_responses)));
+    }
 
-    public String showQuestion(Question current_qs, ArrayList<Character> valid_responses){
+
+    /**
+     * It just prints the question and waits for a response from the user.
+     * @param current_question An Question object to print.
+     * @param abc_responses An ArrayList that contains the characters that the user can press.
+     * @return A string that belongs in the Question responses.
+     */
+    public static String printQuestion(Question current_question, ArrayList<Character> abc_responses){
         System.out.println("------------");
-        System.out.println(current_qs.getQuestion()+"\t ("+current_qs.getType()+")");
-        ArrayList<String> resp = current_qs.getResponses();
-        Collections.shuffle(resp);
-        for (int i = 0; i < Math.min(valid_responses.size(),resp.size()); i++)
-            System.out.println("\t" + valid_responses.get(i)+" : "+resp.get(i));
-
-        return resp.get(valid_responses.indexOf(getUserInput(valid_responses)));
+        System.out.println(current_question.getQuestion()+"\t("+current_question.getType()+")");
+        return printResponsesGetInput(abc_responses, current_question.getResponses(), true);
     }
 
-    public boolean showAnswerResult(Question qs, String current_response)
+    /**
+     * Just prints if the response
+     * @param current_question An Question object.
+     * @param user_response What the user responded to the question.
+     * @return true if the user_response was correct/ the user responded correctly, false if he didnt.
+     */
+    public static boolean printResponseResult(Question current_question, String user_response)
     {
-        System.out.println("You answered: " + current_response);
-
-        if(current_response.equals(qs.getRightResponse()))
+        System.out.println("\nYou answered: " + user_response);
+        if(user_response.equals(current_question.getRightResponse()))
         {
             System.out.println("You answered correctly :D");
             return true;
         }
-        else
-        {
-            System.out.println("You answered incorrectly :(");
-            System.out.println("The actual answer was: " + qs.getRightResponse());
-            return false;
-        }
-
+        System.out.println("You answered incorrectly :(");
+        System.out.println("\tThe actual answer was: " + current_question.getRightResponse()+"\n");
+        return false;
     }
 
-    public String[] showOptions(ArrayList<String> question_types, ArrayList<String> round_types,String old_question_type, String old_round_type)
+
+    /**
+     * A function that prints the menu that let the use change the next round type, and Questions type.
+     *
+     * @param question_types An Arraylist that all the Questions types
+     * @param round_types An Arraylist that all the types of round
+     * @param old_question_type The current questions type.
+     * @param old_round_type The current round type.
+     * @return An String[2] that [0] = current_question_type, [1] = round_type.
+     */
+    public static String[] printMENU(ArrayList<String> question_types, ArrayList<String> round_types,String old_question_type, String old_round_type)
     {
         String current_question_type = old_question_type;
         String current_round_type = old_round_type;
@@ -83,13 +124,13 @@ public class Parser {
 
         ArrayList<Character> abc_menu_question = Utilities.generateLetters(5);
         ArrayList<Character> abc_type_question = Utilities.generateLetters(question_types.size());
-        ArrayList<Character> abc_type_round = Utilities.generateLetters(round_types.size());
-
+        ArrayList<Character> abc_types_rounds = Utilities.generateLetters(round_types.size());
 
         while(current_answer != 'c')
         {
-            System.out.println("------------");
-            System.out.println("MENU");
+            System.out.println("\n------------");
+
+            System.out.println("Round Menu");
             System.out.println("\ta. Change Round Type, current Round Type is: ["+ current_round_type +"]");
             System.out.println("\tb. Change Question Type, current Question Type is: ["+ current_question_type +"]");
             System.out.println("\tc. Start Round");
@@ -103,33 +144,27 @@ public class Parser {
                     System.out.println("------------");
                     System.out.println("Current Round Type is: "+current_round_type);
                     System.out.println("Choose a Round Type: ");
-                    for (int i = 0; i < Math.min(abc_type_round.size(),round_types.size()); i++)
-                        System.out.println(abc_type_round.get(i)+" : "+round_types.get(i));
 
-                    current_round_type =  round_types.get(abc_type_round.indexOf(getUserInput(abc_type_round)));
+                    current_round_type = printResponsesGetInput(abc_types_rounds,round_types,false);
                     break;
                 case 'b':
                     System.out.println("------------");
                     System.out.println("Current Question Type is: ");
                     System.out.println("\t" + current_question_type);
-
-
                     System.out.println("Choose a Question Type: ");
-                    for (int i = 0; i < Math.min(abc_type_question.size(),question_types.size()); i++)
-                        System.out.println(abc_type_question.get(i)+" : "+question_types.get(i));
 
-                    current_question_type =  question_types.get(abc_type_question.indexOf(getUserInput(abc_type_question)));
-
+                    current_question_type =  printResponsesGetInput(abc_type_question, question_types,false);
                     break;
                 case 'd':
-                    System.out.println("Welcome to Buzz Quiz World!\nThere are 2 types of rounds. " +
+                    System.out.println("------INFO------\n" +
+                            "Welcome to Buzz Quiz World!\nThere are 2 types of rounds.\n" +
                             "In each round you answer a set number of random questions from either a random category or a category of your selection.\n" +
-                            "By default, every round at the start is random, but you can change it from the MENU.\n" +
-                            "In Right Answer, the player get 1000 point for every right answer and loses none when answering incorrectly\n" +
-                            "In Bet, the player places a Bet regardless of their current point count, and gains double the amount of the points bet if he \n" +
-                            "answers correctly, and loses the sum if he answers incorrectly.\n" +
+                            "By default, every question and round type is Random, but that can be changed before the start of every round (Round Menu)\n\n" +
                             "If you've selected a category and the questions presented are not from the category you originally selected,\n" +
-                            "this means that there are no more questions remaining from that category and they are presented at random");
+                            "this means that there are no more questions remaining from that category and they are presented randomly.\n\n"+
+                            "Types of Rounds:\n"+
+                            "\t1.Right Answer, the player get 1000 point for every right answer and loses none when answering incorrectly\n" +
+                            "\t2.Bet, the player places a Bet regardless of their points, if he answers correctly he gains double if not he loses points accordingly to his Bet");
                     break;
                 case 'e':
                     Exit(1);
@@ -143,50 +178,55 @@ public class Parser {
     }
 
 
-    public void endRound(int current_points)
-    {
-
+    /**
+     * This function print the "The round has ended" along with the points.
+     * @param current_points The player points.
+     */
+    public static void printEndRound(int current_points){
         System.out.println("The round has ended");
-        System.out.println("Your current points are: "+ current_points);
+        showPoints(current_points);
     }
 
 
-    public void showPoints(int points)
-    {
+    /**
+     * Prints the Player points
+     * @param points int player points
+     */
+    public static void showPoints(int points){
         System.out.println("Your current score is: ["+points+"]");
     }
 
 
-    public int Bet(ArrayList<String> bet_types, String current_question_type)
+    /**
+     * Ask from the user to place a bet
+     * @param bet_types An ArrayList that contains the bets that the user can choose.
+     * @param current_question_type A String that contains the question type of the current question.
+     * @return An int with the value of the bet.
+     */
+    public static int Bet(ArrayList<String> bet_types, String current_question_type)
     {
         ArrayList<Character> abc_type_bet = Utilities.generateLetters(bet_types.size());
-
-
         System.out.println("------------");
         System.out.println("The current question category is: ["+current_question_type+"]");
         System.out.println("Place your bet: ");
-        for (int i = 0; i < Math.min(abc_type_bet.size(),bet_types.size()); i++)
-            System.out.println(abc_type_bet.get(i)+" : "+bet_types.get(i));
-
-
-        String current_bet=  bet_types.get(abc_type_bet.indexOf(getUserInput(abc_type_bet)));
+        String current_bet=  printResponsesGetInput(abc_type_bet, bet_types, false);
 
         return Integer.parseInt(current_bet);
     }
 
-    public void Exit(int error){
+
+    /**
+     * A method that prints endMessages and exits
+     * @param error if error == 1 prints "Thank you for playing", if error == 0 prints No more questions error.
+     */
+    public static void Exit(int error){
         if (error == 1){// Normal exit
             System.out.println("Thank you for playing");
             System.exit(0);
         }
-        if (error == 0) // No more questions
-        {
-            System.out.println("There are no more questions in the directory. You answered them all!");
+        else if (error == 0){// No more questions
+            System.out.println("Sadly there are no more questions in the directory. You answered them all?");
             System.exit(1);
         }
-
     }
-
 }
-
-
