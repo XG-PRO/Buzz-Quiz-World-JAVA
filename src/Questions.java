@@ -1,12 +1,14 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class Questions {
     // @field hash is a hashMap (type of question : arraylist(question)) it contains all the questions filtered by type
-    private final HashMap<String,ArrayList<Question>> hash;
+    private final HashMap<String, ArrayList<Question>> hash;
 
     // @field hashIterators is a hash map (type of question : iterators) it contains iterators for every type of questions
     private final HashMap<String, Iterator<Question>> hashIterators;
-
 
     /**
      * Default Constructor
@@ -18,11 +20,11 @@ public class Questions {
 
 
     /**
-     * @param name A string that contains the question itself.
-     * @param type A string that contains the type of the question.
+     * @param name            A string that contains the question itself.
+     * @param type            A string that contains the type of the question.
      * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
-    public void addQuestion(String type, String name, ArrayList<String> responses_array){
+    public void addQuestion(String type, String name, ArrayList<String> responses_array) {
         Question obj = new Question(name, type, responses_array);
         /*
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
@@ -51,12 +53,11 @@ public class Questions {
 
 
     /**
-     * @param type A string that contains the type of the question to be returned .
+     * @param type A string that contains the type of the question to be returned. If type is "Random" it returns a Random type question
      * @return An object Question with the specified type that HASN'T BEEN REQUESTED AGAIN if no object found it returns NULL
      */
     public Question getRandomQuestionWithType(String type) {
-        if (type.equals("Random"))
-        {
+        if (type.equals("Random")) {
             return getRandomQuestion();
         }
         if (hashIterators.get(type).hasNext()) {
@@ -69,17 +70,16 @@ public class Questions {
     /**
      * @return An object Question from a random type.
      */
-    private Question getRandomQuestion(){
-        int pos = random_int(0,hashIterators.size());
+    private Question getRandomQuestion() {
+        int pos = Utilities.random_int(hashIterators.size());
         ArrayList<String> hash_keys = new ArrayList<>(hashIterators.keySet());
-        if(hashIterators.get(hash_keys.get(pos)).hasNext()){
+        if (hashIterators.get(hash_keys.get(pos)).hasNext()) {
             return getRandomQuestionWithType(hash_keys.get(pos));
         }
         //System.out.println(pos);
-        for (int i = (pos+1)%hash_keys.size(); i!=pos; i=(i+1)%hash_keys.size())
-        {
+        for (int i = (pos + 1) % hash_keys.size(); i != pos; i = (i + 1) % hash_keys.size()) {
             //System.out.println(i);
-            if(hashIterators.get(hash_keys.get(i)).hasNext()){
+            if (hashIterators.get(hash_keys.get(i)).hasNext()) {
                 return getRandomQuestionWithType(hash_keys.get(i));
             }
         }
@@ -91,35 +91,17 @@ public class Questions {
     /**
      * Resets all questions status, to not shown before
      */
-    public void resetAllViewed(){
-        for (String key: hash.keySet()){
-            hashIterators.put(key,hash.get(key).iterator());
+    public void resetAllViewed() {
+        for (String key : hash.keySet()) {
+            hashIterators.put(key, hash.get(key).iterator());
         }
     }
 
-    public ArrayList<String> getTypes(){
-        /*
-        ArrayList<String> temp = new ArrayList<>();
-        for (String key: hash.keySet()){
-            temp.add(key);
-        }
-        return temp;
-         */
 
-        //ArrayList<String> temp = new ArrayList<>(hash.keySet());
-
+    /**
+     * @return an Arraylist of all the types of questions
+     */
+    public ArrayList<String> getTypes() {
         return new ArrayList<>(hash.keySet());
     }
-    /**
-     *
-     * @param min The min int
-     * @param max The max int
-     * @return A random integer in [min,man]
-     */
-    private int random_int(int min, int max) {
-        Random random = new Random();
-        return random.ints(min, max).findFirst().getAsInt();
-    }
-
-
 }

@@ -43,7 +43,7 @@ public class Parser {
     public static void printWelcome()
     {
         System.out.println("Welcome to ...");
-        System.out.println(" ██████╗░██╗░░░██╗███████╗███████╗  ░██████╗░██╗░░░██╗██╗███████╗\n" +
+        System.out.println("██████╗░██╗░░░██╗███████╗███████╗  ░██████╗░██╗░░░██╗██╗███████╗\n" +
                             "██╔══██╗██║░░░██║╚════██║╚════██║  ██╔═══██╗██║░░░██║██║╚════██║\n" +
                             "██████╦╝██║░░░██║░░███╔═╝░░███╔═╝  ██║██╗██║██║░░░██║██║░░███╔═╝\n" +
                             "██╔══██╗██║░░░██║██╔══╝░░██╔══╝░░  ╚██████╔╝██║░░░██║██║██╔══╝░░\n" +
@@ -229,4 +229,26 @@ public class Parser {
             System.exit(1);
         }
     }
+
+
+    /**
+     * Prints the current round type (ex "Round Type : "+type")
+     * @param type The current round type
+     */
+    public static void PrintRoundType(String type){
+        System.out.println("Round Type : "+type);
+    }
+
+
+    /**
+     * Prints the current round number/count (ex "Current Round Count: 1/5")
+     * @param current The current round type
+     * @param last The last round number
+     *
+     */
+    public static void PrintRoundNumber(int current, int last){
+        System.out.println("Current Round Count : "+ current + "/" +last);
+    }
+
+
 }

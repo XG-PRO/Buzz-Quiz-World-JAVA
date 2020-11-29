@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.*;
+import java.util.Random;
 
 public class Utilities {
     public static ArrayList<String> CreateArrayListString(String [] IN) {
@@ -24,8 +24,14 @@ public class Utilities {
             OUT.add(alphabet.charAt(i));
         return OUT;
     }
-    public static int random_int(int min, int max) {
-            Random random = new Random();
-            return random.ints(min, max).findFirst().getAsInt();
+
+    /**
+     * Generates a random int in a range [0,max].
+     * @param max The max value must be max>0;
+     * @return The random int
+     */
+    public static int random_int(int max) {
+            return new Random().nextInt(max);
+            //return random.ints(min, max).findFirst().getAsInt();
         }
 }

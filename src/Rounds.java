@@ -1,44 +1,51 @@
 import java.util.ArrayList;
 
-public class Rounds{
-    private final Questions question_obj;
-    private final Player player_obj;
-    private final int number_of_rounds = 6;
-    private final int number_of_questions = 5;
+/**
+ * This class implements the logic of each round. It could be implemented with inheritance but..
+ * we decided instead to use methods to implement each type of round.
+ */
+public class Rounds {
 
-    private String current_question_type = "Random";
+    private final Questions questions_obj; // A questions object to get questions
+    private final Player player_obj; // A player object to change his points
+    private final int number_of_questions = 5; // The number of questions for each round
+    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds
+    private final ArrayList<String> bet_types;   // A arraylist that contains all the bets the use can bet (ex 250,500...)
+    private String current_question_type = "Random"; // The initial round question type
+    private String current_round_type; // The current round type
 
-    private String current_round_type;
-    private ArrayList<String> rounds_types;
-    private ArrayList<String> bet_types;
 
-    public Rounds(Questions question_obj, Player player_obj) {
-        this.question_obj = question_obj;
+    /**
+     * Default Constructor
+     *
+     * @param questions_obj A Questions object that contains all the questions.
+     * @param player_obj    A Player object to change the points
+     */
+    public Rounds(Questions questions_obj, Player player_obj) {
+        this.questions_obj = questions_obj;
         this.player_obj = player_obj;
 
-        /*
-         * Run Rounds:
-         * 1 - Right Answer
-         * 2 - Bet
-         * 3 - Stop The Counter
-         * 4 - Quick Answer
-         * 5 - Thermometer
-         */
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
-        rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet"});
-        bet_types = Utilities.CreateArrayListString(new String[] {"250","500","750","1000"});
+        rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
+        bet_types = Utilities.CreateArrayListString(new String[]{"250", "500", "750", "1000"});
 
     }
 
-    public void StartRound(){
 
-        for (int i = 0; i<number_of_rounds;i++) {
+    /**
+     * This method starts the rounds
+     */
+    public void StartRound() {
 
-            current_round_type = rounds_types.get(Utilities.random_int(0, rounds_types.size()));
-            System.out.println("Current Round Count: " + (i+1)+"/"+number_of_rounds);
-            Menu();
-            switch (current_round_type)
-            {
+        // The number of rounds
+        int number_of_rounds = 6;
+        for (int i = 0; i < number_of_rounds; i++) {
+
+            current_round_type = rounds_types.get(Utilities.random_int(rounds_types.size())); // Each Round Type is picked randomly but the user can change it
+            //System.out.println("Current Round Count: " + (i+1)+"/"+number_of_rounds);
+            Parser.PrintRoundNumber(i + 1, number_of_rounds); //
+            RoundMenu();
+            switch (current_round_type) {
                 case "Bet":
                     RoundType_Bet();
                     break;
@@ -59,40 +66,44 @@ public class Rounds{
         }
         Parser.Exit(1);
 
-
     }
 
-    private void Menu()
-    {
+    /**
+     * This method when it is called shows the Menu before each round
+     * letting the use choose the type of questions and round he wants.
+     * <b>THIS METHOD CHANGES THE FIELDS "current_round_type" AND "current_question_type"<b/>
+     */
+    private void RoundMenu() {
         Parser.showPoints(player_obj.getPoints());
-        String [] me = Parser.printMENU(question_obj.getTypes(), rounds_types, current_question_type, current_round_type);
+        String[] me = Parser.printMENU(questions_obj.getTypes(), rounds_types, current_question_type, current_round_type);
         current_round_type = me[1];
         current_question_type = me[0];
 
     }
 
 
-
-    private void RoundType_RightAnswer()
-    {
-        System.out.println("Round Type: Right Answer");
-        for (int i=0;i<number_of_questions;i++) {
-            Question temp = question_obj.getRandomQuestionWithType(current_question_type);
+    /**
+     * This method implements the Right Answer
+     * It can change the Player,Questions  objects
+     */
+    private void RoundType_RightAnswer() {
+        Parser.PrintRoundType("Right Answer");
+        for (int i = 0; i < number_of_questions; i++) {
+            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
             if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
                 current_question_type = "Random";
-                temp = question_obj.getRandomQuestionWithType("Random");
+                temp = questions_obj.getRandomQuestionWithType("Random");
             }
-            if (temp == null)
+            if (temp == null) {
                 Parser.Exit(0);  //RAN OUT OF QUESTIONS
-
+                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
+            }
 
             ArrayList<Character> valid_responses = Utilities.generateLetters(4);
 
 
-
             String current_response = Parser.printQuestion(temp, valid_responses);
-            if (Parser.printResponseResult(temp, current_response))
-            {
+            if (Parser.printResponseResult(temp, current_response)) {
                 player_obj.increasePoints(1000);
             }
             Parser.showPoints(player_obj.getPoints());
@@ -102,30 +113,32 @@ public class Rounds{
 
     }
 
-    private void RoundType_Bet()
-    {
-        System.out.println("Round Type: Bet");
-        for (int i=0;i<number_of_questions;i++) {
-            Question temp = question_obj.getRandomQuestionWithType(current_question_type);
+
+    /**
+     * This method implements the Bet
+     * It can change the Player,Questions  objects
+     */
+    private void RoundType_Bet() {
+        Parser.PrintRoundType("Bet");
+        for (int i = 0; i < number_of_questions; i++) {
+            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
             if (temp == null) {
                 current_question_type = "Random";
-                temp = question_obj.getRandomQuestionWithType("Random");
+                temp = questions_obj.getRandomQuestionWithType("Random");
             }
-            if (temp == null)
+            if (temp == null) {
                 Parser.Exit(0);  //RAN OUT OF QUESTIONS
-
+                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
+            }
 
             ArrayList<Character> valid_responses = Utilities.generateLetters(4);
 
             int bet = Parser.Bet(bet_types, temp.getType());
 
             String current_response = Parser.printQuestion(temp, valid_responses);
-            if (Parser.printResponseResult(temp, current_response))
-            {
-                player_obj.increasePoints(bet*2);// Duplicate the points of the player
-            }
-            else
-            {
+            if (Parser.printResponseResult(temp, current_response)) {
+                player_obj.increasePoints(bet * 2);// Duplicate the points of the player
+            } else {
                 player_obj.decreasePoints(bet);
             }
             Parser.showPoints(player_obj.getPoints());
@@ -134,18 +147,15 @@ public class Rounds{
 
     }
 
-    private void RoundType_StopTheCounter()
-    {
+    private void RoundType_StopTheCounter() {
 
     }
 
-    private void RoundType_QuickAnswer()
-    {
+    private void RoundType_QuickAnswer() {
 
     }
 
-    private void RoundType_Thermometer()
-    {
+    private void RoundType_Thermometer() {
 
     }
 }

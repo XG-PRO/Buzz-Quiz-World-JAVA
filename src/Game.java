@@ -5,10 +5,9 @@ import java.util.Collections;
 
 public class Game {
     // @field a questions object that keeps all the questions inside
-    private Questions qs;
-    private Parser ps;
-    private Rounds rs;
-    private Player pl;
+    private final Questions qs;
+    private final Rounds rs;
+    private final Player pl;
 
 
     /**
@@ -22,17 +21,16 @@ public class Game {
     }
 
     /**
-     * Starts the game logic
+     * Starts the game
      */
     void play() {
         readFileQuestions("files/quiz.tsv");
-        //ask player name
 
-        ps.printWelcome();
-        // Debug code
+        Parser.printWelcome();
+
         rs.StartRound();
 
-
+        // Debug code
         /*
         while (temp != null) {
             temp.debugShowInfo();
@@ -83,7 +81,10 @@ public class Game {
                     //System.out.println("The correct response isn't at pos 0 : '" + lineItems[index_question] + "' ");
                     Collections.swap(responses, correct_pos, 0); // Move the correct response at pos 1
                 }
-                
+                if (lineItems[index_type].equals("Random")) {
+                    System.out.println("The type of question '" + lineItems[index_question] + "' CAN NOT BE 'Random'!\n");
+                    throw new Exception();
+                }
                 qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
 
             }
