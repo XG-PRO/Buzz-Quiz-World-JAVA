@@ -3,8 +3,12 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/** The Game Class initiates the start of the game
+ * after gathering the resources needed (questions from file)**/
+
 public class Game {
     // @field a questions object that keeps all the questions inside
+    // The below parameters are used to complement the usage of the corresponding classes
     private final Questions qs;
     private final Rounds rs;
     private final Player pl;

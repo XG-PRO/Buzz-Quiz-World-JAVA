@@ -156,15 +156,21 @@ public class Parser {
                     current_question_type =  printResponsesGetInput(abc_type_question, question_types,false);
                     break;
                 case 'd':
-                    System.out.println("------INFO------\n" +
-                            "Welcome to Buzz Quiz World!\nThere are 2 types of rounds.\n" +
+                    System.out.println("------INFO------\n\n" +
+                            "Welcome to Buzz Quiz World!\n This is a Quiz similar to television shows.\n\n" +
+                            "There are 2 types of rounds. There are a lot of categories with random questions each, and 4 potential answers to accompany them\n" +
+                            "You can handle MENU and other options using the alphabetical keys shown in the screen before \n" +
+                            "each option. You must press the Enter key after inserting an answer key\n\n" +
                             "In each round you answer a set number of random questions from either a random category or a category of your selection.\n" +
                             "By default, every question and round type is Random, but that can be changed before the start of every round (Round Menu)\n\n" +
                             "If you've selected a category and the questions presented are not from the category you originally selected,\n" +
-                            "this means that there are no more questions remaining from that category and they are presented randomly.\n\n"+
+                            "this means that there are no more questions remaining from that category and they will be presented randomly.\n\n"+
                             "Types of Rounds:\n"+
-                            "\t1.Right Answer, the player get 1000 point for every right answer and loses none when answering incorrectly\n" +
-                            "\t2.Bet, the player places a Bet regardless of their points, if he answers correctly he gains double if not he loses points accordingly to his Bet");
+                            "1.[Right Answer], the player gets 1000 point for every right answer and loses none when answering incorrectly\n" +
+                            "2.[Bet], the player places a Bet of a certain amount of points from the given options,\n " +
+                            "regardless of their points. If they answer correctly he gains double the amount bet, while if they don't,\n" +
+                            "they lose points equal to their initial bet.\n\n" +
+                            "That is all. In short, answer correctly and win! Have fun!");
                     break;
                 case 'e':
                     Exit(1);

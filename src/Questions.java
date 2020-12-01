@@ -3,6 +3,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/** This class handles the logic and usable functions
+ * in regards to the Questions of the Quiz
+ *
+ */
 public class Questions {
     // @field hash is a hashMap (type of question : arraylist(question)) it contains all the questions filtered by type
     private final HashMap<String, ArrayList<Question>> hash;
@@ -40,6 +44,8 @@ public class Questions {
 
     /**
      * @param obj A question object
+     * Since each question added uses tha hash method, every time a question is shown to the user,
+     * it is indicated as answered and thus never shown again until restart
      */
     public void addQuestion(Question obj) {
 
@@ -69,6 +75,9 @@ public class Questions {
 
     /**
      * @return An object Question from a random type.
+     * Utilizes the getRandomQuestionWithType but using every single type,
+     * in other words either the type the player chooses or a random one chosen
+     * in this function. If no questions remain at all, the function returns null
      */
     private Question getRandomQuestion() {
         int pos = Utilities.random_int(hashIterators.size());
@@ -89,7 +98,7 @@ public class Questions {
 
 
     /**
-     * Resets all questions status, to not shown before
+     * Resets all questions status, to not shown before, useful for restarts
      */
     public void resetAllViewed() {
         for (String key : hash.keySet()) {

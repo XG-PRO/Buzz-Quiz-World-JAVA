@@ -1,3 +1,5 @@
+/** The Main class basically starts the game and does nothing else**/
+
 public class Main {
     public static void main(String[] args) {
 

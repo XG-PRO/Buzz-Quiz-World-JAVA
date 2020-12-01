@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class Rounds {
 
     private final Questions questions_obj; // A questions object to get questions
-    private final Player player_obj; // A player object to change his points
+    private final Player player_obj; // A player object to use the Player class and change their points
     private final int number_of_questions = 5; // The number of questions for each round
-    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds
-    private final ArrayList<String> bet_types;   // A arraylist that contains all the bets the use can bet (ex 250,500...)
+    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added antyime
+    private final ArrayList<String> bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
     private String current_question_type = "Random"; // The initial round question type
     private String current_round_type; // The current round type
 
@@ -84,7 +84,9 @@ public class Rounds {
 
     /**
      * This method implements the Right Answer
-     * It can change the Player,Questions  objects
+     * It functions by presenting questions equal to the set number of questions per Round (constant in our case),
+     * and handles what is shown and gather from the user in order for their points to be handled.
+     * It can change the Player, Questions  objects
      */
     private void RoundType_RightAnswer() {
         Parser.PrintRoundType("Right Answer");
@@ -116,6 +118,7 @@ public class Rounds {
 
     /**
      * This method implements the Bet
+     * Functions exactly as Right Answer, with the added method of betting points
      * It can change the Player,Questions  objects
      */
     private void RoundType_Bet() {
@@ -146,6 +149,8 @@ public class Rounds {
         Parser.printEndRound(player_obj.getPoints());
 
     }
+
+    /** Unused types of Round which can be implemented in the future if needed **/
 
     private void RoundType_StopTheCounter() {
 

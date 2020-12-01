@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/** This class construct the basic structure
+ * of each question to be used in the quiz
+ * after gathering information from the
+ * file that was read from Game.java
+ */
 public class Question {
     protected final String name;
     protected final String type;
@@ -51,7 +56,7 @@ public class Question {
     }
 
     /**
-     * Prints all the field of the question
+     * Prints all the field of the question, used by the developer mainly
      */
     public void debugShowInfo() {
         System.out.println("----------");

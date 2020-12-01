@@ -2,7 +2,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/** A generic class that is static and global
+ * to assist the developers in further improving
+ * the consistency of the code
+ */
 public class Utilities {
+
+    /** These 3 functions basically ease the structure and internal development
+     * of the MENU for the parser. They can all be generally used, either for input or output.
+     * The most useful one is the generateLetters function which does
+     * all of the above but even more dynamically.
+     * @param IN and count indicate the options or number of options the developer wants to generate
+     * @return a string OUT which contains ansswer protocols in order.
+     */
+
     public static ArrayList<String> CreateArrayListString(String [] IN) {
         ArrayList<String> OUT = new ArrayList<>(IN.length);
         Collections.addAll(OUT, IN);
