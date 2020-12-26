@@ -1,28 +1,29 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class GUI {
     //Panels
     private JPanel mainPanel;
     private JPanel questionPanel;
     private JPanel typePanel;
-    private JPanel responesPanel;
+    private JPanel responsesPanel;
     private JPanel centerPanel;
-    private JPanel below_qs_panel;
-    private JPanel scorepanel;
+    private JPanel belowQsPanel;
+    private JPanel scorePanel;
 
 
-    private JLabel txt_type_qs;
-    private JLabel txt_type_round;
-    private JTextArea txt_question_name;
+    private JLabel txtTypeQs;
+    private JLabel txtTypeRound;
+    private JTextArea txtQuestionName;
 
-    private JLabel[] txt_res_keys;
-    private JLabel[] txt_res;
-
-    private JLabel[] txt_players_points;
-
+    private JLabel[] txtResKeys;
+    private JLabel[] txtRes;
+    private JLabel[] txtPlayersPoints;
 
     //private ImageIcon icon;
 
@@ -30,36 +31,32 @@ public class GUI {
 
     public GUI() {
 
+        font_global = new Font("Comic Sans", Font.BOLD, 24);
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
 
-        ImageIcon icon;
-        String iconPath = "splash/button.png";
-        URL imageURL = getClass().getResource(iconPath);
-        icon = new ImageIcon(imageURL);
-        txt_players_points = new JLabel[2];
-        txt_players_points[0] = new JLabel("PL1 100");
-        txt_players_points[1] = new JLabel("PL2 200");
+        txtPlayersPoints = new JLabel[2];
+        txtPlayersPoints[0] = new JLabel("PL1: 100");
+        txtPlayersPoints[1] = new JLabel("PL2: 200");
 
-        txt_res_keys = new JLabel[4];
-        txt_res_keys[0] = new JLabel("Q 1");
-
-        txt_res_keys[1] = new JLabel("W 2");
-        txt_res_keys[2] = new JLabel("E 3");
-        txt_res_keys[3] = new JLabel("R 4");
-
-        txt_res = new JLabel[4];
-        txt_res[0] = new JLabel("Response 1");
-
-        txt_res[1] = new JLabel("Response 2");
-        txt_res[2] = new JLabel("Response 3");
-        txt_res[3] = new JLabel("Response 4");
+        // Init the KEY Responses Array
+        txtResKeys = new JLabel[4];
+        txtResKeys[0] = new JLabel("Q 1");
+        txtResKeys[1] = new JLabel("W 2");
+        txtResKeys[2] = new JLabel("E 3");
+        txtResKeys[3] = new JLabel("R 4");
+        // Init the Responses Array
+        txtRes = new JLabel[4];
+        txtRes[0] = new JLabel("Response 1");
+        txtRes[1] = new JLabel("Response 2");
+        txtRes[2] = new JLabel("Response 3");
+        txtRes[3] = new JLabel("Response 4");
 
 
-        font_global = new Font("Arial Black", Font.BOLD, 22);
-
+        // Make the frame
         JFrame frame = new JFrame();
         frame.setTitle("Buzz Quiz World 2020");
-        frame.setSize(800, 490);
-        frame.setResizable(false);
+        frame.setSize(900, 600);
+        //frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
@@ -102,10 +99,10 @@ public class GUI {
         frame.setVisible(true);
 
          */
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
 
+        // Init the mainPanel
         mainPanel = new JPanel(new BorderLayout());
-
+        // Init the centerPanel
         centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         typePanel = new JPanel();
@@ -115,79 +112,78 @@ public class GUI {
         questionPanel.setBackground(Color.white);
         questionPanel.setOpaque(true);
 
+        // Init the below_qs_panel
+        belowQsPanel = new JPanel();
+        belowQsPanel.setLayout(new BoxLayout(belowQsPanel,BoxLayout.X_AXIS));
 
-        below_qs_panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        responesPanel = new JPanel(new GridBagLayout());
+        // Init the responsesPanel
+        responsesPanel = new JPanel(new GridBagLayout());
+        // Init grid bag for responsesPanel
         GridBagConstraints c = new GridBagConstraints();
+        responsesPanel.setOpaque(false);
 
-        responesPanel.setBackground(Color.LIGHT_GRAY);
-        //responesPanel.setLayout(new GridLayout(4,1));
-        //responesPanel.setLayout(new BoxLayout(responesPanel,BoxLayout.Y_AXIS));
+        txtQuestionName = new JTextArea("Which organ could grow back if you donated part of it?");
+        txtQuestionName.setFont(font_global);
+        txtQuestionName.setOpaque(true);
+        txtQuestionName.setLineWrap(true);
+        txtQuestionName.setWrapStyleWord(true);
+        txtQuestionName.setPreferredSize(new Dimension((int) (frame.getWidth()*0.90), 110));
+        txtQuestionName.setEnabled(false);
+        txtQuestionName.setDisabledTextColor(new Color(61,72,85));
+        questionPanel.setMinimumSize(new Dimension(frame.getWidth(), 110));
+        questionPanel.setMaximumSize(new Dimension(frame.getWidth(), 110));
+        questionPanel.setPreferredSize(new Dimension(frame.getWidth(), 110));
+        questionPanel.add(txtQuestionName);
 
-        //responesPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-
-        String questionString = "Which planet is covered in thick poisonous clouds, trapping all the heat it absorbs from the Sun?";
-        //questionString = questionString.substring(0,53) + "-" + questionString.substring(53);
-        txt_question_name = new JTextArea(questionString);
-        txt_question_name.setFont(font_global);
-
-        txt_question_name.setOpaque(true);
-        txt_question_name.setLineWrap(true);
-        txt_question_name.setWrapStyleWord(true);
-        txt_question_name.setPreferredSize(new Dimension(700, 90));
-        txt_question_name.setEnabled(false);
-        txt_question_name.setDisabledTextColor(Color.BLACK);
-        questionPanel.setMaximumSize(new Dimension(800, 100));
-
-        txt_type_qs = new JLabel("Stop the Timer");
-        txt_type_qs.setFont(font_global);
-        txt_type_qs.setForeground(Color.white);
-        txt_type_round = new JLabel("Technology");
-        txt_type_round.setForeground(Color.white);
-        txt_type_round.setFont(font_global);
+        txtTypeQs = new JLabel("Stop the Timer");
+        txtTypeQs.setFont(font_global);
+        txtTypeQs.setForeground(Color.white);
+        txtTypeRound = new JLabel("Technology");
+        txtTypeRound.setForeground(Color.white);
+        txtTypeRound.setFont(font_global);
 
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
-        typePanel.add(txt_type_round);
+        typePanel.add(txtTypeRound);
         typePanel.add(Box.createHorizontalGlue());
-        typePanel.add(txt_type_qs);
+        typePanel.add(txtTypeQs);
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
 
-
-        scorepanel = new JPanel();
-        scorepanel.setBackground(Color.BLACK);
-        scorepanel.setLayout(new BoxLayout(scorepanel, BoxLayout.X_AXIS));
-        scorepanel.add(Box.createRigidArea(new Dimension(40, 0)));
+        scorePanel = new JPanel();
+        scorePanel.setBackground(Color.BLACK);
+        scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.X_AXIS));
+        scorePanel.add(Box.createRigidArea(new Dimension(40, 0)));
         JLabel txt_round_count = new JLabel("ROUND 1");
         txt_round_count.setForeground(Color.WHITE);
         txt_round_count.setFont(font_global);
-        scorepanel.add(txt_round_count);
-        scorepanel.add(Box.createHorizontalGlue());
+        scorePanel.add(txt_round_count);
+        scorePanel.add(Box.createHorizontalGlue());
 
         for (int i = 0; i < 2; i++) {
-            txt_players_points[i].setFont(font_global);
-            txt_players_points[i].setForeground(Color.WHITE);
-            scorepanel.add(txt_players_points[i]);
-            scorepanel.add(Box.createHorizontalGlue());
+            txtPlayersPoints[i].setFont(font_global);
+            txtPlayersPoints[i].setForeground(Color.WHITE);
+            scorePanel.add(txtPlayersPoints[i]);
+            scorePanel.add(Box.createHorizontalGlue());
         }
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
 
 
-        questionPanel.add(txt_question_name);
+
 
         c.ipadx = 50;
         for (int i = 0; i < 4; i++) {
             c.gridx = 0;
             c.gridy = i;
             c.fill = GridBagConstraints.HORIZONTAL;
-            txt_res_keys[i].setFont(font_global);
-
-            txt_res_keys[i].setHorizontalAlignment(JLabel.CENTER);
-            responesPanel.add(txt_res_keys[i], c);
+            txtResKeys[i].setFont(font_global);
+            txtResKeys[i].setForeground(Color.WHITE);
+            txtResKeys[i].setHorizontalAlignment(JLabel.CENTER);
+            responsesPanel.add(txtResKeys[i], c);
 
             c.gridx += 1;
-            txt_res[i].setFont(font_global);
-            txt_res[i].setHorizontalAlignment(JLabel.LEFT);
-            responesPanel.add(txt_res[i], c);
+            txtRes[i].setFont(font_global);
+            txtRes[i].setForeground(Color.WHITE);
+            txtRes[i].setHorizontalAlignment(JLabel.LEFT);
+            responsesPanel.add(txtRes[i], c);
         }
         /*
         txt_res_key_1 = new JLabel("   Q    1");
@@ -251,28 +247,60 @@ public class GUI {
 
          */
 
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 25)));
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         //centerPanel.add(Box.createVerticalGlue());
 
         centerPanel.add(questionPanel);
 
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerPanel.add(Box.createGlue());
+        //centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        //centerPanel.add(Box.createGlue());
 
-        below_qs_panel.add(responesPanel);
-        below_qs_panel.add(new JButton("Image Placeholder"));
+        belowQsPanel.add(responsesPanel);
+        //below_qs_panel.add(Box.createGlue());
+        BufferedImage myPicture = null;
+        try {
+            File f = new File(getClass().getResource("splash/placeholder.png").getFile());
+            myPicture = ImageIO.read(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //below_qs_panel.setBackground(Color.BLACK);
+        belowQsPanel.setOpaque(false);
+        JLabel temp_image_placeholder = new JLabel(new ImageIcon(myPicture));
+        temp_image_placeholder.setOpaque(true);
+        //temp_image_placeholder.setMinimumSize(new Dimension(350,350));
+        //temp_image_placeholder.setMaximumSize(new Dimension(350,350));
+        temp_image_placeholder.setPreferredSize(new Dimension(350,350));
 
-        centerPanel.add(below_qs_panel);
+
+        belowQsPanel.add(temp_image_placeholder);
+        //below_qs_panel.add(Box.createGlue());
+        belowQsPanel.add(Box.createHorizontalGlue());
+        belowQsPanel.add(Box.createRigidArea(new Dimension(100, 50)));
+        belowQsPanel.add(Box.createHorizontalGlue());
+
+        centerPanel.add(belowQsPanel);
+        centerPanel.setBackground(new Color(61,72,85));
         centerPanel.add(Box.createHorizontalGlue());
 
         //centerPanel.add(Box.createVerticalGlue());
 
-        centerPanel.add(Box.createRigidArea(new Dimension(40, 100)));
+        //centerPanel.add(Box.createRigidArea(new Dimension(40, 100)));
+        mainPanel.setBackground(Color.WHITE);
         mainPanel.add(typePanel, BorderLayout.PAGE_START);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(scorepanel, BorderLayout.PAGE_END);
-
+        mainPanel.add(scorePanel, BorderLayout.PAGE_END);
+        frame.setFocusable(true); //Make it focusable to be able the KeyListener to lister for key presses
         frame.add(mainPanel);
+
+        frame.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                System.out.println("KEY PRESSES "+evt.getKeyChar());
+                if (evt.getKeyChar() == 'A'){
+                    JOptionPane.showMessageDialog(null, "Just a message");
+                }
+            }
+        });
         //frame.pack();
         frame.setVisible(true);
 
@@ -281,6 +309,7 @@ public class GUI {
 
     public static void main(String[] args) {
         GUI frame = new GUI();
+
     }
 }
 
