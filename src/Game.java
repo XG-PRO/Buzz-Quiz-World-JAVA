@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 /** The Game Class initiates the start of the game
  * after gathering the resources needed (questions from file)**/
@@ -11,28 +12,35 @@ public class Game {
     // The below parameters are used to complement the usage of the corresponding classes
     private final Questions qs;
     private final Rounds rs;
-    private final Player pl;
-
-
+    Player[] players_arr;
+    private GUI gui;
+    private int numberOfPlayers;
     /**
      * Default Constructor
      */
     public Game() {
         qs = new Questions();
-        pl = new Player();
-        rs = new Rounds(qs, pl);
 
+        rs = new Rounds(qs, new Player("test",new char[]{}));
+        readFileQuestions("files/quiz.tsv");
+        GUI frame = new GUI();
+        numberOfPlayers = frame.popupAskNumberOfPlayer();
+        players_arr = new Player[numberOfPlayers];
+        if (numberOfPlayers >= 1)
+            players_arr[0] = new Player("PL1",new char[]{'Q','W','E','R'});
+        if (numberOfPlayers >= 2)
+            players_arr[1] = new Player("PL2",new char[]{'1','2','3','4'});
+        frame.drawPlayersInfoToGUI(players_arr);
     }
+
 
     /**
      * Starts the game
      */
     void play() {
-        readFileQuestions("files/quiz.tsv");
 
-        Parser.printWelcome();
 
-        rs.StartRound();
+        //rs.StartRound();
 
         // Debug code
         /*
