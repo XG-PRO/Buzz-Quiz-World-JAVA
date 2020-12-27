@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class GUI {
@@ -19,20 +21,37 @@ public class GUI {
     private JPanel centerPanel;
     private JPanel belowQsPanel;
     private JPanel scorePanel;
-    private JLabel txtTypeQs;
-    private JLabel txtTypeRound;
+
+
+    private JLabel txtTypeQuestion;
+    private JLabel txtRoundType;
     private JTextArea txtQuestionName;
     private JLabel[] txtResKeys;
     private JLabel[] txtRes;
-    private HashMap<Player, JLabel> playersPointsHash;
+    JLabel txtRoundCount;
+
+
+    private HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
+    private HashMap<Character, JLabel> characterToJLable_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
+    private HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
     private Font font_global;
     private Font font_global_20;
     private int numberOfPlayers;
 
+
+    private Player[] playersArr;
+    private Responses responsesObj;
+
+
     private final int numberOfResponses = 4;
+    private boolean atLeastOneInput;
+    /**
+     * Default Constactor building the UI using JAVA SWING Library
+     */
     public GUI() {
 
-
+        characterToJLable_HashMap = new HashMap<>(numberOfPlayers*numberOfResponses);
+        characterToPlayer_HashMap = new HashMap<>(numberOfPlayers*numberOfResponses);
         font_global = new Font("Arial Black", Font.BOLD, 26);
         font_global_20 = new Font("Arial Black", Font.PLAIN, 20);
         Border border = BorderFactory.createLineBorder(Color.BLACK);
@@ -42,7 +61,7 @@ public class GUI {
         txtRes = new JLabel[numberOfResponses];
         for (int i = 0; i < numberOfResponses; i++) {
             txtResKeys[i] = new JLabel("P H");
-            txtRes[i] = new JLabel("Donec et urna in arcu ultricies");
+            txtRes[i] = new JLabel("Etiam orci felis, bibendum ac congue a metus.");
         }
 
 
@@ -50,6 +69,7 @@ public class GUI {
         frame = new JFrame();
         frame.setTitle("Buzz Quiz World 2020");
         frame.setSize(1250, 640);
+        frame.setMinimumSize(new Dimension(1214, 592));
         //frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,6 +122,7 @@ public class GUI {
         menu.setForeground(Color.white);
         menu.add(menuItem);
         menubar.add(menu);
+        typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
         typePanel.add(menubar);
 
 
@@ -119,29 +140,29 @@ public class GUI {
         questionPanel.setPreferredSize(questionPanelDimension);
         questionPanel.add(txtQuestionName);
 
-        txtTypeQs = new JLabel("Stop the Timer");
-        txtTypeQs.setFont(font_global);
-        txtTypeQs.setForeground(Color.white);
-        txtTypeRound = new JLabel("Technology");
-        txtTypeRound.setForeground(Color.white);
-        txtTypeRound.setFont(font_global);
+        txtTypeQuestion = new JLabel("Stop the Timer");
+        txtTypeQuestion.setFont(font_global);
+        txtTypeQuestion.setForeground(Color.white);
+        txtRoundType = new JLabel("Technology");
+        txtRoundType.setForeground(Color.white);
+        txtRoundType.setFont(font_global);
 
-        typePanel.add(Box.createRigidArea(new Dimension(100, 0)));
-        typePanel.add(Box.createHorizontalGlue());
-        typePanel.add(txtTypeRound);
-        typePanel.add(Box.createHorizontalGlue());
-        typePanel.add(txtTypeQs);
-        typePanel.add(Box.createRigidArea(new Dimension((int) (frame.getWidth() * 0.15), 0)));
+        //typePanel.add(Box.createRigidArea(new Dimension(100, 0)));
+        typePanel.add(Box.createGlue());
+        typePanel.add(txtRoundType);
+        typePanel.add(Box.createGlue());
+        typePanel.add(txtTypeQuestion);
+        typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
 
 
         scorePanel = new JPanel();
         scorePanel.setBackground(Color.BLACK);
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.X_AXIS));
         scorePanel.add(Box.createRigidArea(new Dimension(40, 0)));
-        JLabel txt_round_count = new JLabel("ROUND 1");
-        txt_round_count.setForeground(Color.WHITE);
-        txt_round_count.setFont(font_global);
-        scorePanel.add(txt_round_count);
+        txtRoundCount = new JLabel("ROUND 1");
+        txtRoundCount.setForeground(Color.WHITE);
+        txtRoundCount.setFont(font_global);
+        scorePanel.add(txtRoundCount);
         scorePanel.add(Box.createHorizontalGlue());
 
 /*
@@ -225,9 +246,12 @@ public class GUI {
         frame.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 System.out.println("KEY PRESSES " + evt.getKeyChar());
-                if (evt.getKeyChar() == 'A') {
-                    JOptionPane.showMessageDialog(null, "Just a message");
+                char key = Character.toUpperCase(evt.getKeyChar());
+                if (responsesObj!=null && characterToPlayer_HashMap.containsKey(key)){
+                    Player pl = characterToPlayer_HashMap.get(key);
+                    responsesObj.addPlayerResponse(pl,characterToJLable_HashMap.get(key).getText());
                 }
+
             }
         });
         //frame.pack();
@@ -241,6 +265,12 @@ public class GUI {
         frame.popupAskNumberOfPlayer();
     }
 
+    /**
+     * This method opens a PopUp windows and ask the user to choose from the response array.
+     * @param question A String    .The Question that the use will have to answer.
+     * @param responses A String[](Array) .The Available options (buttons0 )the user can press.
+     * @return
+     */
     public int popupInput(String question, String[] responses) {
         int n = -1;
         while (n == -1) { // While the use closes the popup ask again and again and again....
@@ -256,23 +286,32 @@ public class GUI {
         return n;
     }
 
+    /**
+     * Ask from the user the number of players, and returns the result.
+     * @return Returns the number of player
+     */
     public int popupAskNumberOfPlayer() {
         numberOfPlayers = popupInput("Number of players?", new String[]{"1 Player", "2 Players"}) + 1;
         return numberOfPlayers;
 
     }
 
+    /**
+     * This method adds the players in the bottom panel.
+     * Also this method adds the respond keys.
+     * @param playersArr A Array containing Player objects.
+     */
     public void drawPlayersInfoToGUI(Player[] playersArr) {
-        playersPointsHash = new HashMap<>(playersArr.length);
+        playerToJLabel_HashMap = new HashMap<>(playersArr.length);
         for (int i = 0; i < playersArr.length; i++) {
-            playersPointsHash.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
-            playersPointsHash.get(playersArr[i]).setFont(font_global);
-            playersPointsHash.get(playersArr[i]).setForeground(Color.WHITE);
-            scorePanel.add(playersPointsHash.get(playersArr[i]));
+            playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
+            playerToJLabel_HashMap.get(playersArr[i]).setFont(font_global);
+            playerToJLabel_HashMap.get(playersArr[i]).setForeground(Color.WHITE);
+            scorePanel.add(playerToJLabel_HashMap.get(playersArr[i]));
             scorePanel.revalidate();
             scorePanel.add(Box.createHorizontalGlue());
             scorePanel.revalidate();
-            System.out.println("i :" + i + " name : " + playersArr[i].getName());
+            //System.out.println("i :" + i + " name : " + playersArr[i].getName());
         }
 
         for (int i = 0; i < numberOfResponses; i++) {
@@ -281,10 +320,71 @@ public class GUI {
                 temp += playersArr[j].getKeyboard_responses()[i] + " ";
             }
             txtResKeys[i].setText(temp);
+
+        }
+
+        for (int i = 0; i < numberOfResponses; i++) {
+            for (Player playerObj:playersArr){
+                characterToJLable_HashMap.put(playerObj.getKeyboard_responses()[i], txtRes[i]);
+                characterToPlayer_HashMap.put(playerObj.getKeyboard_responses()[i],playerObj);
+            }
+        }
+        System.out.println();
+        /*
+        for (Character key: resKeysHash.keySet()){
+            System.out.println(key+" : "+resKeysHash.get(key).getText());
+        }
+         */
+    }
+
+    /**
+     * This method updates the score JLabel in the bottom panel for every player.
+     * @param playersArr A Array containing Players objects.
+     */
+    public void updatePlayersPoints(Player[] playersArr){
+        for (Player item: playersArr){
+            JLabel label_p = playerToJLabel_HashMap.get(item);
+            String temp = label_p.getText().substring(0,label_p.getText().indexOf(':'));
+            temp+= item.getPoints();
+            label_p.setText(temp);
         }
 
     }
+
+    public void showQuestionAndGetResponses(Question questionObj, Player[] playersArr, Responses responsesObj){
+        atLeastOneInput = false;
+        responsesObj.setIgnoreInput(false);
+        this.playersArr = playersArr;
+        this.responsesObj = responsesObj;
+        txtQuestionName.setText(questionObj.getQuestion());
+        txtTypeQuestion.setText(questionObj.getType());
+        ArrayList<String> respArr = new ArrayList<>(questionObj.getResponses());
+        Collections.shuffle(respArr);
+        for (int i = 0; i<txtRes.length; i++){
+            txtRes[i].setText(respArr.get(i));
+        }
+        while (!responsesObj.haveAllPlayersResponed()){}
+        //responsesObj.setIgnoreInput(true);
+        respArr.clear();
+        atLeastOneInput = false;
+    }
+
+    /**
+     * It changes the
+     * @param roundCount
+     */
+    public void changeRoundCount(int roundCount){
+        String temp = txtRoundCount.getText().substring(0,4);
+        txtRoundCount.setText(temp+" "+roundCount);
+    }
+
+    public void changeRoundType(String roundType){
+        txtRoundType.setText(roundType);
+    }
 }
+
+
+
 
 
 

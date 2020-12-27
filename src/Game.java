@@ -15,13 +15,14 @@ public class Game {
     Player[] players_arr;
     private GUI gui;
     private int numberOfPlayers;
+
     /**
      * Default Constructor
      */
     public Game() {
         qs = new Questions();
 
-        rs = new Rounds(qs, new Player("test",new char[]{}));
+
         readFileQuestions("files/quiz.tsv");
         GUI frame = new GUI();
         numberOfPlayers = frame.popupAskNumberOfPlayer();
@@ -31,6 +32,7 @@ public class Game {
         if (numberOfPlayers >= 2)
             players_arr[1] = new Player("PL2",new char[]{'1','2','3','4'});
         frame.drawPlayersInfoToGUI(players_arr);
+        rs = new Rounds(qs, players_arr,frame);
     }
 
 
@@ -40,7 +42,7 @@ public class Game {
     void play() {
 
 
-        //rs.StartRound();
+        rs.StartRound();
 
         // Debug code
         /*

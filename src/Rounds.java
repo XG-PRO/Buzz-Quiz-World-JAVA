@@ -7,26 +7,29 @@ import java.util.ArrayList;
 public class Rounds {
 
     private final Questions questions_obj; // A questions object to get questions
-    private final Player player_obj; // A player object to use the Player class and change their points
+    private final Player[] playersArr; // A player object to use the Player class and change their points
     private final int number_of_questions = 5; // The number of questions for each round
     private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added antyime
     private final ArrayList<String> bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
     private String current_question_type = "Random"; // The initial round question type
     private String current_round_type; // The current round type
-
-
+    private GUI frame;
+    private Responses responsesObj;
     /**
      * Default Constructor
      *
      * @param questions_obj A Questions object that contains all the questions.
-     * @param player_obj    A Player object to change the points
+     * @param playersArr    A Player object to change the points
      */
-    public Rounds(Questions questions_obj, Player player_obj) {
+    public Rounds(Questions questions_obj, Player[] playersArr, GUI frame) {
         this.questions_obj = questions_obj;
-        this.player_obj = player_obj;
+        this.playersArr = playersArr;
+        this.frame = frame;
+        this.responsesObj = new Responses(playersArr.length);
 
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
-        rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
+        //rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
+        rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer",});
         bet_types = Utilities.CreateArrayListString(new String[]{"250", "500", "750", "1000"});
 
     }
@@ -74,10 +77,10 @@ public class Rounds {
      * <b>THIS METHOD CHANGES THE FIELDS "current_round_type" AND "current_question_type"<b/>
      */
     private void RoundMenu() {
-        Parser.showPoints(player_obj.getPoints());
-        String[] me = Parser.printMENU(questions_obj.getTypes(), rounds_types, current_question_type, current_round_type);
-        current_round_type = me[1];
-        current_question_type = me[0];
+    //    Parser.showPoints(player_obj.getPoints());
+      //  String[] me = Parser.printMENU(questions_obj.getTypes(), rounds_types, current_question_type, current_round_type);
+        //current_round_type = me[1];
+        //current_question_type = me[0];
 
     }
 
@@ -89,7 +92,7 @@ public class Rounds {
      * It can change the Player, Questions  objects
      */
     private void RoundType_RightAnswer() {
-        Parser.PrintRoundType("Right Answer");
+        frame.changeRoundType("Right Answer");
         for (int i = 0; i < number_of_questions; i++) {
             Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
             if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
@@ -100,17 +103,13 @@ public class Rounds {
                 Parser.Exit(0);  //RAN OUT OF QUESTIONS
                 temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
             }
+            frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
 
-            ArrayList<Character> valid_responses = Utilities.generateLetters(4);
 
 
-            String current_response = Parser.printQuestion(temp, valid_responses);
-            if (Parser.printResponseResult(temp, current_response)) {
-                player_obj.increasePoints(1000);
-            }
-            Parser.showPoints(player_obj.getPoints());
+
+
         }
-        Parser.printEndRound(player_obj.getPoints());
 
 
     }
@@ -139,16 +138,9 @@ public class Rounds {
             int bet = Parser.Bet(bet_types, temp.getType());
 
             String current_response = Parser.printQuestion(temp, valid_responses);
-            if (Parser.printResponseResult(temp, current_response)) {
-                player_obj.increasePoints(bet * 2);// Duplicate the points of the player
-            } else {
-                player_obj.decreasePoints(bet);
-            }
-            Parser.showPoints(player_obj.getPoints());
-        }
-        Parser.printEndRound(player_obj.getPoints());
 
-    }
+
+    }}
 
     /** Unused types of Round which can be implemented in the future if needed **/
 
@@ -163,5 +155,6 @@ public class Rounds {
     private void RoundType_Thermometer() {
 
     }
-}
 
+
+}
