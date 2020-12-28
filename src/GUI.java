@@ -300,7 +300,7 @@ public class GUI {
      * @param playersArr A Array containing Player objects.
      */
     public void drawPlayersInfoToGUI(Player[] playersArr) {
-        playerToJLabel_HashMap = new HashMap<>(playersArr.length);
+        playerToJLabel_HashMap = new HashMap<>();
         for (int i = 0; i < playersArr.length; i++) {
             playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
             playerToJLabel_HashMap.get(playersArr[i]).setFont(font_global);
@@ -327,12 +327,6 @@ public class GUI {
                 characterToPlayer_HashMap.put(playerObj.getKeyboard_responses()[i],playerObj);
             }
         }
-        System.out.println();
-        /*
-        for (Character key: resKeysHash.keySet()){
-            System.out.println(key+" : "+resKeysHash.get(key).getText());
-        }
-         */
     }
 
     /**
@@ -361,13 +355,6 @@ public class GUI {
         for (int i = 0; i<txtRes.length; i++){
             txtRes[i].setText(respArr.get(i));
         }
-        /*
-        while (!responsesObj.haveAllPlayersResponed()){}
-        //responsesObj.setIgnoreInput(true);
-        respArr.clear();
-        atLeastOneInput = false;
-
-         */
     }
 
     /**
