@@ -61,9 +61,9 @@ public class Responses {
         this.respArr[current_player_pos] = playerResponseString;
         playerResponse.put(pl,true);
         current_player_pos++;
-        System.out.println("Added RESPONSE\n\tPlayer:"+pl.getName()+"\n\tString:"+playerResponseString);
-        System.out.println("\t number of players : "+numOfPlayers);
-        System.out.println("\t number of replied players : "+current_player_pos);
+        //System.out.println("Added RESPONSE\n\tPlayer:"+pl.getName()+"\n\tString:"+playerResponseString);
+        //System.out.println("\t number of players : "+numOfPlayers);
+        //System.out.println("\t number of replied players : "+current_player_pos);
         return true;
     }
 

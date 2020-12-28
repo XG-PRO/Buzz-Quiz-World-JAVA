@@ -115,7 +115,7 @@ public class Rounds {
                 }
 
             }
-            System.out.printf("Next Question");
+            //System.out.printf("Next Question");
             responsesObj.clear_responses();
 
             //frame.updatePlayersPoints(playersArr);

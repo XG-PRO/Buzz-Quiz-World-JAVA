@@ -246,13 +246,13 @@ public class GUI {
 
         frame.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                System.out.println("KEY PRESSED " + evt.getKeyChar());
+                //System.out.println("KEY PRESSED " + evt.getKeyChar());
                 char key = Character.toUpperCase(evt.getKeyChar());
                 if (responsesObj!=null && characterToPlayer_HashMap.containsKey(key)){
                     Player pl = characterToPlayer_HashMap.get(key);
                     responsesObj.addPlayerResponse(pl,characterToJLable_HashMap.get(key).getText());
-                    System.out.printf("The status of Responses is "+responsesObj.haveAllPlayersResponed());
-                    System.out.printf("ID OF OBJECT : "+responsesObj.hashCode());
+                //    System.out.printf("The status of Responses is "+responsesObj.haveAllPlayersResponed());
+                //    System.out.printf("ID OF OBJECT : "+responsesObj.hashCode());
                 }
 
             }

@@ -14,8 +14,6 @@ public class Game {
     private final Rounds rs;
     Player[] players_arr;
 
-    private int numberOfPlayers;
-
     /**
      * Default Constructor
      */
@@ -25,13 +23,7 @@ public class Game {
 
         readFileQuestions("files/quiz.tsv");
         GUI frame = new GUI();
-        numberOfPlayers = frame.popupAskNumberOfPlayer();
-        players_arr = new Player[numberOfPlayers];
-        if (numberOfPlayers >= 1)
-            players_arr[0] = new Player("PL1",new char[]{'Q','W','E','R'});
-        if (numberOfPlayers >= 2)
-            players_arr[1] = new Player("PL2",new char[]{'1','2','3','4'});
-        frame.drawPlayersInfoToGUI(players_arr);
+        playersSet(frame);
         rs = new Rounds(qs, players_arr,frame);
     }
 
@@ -52,6 +44,17 @@ public class Game {
         }
         */
 
+    }
+
+    void playersSet(GUI frame)
+    {
+        int numberOfPlayers = frame.popupAskNumberOfPlayer();
+        players_arr = new Player[numberOfPlayers];
+        if (numberOfPlayers >= 1)
+            players_arr[0] = new Player("PL1",new char[]{'Q','W','E','R'});
+        if (numberOfPlayers >= 2)
+            players_arr[1] = new Player("PL2",new char[]{'1','2','3','4'});
+        frame.drawPlayersInfoToGUI(players_arr);
     }
 
 
