@@ -336,7 +336,7 @@ public class GUI {
     public void updatePlayersPoints(Player[] playersArr){
         for (Player item: playersArr){
             JLabel label_p = playerToJLabel_HashMap.get(item);
-            String temp = label_p.getText().substring(0,label_p.getText().indexOf(':'));
+            String temp = label_p.getText().substring(0,label_p.getText().indexOf(':')+1);
             temp+= item.getPoints();
             label_p.setText(temp);
         }

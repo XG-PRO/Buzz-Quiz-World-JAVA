@@ -116,9 +116,13 @@ public class Rounds {
 
             }
             //System.out.printf("Next Question");
-            responsesObj.clear_responses();
 
-            //frame.updatePlayersPoints(playersArr);
+            for (int j = 0; j < playersArr.length; j++) {
+                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse()))
+                    responsesObj.getPlayerAtPos(j).increasePoints(1000);
+            }
+            frame.updatePlayersPoints(playersArr);
+            responsesObj.clear_responses();
 
 
 
