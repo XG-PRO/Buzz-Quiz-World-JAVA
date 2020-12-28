@@ -11,24 +11,17 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class GUI {
-    private final int maxNumberOfPlayers = 2;
     //Panels
     JFrame frame;
-    private JPanel mainPanel;
-    private JPanel questionPanel;
-    private JPanel typePanel;
-    private JPanel responsesPanel;
-    private JPanel centerPanel;
-    private JPanel belowQsPanel;
-    private JPanel scorePanel;
 
+    private JPanel scorePanel;
 
     private JLabel txtTypeQuestion;
     private JLabel txtRoundType;
     private JTextArea txtQuestionName;
     private JLabel[] txtResKeys;
     private JLabel[] txtRes;
-    JLabel txtRoundCount;
+    private JLabel txtRoundCount;
 
 
     private HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
@@ -44,11 +37,19 @@ public class GUI {
 
 
     private final int numberOfResponses = 4;
-    private boolean atLeastOneInput;
+
     /**
      * Default Constructor building the UI using JAVA SWING Library
      */
     public GUI() {
+        JPanel mainPanel;
+        JPanel questionPanel;
+        JPanel typePanel;
+        JPanel responsesPanel;
+        JPanel centerPanel;
+        JPanel belowQsPanel;
+
+
 
         characterToJLable_HashMap = new HashMap<>(numberOfPlayers*numberOfResponses);
         characterToPlayer_HashMap = new HashMap<>(numberOfPlayers*numberOfResponses);
@@ -88,6 +89,7 @@ public class GUI {
         typePanel.setBackground(Color.BLACK);
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.LINE_AXIS));
         questionPanel = new JPanel();
+        questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
         questionPanel.setBackground(Color.white);
         questionPanel.setOpaque(true);
 
@@ -104,7 +106,7 @@ public class GUI {
         //UIManager.put("MenuItem.font", font_global_20);
         JMenu menu;
         JMenuBar menubar;
-        BufferedImage myPicture = null;
+        BufferedImage myPicture =null;
         try {
             myPicture = ImageIO.read(getClass().getResource("/splash/settings-32.png"));
         } catch (IOException e) {
@@ -124,7 +126,9 @@ public class GUI {
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
         typePanel.add(menubar);
 
-
+        txtTypeQuestion = new JLabel("Tech");
+        txtTypeQuestion.setFont(font_global);
+        txtTypeQuestion.setForeground(new Color(15,186,247));
         txtQuestionName = new JTextArea("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et libero in lorem pulvinar aliquam sit.");
         txtQuestionName.setFont(font_global);
         txtQuestionName.setOpaque(true);
@@ -138,11 +142,10 @@ public class GUI {
         questionPanel.setMaximumSize(questionPanelDimension);
         questionPanel.setPreferredSize(questionPanelDimension);
         questionPanel.add(txtQuestionName);
+        questionPanel.add(txtTypeQuestion);
 
-        txtTypeQuestion = new JLabel("Stop the Timer");
-        txtTypeQuestion.setFont(font_global);
-        txtTypeQuestion.setForeground(Color.white);
-        txtRoundType = new JLabel("Technology");
+
+        txtRoundType = new JLabel("Stop the Timer");
         txtRoundType.setForeground(Color.white);
         txtRoundType.setFont(font_global);
 
@@ -150,7 +153,7 @@ public class GUI {
         typePanel.add(Box.createGlue());
         typePanel.add(txtRoundType);
         typePanel.add(Box.createGlue());
-        typePanel.add(txtTypeQuestion);
+        //typePanel.add(txtTypeQuestion);
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
 
 
@@ -243,11 +246,13 @@ public class GUI {
 
         frame.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                System.out.println("KEY PRESSES " + evt.getKeyChar());
+                System.out.println("KEY PRESSED " + evt.getKeyChar());
                 char key = Character.toUpperCase(evt.getKeyChar());
                 if (responsesObj!=null && characterToPlayer_HashMap.containsKey(key)){
                     Player pl = characterToPlayer_HashMap.get(key);
                     responsesObj.addPlayerResponse(pl,characterToJLable_HashMap.get(key).getText());
+                    System.out.printf("The status of Responses is "+responsesObj.haveAllPlayersResponed());
+                    System.out.printf("ID OF OBJECT : "+responsesObj.hashCode());
                 }
 
             }
@@ -256,11 +261,6 @@ public class GUI {
 
         frame.setVisible(true);
 
-    }
-
-    public static void main(String[] args) {
-        GUI frame = new GUI();
-        frame.popupAskNumberOfPlayer();
     }
 
     /**
@@ -350,7 +350,7 @@ public class GUI {
     }
 
     public void showQuestionAndGetResponses(Question questionObj, Player[] playersArr, Responses responsesObj){
-        atLeastOneInput = false;
+
         responsesObj.setIgnoreInput(false);
         this.playersArr = playersArr;
         this.responsesObj = responsesObj;
@@ -361,24 +361,29 @@ public class GUI {
         for (int i = 0; i<txtRes.length; i++){
             txtRes[i].setText(respArr.get(i));
         }
+        /*
         while (!responsesObj.haveAllPlayersResponed()){}
         //responsesObj.setIgnoreInput(true);
         respArr.clear();
         atLeastOneInput = false;
+
+         */
     }
 
     /**
-     * It changes the
-     * @param roundCount
+     * It changes the round counter (bottom - left) JLabel
+     * @param roundCount The round type
      */
     public void changeRoundCount(int roundCount){
-        String temp = txtRoundCount.getText().substring(0,4);
+        String temp = txtRoundCount.getText().substring(0,5);
         txtRoundCount.setText(temp+" "+roundCount);
     }
 
     public void changeRoundType(String roundType){
         txtRoundType.setText(roundType);
     }
+
+
 }
 
 

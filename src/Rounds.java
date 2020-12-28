@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class implements the logic of each round. It could be implemented with inheritance but..
@@ -46,7 +47,8 @@ public class Rounds {
 
             current_round_type = rounds_types.get(Utilities.random_int(rounds_types.size())); // Each Round Type is picked randomly but the user can change it
             //System.out.println("Current Round Count: " + (i+1)+"/"+number_of_rounds);
-            Parser.PrintRoundNumber(i + 1, number_of_rounds); //
+            //Parser.PrintRoundNumber(i + 1, number_of_rounds); //
+            frame.changeRoundCount(i+1);
             RoundMenu();
             switch (current_round_type) {
                 case "Bet":
@@ -67,7 +69,7 @@ public class Rounds {
             }
 
         }
-        Parser.Exit(1);
+        //Parser.Exit(1);
 
     }
 
@@ -103,7 +105,20 @@ public class Rounds {
                 Parser.Exit(0);  //RAN OUT OF QUESTIONS
                 temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
             }
+            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
             frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
+            while(!responsesObj.haveAllPlayersResponed()){
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            System.out.printf("Next Question");
+            responsesObj.clear_responses();
+
+            //frame.updatePlayersPoints(playersArr);
 
 
 

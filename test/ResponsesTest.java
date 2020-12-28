@@ -14,9 +14,11 @@ class ResponsesTest {
         Responses responses_obj = new Responses(2);
 
         responses_obj.addPlayerResponse(pl2, "true");
-        responses_obj.addPlayerResponse(pl1, "false");
+        responses_obj.addPlayerResponse(pl2, "false");
+
 
         responses_obj.clear_responses();
+
 
 
         responses_obj.addPlayerResponse(pl1, "false");

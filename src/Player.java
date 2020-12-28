@@ -30,6 +30,7 @@ public class Player {
         points+=p;
     }
 
+
     public void decreasePoints(int p){
         points-=p;
     }
