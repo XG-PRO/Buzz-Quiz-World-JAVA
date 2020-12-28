@@ -46,7 +46,7 @@ public class GUI {
     private final int numberOfResponses = 4;
     private boolean atLeastOneInput;
     /**
-     * Default Constactor building the UI using JAVA SWING Library
+     * Default Constructor building the UI using JAVA SWING Library
      */
     public GUI() {
 
@@ -106,8 +106,7 @@ public class GUI {
         JMenuBar menubar;
         BufferedImage myPicture = null;
         try {
-            File f = new File(getClass().getResource("splash/settings-32.png").getFile());
-            myPicture = ImageIO.read(f);
+            myPicture = ImageIO.read(getClass().getResource("/splash/settings-32.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -208,8 +207,7 @@ public class GUI {
         //below_qs_panel.add(Box.createGlue());
         myPicture = null;
         try {
-            File f = new File(getClass().getResource("splash/placeholder.png").getFile());
-            myPicture = ImageIO.read(f);
+            myPicture = ImageIO.read(getClass().getResource("/splash/placeholder.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
