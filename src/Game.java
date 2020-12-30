@@ -52,8 +52,11 @@ public class Game {
         players_arr = new Player[numberOfPlayers];
 
         char[][] acceptable_responses = new char[players_arr.length][4];
-        acceptable_responses[0] = new char[]{'Q','W','E','R'};
-        acceptable_responses[1] = new char[]{'1','2','3','4'};
+
+            acceptable_responses[0] = new char[]{'Q','W','E','R'};
+
+        if (players_arr.length>1)
+            acceptable_responses[1] = new char[]{'1','2','3','4'};
 
         for (int i=0; i<numberOfPlayers; i++)
         {
