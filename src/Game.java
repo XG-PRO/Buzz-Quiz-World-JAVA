@@ -51,7 +51,7 @@ public class Game {
         int numberOfPlayers = frame.popupAskNumberOfPlayer();
         players_arr = new Player[numberOfPlayers];
 
-        char[][] acceptable_responses = new char[players_arr.length][4];
+        char[][] acceptable_responses = new char[numberOfPlayers][4];
 
             acceptable_responses[0] = new char[]{'Q','W','E','R'};
 

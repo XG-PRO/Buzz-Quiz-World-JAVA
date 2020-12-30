@@ -12,20 +12,23 @@ public class GUI {
     private final int numberOfResponses = 4;
     private final Color colorGrayBackground;
     //Panels
-    JFrame frame;
-    JPanel mainPanel;
-    JPanel questionPanel;
-    JPanel typePanel;
-    JPanel responsesPanel;
-    JPanel centerPanel;
-    JPanel belowQsPanel;
-    JLabel imagePlaceHolder;
+    private JFrame frame;
+    private JPanel mainPanel;
+    private JPanel questionPanel;
+    private JPanel typePanel;
+    private JPanel responsesPanel;
+    private JPanel centerPanel;
+    private JPanel belowQsPanel;
+
+    private JLabel imagePlaceHolder;
     private JLabel txtTypeQuestion;
     private JLabel txtRoundType;
+
     private JTextArea txtQuestionName;
     private JLabel[] txtResKeys;
     private JLabel[] txtRes;
     private JLabel txtRoundCount;
+
     private HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
     private HashMap<Character, JLabel> characterToJLable_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
     private HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
@@ -42,7 +45,21 @@ public class GUI {
      * Default Constructor building the UI using JAVA SWING Library
      */
     public GUI() {
+        //Set OptionPane font to
+        font_global = new Font("Arial Black", Font.BOLD, 26);
+        font_global_20 = new Font("Arial Black", Font.PLAIN, 20);
         colorGrayBackground = new Color(61, 72, 85);
+
+        Color colorForOptionPanel = new Color(18,26,40);
+        UIManager.put("OptionPane.messageFont", new Font("Arial Black", Font.BOLD, 24));
+        UIManager.put("OptionPane.buttonFont", new Font("Arial Black", Font.PLAIN, 20));
+        UIManager.put("TextField.font", new Font("Arial Black", Font.PLAIN, 20));
+        UIManager.put("OptionPane.messageForeground", Color.white);
+        UIManager.put("OptionPane.background", colorForOptionPanel);
+        UIManager.put("OptionPane.messagebackground", colorForOptionPanel);
+        UIManager.put("Panel.background", colorForOptionPanel);
+
+
         // Make the frame
         frame = new JFrame();
         frame.setTitle("Buzz Quiz World 2020");
@@ -65,9 +82,6 @@ public class GUI {
         // Init the HashMap's
         characterToJLable_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
         characterToPlayer_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
-
-        font_global = new Font("Arial Black", Font.BOLD, 26);
-        font_global_20 = new Font("Arial Black", Font.PLAIN, 20);
 
         initMenu();
 
@@ -175,13 +189,6 @@ public class GUI {
      * This private method initializes the JPanel "questionPanel", the JLabel's "txtquestionName", "txtTypeQuestion"
      */
     private void initQuestionPanel() {
-        // Init the KEY Responses Array
-        txtResKeys = new JLabel[numberOfResponses];
-        txtRes = new JLabel[numberOfResponses];
-        for (int i = 0; i < numberOfResponses; i++) {
-            txtResKeys[i] = new JLabel("P H");
-            txtRes[i] = new JLabel("Etiam orci felis, bibendum ac congue a metus.");
-        }
         // Init the questionPanel
         questionPanel = new JPanel();
         questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
@@ -190,7 +197,7 @@ public class GUI {
 
         txtTypeQuestion = new JLabel("Tech");
         txtTypeQuestion.setFont(font_global);
-        txtTypeQuestion.setForeground(new Color(15, 186, 247));
+        txtTypeQuestion.setForeground(new Color(110, 160, 155));
         txtQuestionName = new JTextArea("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et libero in lorem pulvinar aliquam sit.");
         txtQuestionName.setFont(font_global);
         txtQuestionName.setOpaque(true);
@@ -220,6 +227,13 @@ public class GUI {
      * This private method initializes the JPanel "responsesPanel", and JLabel "imagePlaceholder"
      */
     private void initResponsesPanelAndImage() {
+        // Init the KEY Responses Array
+        txtResKeys = new JLabel[numberOfResponses];
+        txtRes = new JLabel[numberOfResponses];
+        for (int i = 0; i < numberOfResponses; i++) {
+            txtResKeys[i] = new JLabel("P H");
+            txtRes[i] = new JLabel("Etiam orci felis, bibendum ac congue a metus.");
+        }
         responsesPanel = new JPanel(new GridBagLayout());
         // Init grid bag for responsesPanel
         GridBagConstraints c = new GridBagConstraints();
@@ -305,10 +319,12 @@ public class GUI {
     }
 
     public String popupGetPlayerName(int i) {
-        String temp = "";
-        while (temp == "" || temp == null || temp.length()<1)
-            temp =JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
 
+        String temp =JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
+        while (temp == null || temp.isBlank()) {
+            JOptionPane.showMessageDialog(frame, "Player Name can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            temp = JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
+        }
         return temp;
 
     }
