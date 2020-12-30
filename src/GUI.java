@@ -284,7 +284,7 @@ public class GUI {
         while (n == -1) { // While the use closes the popup ask again and again and again....
             n = JOptionPane.showOptionDialog(frame,
                     question,
-                    question,
+                    null,
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
@@ -302,6 +302,14 @@ public class GUI {
     public int popupAskNumberOfPlayer() {
         numberOfPlayers = popupInput("Number of players?", new String[]{"1 Player", "2 Players"}) + 1;
         return numberOfPlayers;
+    }
+
+    public String popupGetPlayerName(int i) {
+        String temp = "";
+        while (temp == "" || temp == null || temp.length()<1)
+            temp =JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
+
+        return temp;
 
     }
 

@@ -160,7 +160,7 @@ public class Rounds {
             int [] bet_player = new int [playersArr.length];
 
             for (int j = 0; j< playersArr.length;j++)
-                bet_player[j] = Integer.parseInt(bet_types[frame.popupInput(playersArr[j].getName() + " place your bet:\n", bet_types)]);
+                bet_player[j] = Integer.parseInt(bet_types[frame.popupInput("Question Category is:\n" + temp.getType() + "\n\n" + playersArr[j].getName() + " place your bet:", bet_types)]);
 
 
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
