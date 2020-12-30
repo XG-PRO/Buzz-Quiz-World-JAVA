@@ -10,7 +10,7 @@ public class Rounds {
     private final Questions questions_obj; // A questions object to get questions
     private final Player[] playersArr; // A player object to use the Player class and change their points
     private final int number_of_questions = 5; // The number of questions for each round
-    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added antyime
+    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime
     private String[] bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
     private String current_question_type = "Random"; // The initial round question type
     private String current_round_type; // The current round type
