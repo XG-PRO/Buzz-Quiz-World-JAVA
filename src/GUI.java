@@ -302,6 +302,24 @@ public class GUI {
 
     }
 
+
+    public void popupShowGainedPoints(Player[] player_arr, int[] gainedPoints)
+    {
+        String temp = "";
+        for (int i = 0; i < player_arr.length; i++) {
+            if (gainedPoints[i] >= 0)
+
+                 temp+=player_arr[i].getName() + " gained : " + gainedPoints[i] + " points \n";
+
+            else
+
+                 temp+=player_arr[i].getName() + " lost : " + gainedPoints[i]*(-1) + " points \n";
+        }
+
+        JOptionPane.showMessageDialog(null, temp,
+                "Results", JOptionPane.PLAIN_MESSAGE);
+    }
+
     /**
      * This method adds the players in the bottom panel.
      * Also this method adds the respond keys.

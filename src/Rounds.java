@@ -107,7 +107,7 @@ public class Rounds {
             }
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
             frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
-            while(!responsesObj.haveAllPlayersResponed()){
+            while (!responsesObj.haveAllPlayersResponed()) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(100);
                 } catch (InterruptedException e) {
@@ -116,16 +116,19 @@ public class Rounds {
 
             }
             //System.out.printf("Next Question");
+            int[] gainedPoints;
+            gainedPoints = new int[playersArr.length];
+
 
             for (int j = 0; j < playersArr.length; j++) {
-                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse()))
+                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
+                    gainedPoints[j] = 1000;
                     responsesObj.getPlayerAtPos(j).increasePoints(1000);
+                } else
+                    gainedPoints[j] = 0;
             }
             frame.updatePlayersPoints(playersArr);
             responsesObj.clear_responses();
-
-
-
 
 
         }
@@ -140,10 +143,10 @@ public class Rounds {
      * It can change the Player,Questions  objects
      */
     private void RoundType_Bet() {
-        Parser.PrintRoundType("Bet");
+        frame.changeRoundType("Bet");
         for (int i = 0; i < number_of_questions; i++) {
             Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
-            if (temp == null) {
+            if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
                 current_question_type = "Random";
                 temp = questions_obj.getRandomQuestionWithType("Random");
             }
@@ -152,14 +155,46 @@ public class Rounds {
                 temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
             }
 
-            ArrayList<Character> valid_responses = Utilities.generateLetters(4);
+            int [] bet_player = new int [playersArr.length];
 
-            int bet = Parser.Bet(bet_types, temp.getType());
+            for (int j = 0; j< playersArr.length;j++)
+                bet_player[j] = Integer.parseInt(bet_types[frame.popupInput(playersArr[j].getName() + " place your bet:\n", bet_types)]);
 
-            String current_response = Parser.printQuestion(temp, valid_responses);
+
+            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
+            frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
+            while (!responsesObj.haveAllPlayersResponed()) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //System.out.printf("Next Question");
+            int[] gainedPoints;
+            gainedPoints = new int[playersArr.length];
 
 
-    }}
+            for (int j = 0; j < playersArr.length; j++) {
+                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
+                    gainedPoints[j] = bet_player[j] * 2;
+                    responsesObj.getPlayerAtPos(j).increasePoints( bet_player[j] * 2);
+                }
+                else {
+                    gainedPoints[j] = -bet_player[j];
+                    responsesObj.getPlayerAtPos(j).decreasePoints(bet_player[j]);
+                }
+            }
+
+            frame.popupShowGainedPoints(playersArr, gainedPoints);
+            frame.updatePlayersPoints(playersArr);
+            responsesObj.clear_responses();
+
+
+        }
+
+    }
 
     /** Unused types of Round which can be implemented in the future if needed **/
 
