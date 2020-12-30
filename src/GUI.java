@@ -278,6 +278,9 @@ public class GUI {
      */
     public int popupInput(String question, String[] responses) {
         int n = -1;
+        JPanel insidePanel = new JPanel(new GridLayout(responses.length,1));
+        for (int i = 0; i<responses.length;i++)
+            insidePanel.add(new JLabel(responses[i]));
         while (n == -1) { // While the use closes the popup ask again and again and again....
             n = JOptionPane.showOptionDialog(frame,
                     question,

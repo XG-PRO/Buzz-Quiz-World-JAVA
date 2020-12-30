@@ -11,7 +11,7 @@ public class Rounds {
     private final Player[] playersArr; // A player object to use the Player class and change their points
     private final int number_of_questions = 5; // The number of questions for each round
     private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added antyime
-    private final ArrayList<String> bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
+    private String[] bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
     private String current_question_type = "Random"; // The initial round question type
     private String current_round_type; // The current round type
     private GUI frame;
@@ -30,8 +30,8 @@ public class Rounds {
 
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
         //rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
-        rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer",});
-        bet_types = Utilities.CreateArrayListString(new String[]{"250", "500", "750", "1000"});
+        rounds_types = Utilities.CreateArrayListString(new String[]{"Bet",});
+        bet_types = new String[]{"250", "500", "750", "1000"};
 
     }
 
@@ -127,14 +127,16 @@ public class Rounds {
                 } else
                     gainedPoints[j] = 0;
             }
+
+            frame.popupShowGainedPoints(playersArr, gainedPoints);
             frame.updatePlayersPoints(playersArr);
             responsesObj.clear_responses();
 
 
         }
 
-
     }
+
 
 
     /**
