@@ -32,7 +32,7 @@ public class Responses {
     /**
      * Clear all the players responses (sets to null)
      */
-    public void clear_responses(){
+    public void clearReset(){
         for (int i =0 ; i < numOfPlayers; i++){
             plArr[i] = null;
             respArr[i] = null;

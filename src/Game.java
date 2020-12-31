@@ -1,5 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,7 +21,7 @@ public class Game {
         qs = new Questions();
 
 
-        readFileQuestions("files/quiz.tsv");
+        readFileQuestions();
         GUI frame = new GUI();
         playersSet(frame);
         rs = new Rounds(qs, players_arr,frame);
@@ -48,7 +48,7 @@ public class Game {
 
     void playersSet(GUI frame)
     {
-        int numberOfPlayers = frame.popupAskNumberOfPlayer();
+        int numberOfPlayers = frame.popupAskNumberOfPlayer(2);
         players_arr = new Player[numberOfPlayers];
 
         char[][] acceptable_responses = new char[numberOfPlayers][4];
@@ -64,7 +64,6 @@ public class Game {
             players_arr[i] = new Player(frame.popupGetPlayerName(i+1), acceptable_responses[i]);
         }
 
-
         frame.drawPlayersInfoToGUI(players_arr);
     }
 
@@ -73,9 +72,13 @@ public class Game {
      * reads the questions from a .tsv(tab separated values) file.
      * Κατηγορία(TAB)Ερώτηση(TAB)Απάντηση 1(TAB)Απάντηση 2(TAB)Απάντηση 3(TAB)Απάντηση 4(TAB)Σωστή απάντηση(TAB)Όνομα εικόνας
      */
-    private void readFileQuestions(String filename) { // Source: https://stackoverflow.com/questions/61443542/reading-tsv-file-in-java
+    private void readFileQuestions() { // Source: https://stackoverflow.com/questions/61443542/reading-tsv-file-in-java
 
-        try (BufferedReader TSVReader = new BufferedReader(new FileReader(filename))) {
+        String fileName = "packageQuestions/quiz.tsv";
+        InputStream f = getClass().getResourceAsStream(fileName);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(f))) {
+
             final int index_type = 0;
             final int index_question = 1;
             final int index_resp_start = 2;
@@ -84,7 +87,7 @@ public class Game {
             //final int index_image_src = 7;
 
             String line;
-            while ((line = TSVReader.readLine()) != null) {  // for every line in the file
+            while ((line = reader.readLine()) != null) {  // for every line in the file
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
                 /*
                 lineItems[0]//κατηγορία
@@ -114,12 +117,14 @@ public class Game {
                     throw new Exception();
                 }
                 qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
-
             }
         } catch (Exception e) {
             System.out.println("Something went wrong when trying to read the .tsv file.");
+            e.printStackTrace();
             System.exit(-1);
         }
+
+
     }
 
 

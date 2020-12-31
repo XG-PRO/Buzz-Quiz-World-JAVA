@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class GUI {
     private final int numberOfResponses = 4;
@@ -40,6 +41,7 @@ public class GUI {
     private JPanel scorePanel;
     private JMenu menu;
     private JMenuBar menubar;
+
 
     /**
      * Default Constructor building the UI using JAVA SWING Library
@@ -125,6 +127,7 @@ public class GUI {
                 if (responsesObj != null && characterToPlayer_HashMap.containsKey(key)) {
                     Player pl = characterToPlayer_HashMap.get(key);
                     responsesObj.addPlayerResponse(pl, characterToJLable_HashMap.get(key).getText());
+                    changePlayerStatusToReplied(pl);
                     //    System.out.printf("The status of Responses is "+responsesObj.haveAllPlayersResponed());
                     //    System.out.printf("ID OF OBJECT : "+responsesObj.hashCode());
                 }
@@ -291,15 +294,26 @@ public class GUI {
      * @return
      */
     public int popupInput(String question, String[] responses) {
-        int n = -1;
+        int n;
+        /*
         JPanel insidePanel = new JPanel(new GridLayout(responses.length,1));
         for (int i = 0; i<responses.length;i++)
-            insidePanel.add(new JLabel(responses[i]));
+            insidePanel.add(new JButton(responses[i]));
+         */
+        n = JOptionPane.showOptionDialog(frame,
+                question,
+                null,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                responses,
+                null);
         while (n == -1) { // While the use closes the popup ask again and again and again....
+            JOptionPane.showMessageDialog(frame, "You Have To Select A Option To Continue\n", "Error", JOptionPane.ERROR_MESSAGE);
             n = JOptionPane.showOptionDialog(frame,
                     question,
                     null,
-                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     responses,
@@ -310,20 +324,26 @@ public class GUI {
 
     /**
      * Ask from the user the number of players, and returns the result.
-     *
-     * @return Returns the number of player
+     * @param maxNumberOfPlayers The maximum number of players.
+     * @return Returns the number of players.
      */
-    public int popupAskNumberOfPlayer() {
-        numberOfPlayers = popupInput("Number of players?", new String[]{"1 Player", "2 Players"}) + 1;
+    public int popupAskNumberOfPlayer(int maxNumberOfPlayers) {
+        String [] t = new String[maxNumberOfPlayers];
+        t[0] = "1 Player";
+        for (int i = 1; i < maxNumberOfPlayers; i++) {
+            t[i] = (i+1) + " Players";
+        }
+        numberOfPlayers = popupInput("Number of Players?", t) + 1;
+        this.responsesObj = new Responses(numberOfPlayers);
         return numberOfPlayers;
     }
 
     public String popupGetPlayerName(int i) {
 
-        String temp =JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
+        String temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
         while (temp == null || temp.isBlank()) {
             JOptionPane.showMessageDialog(frame, "Player Name can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            temp = JOptionPane.showInputDialog("Enter Name of player " + i + " : ");
+            temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
         }
         return temp;
 
@@ -350,10 +370,11 @@ public class GUI {
     /**
      * This method adds the players in the bottom panel.
      * Also this method adds the respond keys.
-     *
+     * <b>This method adds the playerArr to the private fields of GUI</b>
      * @param playersArr A Array containing Player objects.
      */
     public void drawPlayersInfoToGUI(Player[] playersArr) {
+        this.playersArr = playersArr;
         playerToJLabel_HashMap = new HashMap<>();
         for (int i = 0; i < playersArr.length; i++) {
             playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
@@ -398,9 +419,18 @@ public class GUI {
 
     }
 
-    public void showQuestionAndGetResponses(Question questionObj, Player[] playersArr, Responses responsesObj) {
+    /**
+     * This method draws the the question,responses and category of question on the GUI.
+     * Also it resets the Player color to default.
+     * @param questionObj The question object
+     * @return
+     */
+    public Responses showQuestionAndGetResponses(Question questionObj) {
+        //Change All players color to default
+        for (Player item: playersArr)
+            changePlayerStatusToNormal(item);
 
-        responsesObj.setIgnoreInput(false);
+        this.responsesObj.clearReset();
         this.playersArr = playersArr;
         this.responsesObj = responsesObj;
         txtQuestionName.setText(questionObj.getQuestion());
@@ -410,6 +440,16 @@ public class GUI {
         for (int i = 0; i < txtRes.length; i++) {
             txtRes[i].setText(respArr.get(i));
         }
+        while (!responsesObj.haveAllPlayersResponed()) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return responsesObj;
+
     }
 
     /**
@@ -426,11 +466,10 @@ public class GUI {
         txtRoundType.setText(roundType);
     }
 
-
+    private void changePlayerStatusToReplied(Player playerObj){
+        playerToJLabel_HashMap.get(playerObj).setForeground(new Color(109, 116, 116));
+    }
+    private void changePlayerStatusToNormal(Player playerObj){
+        playerToJLabel_HashMap.get(playerObj).setForeground(Color.white);
+    }
 }
-
-
-
-
-
-

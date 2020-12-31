@@ -1,5 +1,3 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +15,7 @@ class ResponsesTest {
         responses_obj.addPlayerResponse(pl2, "false");
 
 
-        responses_obj.clear_responses();
+        responses_obj.clearReset();
 
 
 
@@ -94,7 +92,7 @@ class ResponsesTest {
         assertEquals(responses_obj.getPlayerAtPos(1),pl1);
         assertEquals(responses_obj.getResponseAtPos(1),"20");
 
-        responses_obj.clear_responses();
+        responses_obj.clearReset();
 
         responses_obj.addPlayerResponse(pl1, "23");
         responses_obj.addPlayerResponse(pl2, "15");

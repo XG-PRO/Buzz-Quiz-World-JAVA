@@ -106,21 +106,14 @@ public class Rounds {
                 temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
             }
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
-            frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
-            while (!responsesObj.haveAllPlayersResponed()) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            responsesObj = frame.showQuestionAndGetResponses(temp);
 
-            }
-            //System.out.printf("Next Question");
             int[] gainedPoints;
             gainedPoints = new int[playersArr.length];
 
 
             for (int j = 0; j < playersArr.length; j++) {
+
                 if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
                     gainedPoints[j] = 1000;
                     responsesObj.getPlayerAtPos(j).increasePoints(1000);
@@ -130,7 +123,7 @@ public class Rounds {
 
             frame.popupShowGainedPoints(playersArr, gainedPoints);
             frame.updatePlayersPoints(playersArr);
-            responsesObj.clear_responses();
+            responsesObj.clearReset();
 
 
         }
@@ -164,15 +157,8 @@ public class Rounds {
 
 
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
-            frame.showQuestionAndGetResponses(temp, playersArr, responsesObj);
-            while (!responsesObj.haveAllPlayersResponed()) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            responsesObj = frame.showQuestionAndGetResponses(temp);
 
-            }
             //System.out.printf("Next Question");
             int[] gainedPoints;
             gainedPoints = new int[playersArr.length];
@@ -191,7 +177,7 @@ public class Rounds {
 
             frame.popupShowGainedPoints(playersArr, gainedPoints);
             frame.updatePlayersPoints(playersArr);
-            responsesObj.clear_responses();
+            responsesObj.clearReset();
 
 
         }

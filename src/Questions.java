@@ -51,7 +51,7 @@ public class Questions {
 
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
         hash.get(obj.getType()).add(obj);
-        if (hash.get(obj.getType()).size() % 10 == 0) { // Every 5th element the arraylist that contains the questions will be shuffled;
+        if (hash.get(obj.getType()).size() % 3 == 0) { // Every 3th element the arraylist that contains the questions will be shuffled;
             Collections.shuffle(hash.get(obj.getType()));
         }
         hashIterators.put(obj.getType(), hash.get(obj.getType()).iterator());
