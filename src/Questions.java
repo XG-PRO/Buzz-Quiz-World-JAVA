@@ -24,6 +24,7 @@ public class Questions {
 
 
     /**
+     * Adds a question in the Questions structure.
      * @param name            A string that contains the question itself.
      * @param type            A string that contains the type of the question.
      * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
@@ -41,7 +42,23 @@ public class Questions {
         addQuestion(obj);
     }
 
-
+    /**
+     * Adds a question image in the Questions structure.
+     * @param name            A string that contains the question itself.
+     * @param type            A string that contains the type of the question.
+     * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
+     * @param imageName The file name of the image.
+     */
+    public void addQuestionImage(String type, String name, ArrayList<String> responses_array,String imageName) {
+        addQuestion(new QuestionImage(name, type, responses_array,imageName));
+    }
+    public static boolean isQuestionImage(Question qsObj){
+        if (qsObj instanceof QuestionImage){
+            System.out.println("Question Image");
+            return true;
+        }
+        return false;
+    }
     /**
      * @param obj A question object
      * Since each question added uses tha hash method, every time a question is shown to the user,
@@ -98,7 +115,7 @@ public class Questions {
 
 
     /**
-     * Resets all questions status, to not shown before, useful for restarts
+     * Resets all questions status, to not shown before, useful to reset
      */
     public void resetAllViewed() {
         for (String key : hash.keySet()) {

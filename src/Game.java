@@ -1,8 +1,8 @@
-import java.io.*;
-import java.nio.file.Files;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 
 /** The Game Class initiates the start of the game
  * after gathering the resources needed (questions from file)**/
@@ -84,7 +84,7 @@ public class Game {
             final int index_resp_start = 2;
             final int index_resp_finish = 5;
             final int index_resp_correct = 6;
-            //final int index_image_src = 7;
+            final int index_image_src = 7;
 
             String line;
             while ((line = reader.readLine()) != null) {  // for every line in the file
@@ -116,7 +116,11 @@ public class Game {
                     System.out.println("The type of question '" + lineItems[index_question] + "' CAN NOT BE 'Random'!\n");
                     throw new Exception();
                 }
-                qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
+                if (!lineItems[index_image_src].equals("NoImage")){
+                    qs.addQuestionImage(lineItems[index_type], lineItems[index_question], responses,lineItems[index_image_src]);
+                }else{
+                    qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
+                }
             }
         } catch (Exception e) {
             System.out.println("Something went wrong when trying to read the .tsv file.");

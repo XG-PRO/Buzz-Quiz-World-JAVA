@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
 
 /**
  * This class implements the logic of each round. It could be implemented with inheritance but..
@@ -16,6 +16,7 @@ public class Rounds {
     private String current_round_type; // The current round type
     private GUI frame;
     private Responses responsesObj;
+    private HashMap gainedPointsHash;
     /**
      * Default Constructor
      *
@@ -26,7 +27,7 @@ public class Rounds {
         this.questions_obj = questions_obj;
         this.playersArr = playersArr;
         this.frame = frame;
-
+        this.gainedPointsHash = new HashMap<Player,Integer>(playersArr.length);
 
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
         //rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
@@ -108,20 +109,19 @@ public class Rounds {
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
-            int[] gainedPoints;
-            gainedPoints = new int[playersArr.length];
+            gainedPointsHash.clear();
 
 
             for (int j = 0; j < playersArr.length; j++) {
-
+                Player currentPlayer = responsesObj.getPlayerAtPos(j);
                 if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPoints[j] = 1000;
-                    responsesObj.getPlayerAtPos(j).increasePoints(1000);
+                    gainedPointsHash.put(currentPlayer,1000);
+                    currentPlayer.increasePoints(1000);
                 } else
-                    gainedPoints[j] = 0;
+                    gainedPointsHash.put(currentPlayer,0);
             }
 
-            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
+            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
             frame.updatePlayersPoints(playersArr);
             responsesObj.clearReset();
 
@@ -160,22 +160,23 @@ public class Rounds {
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
             //System.out.printf("Next Question");
-            int[] gainedPoints;
-            gainedPoints = new int[playersArr.length];
+            gainedPointsHash.clear();
 
 
             for (int j = 0; j < playersArr.length; j++) {
+                Player currentPlayer = responsesObj.getPlayerAtPos(j);
+
                 if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPoints[j] = bet_player[j];
-                    responsesObj.getPlayerAtPos(j).increasePoints(bet_player[j]);
+                    gainedPointsHash.put(currentPlayer,bet_player[j]);
+                    currentPlayer.increasePoints(bet_player[j]);
                 }
                 else {
-                    gainedPoints[j] = -bet_player[j];
-                    responsesObj.getPlayerAtPos(j).decreasePoints(bet_player[j]);
+                    gainedPointsHash.put(currentPlayer, -bet_player[j]);
+                    currentPlayer.decreasePoints(bet_player[j]);
                 }
             }
 
-            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
+            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
             frame.updatePlayersPoints(playersArr);
             responsesObj.clearReset();
 
@@ -205,21 +206,23 @@ public class Rounds {
             //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
-            int[] gainedPoints;
-            gainedPoints = new int[playersArr.length];
+            gainedPointsHash.clear(); // = new HashMap<Player,Integer>(playersArr.length);
+
 
             int winner_points = 1000;
             for (int j = 0; j < playersArr.length; j++) {
-
+                Player currentPlayer = responsesObj.getPlayerAtPos(j);
                 if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPoints[j] = winner_points;
-                    responsesObj.getPlayerAtPos(j).increasePoints(winner_points);
+                    gainedPointsHash.put(currentPlayer,winner_points);
+                    currentPlayer.increasePoints(winner_points);
+                    winner_points/=2;
+
                 } else
-                    gainedPoints[j] = 0;
-                winner_points/=2;
+                    gainedPointsHash.put(currentPlayer,0);
+
             }
 
-            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
+            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
             frame.updatePlayersPoints(playersArr);
             responsesObj.clearReset();
 

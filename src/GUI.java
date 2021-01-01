@@ -21,7 +21,8 @@ public class GUI {
     private JPanel centerPanel;
     private JPanel belowQsPanel;
 
-    private JLabel imagePlaceHolder;
+    private JLabel imageLabel;
+    private ImageIcon imageIcon;
     private JLabel txtTypeQuestion;
     private JLabel txtRoundType;
 
@@ -41,6 +42,8 @@ public class GUI {
     private JPanel scorePanel;
     private JMenu menu;
     private JMenuBar menubar;
+
+
 
 
     /**
@@ -96,7 +99,7 @@ public class GUI {
         initResponsesPanelAndImage();
         belowQsPanel.add(responsesPanel);
         belowQsPanel.add(Box.createHorizontalGlue());
-        belowQsPanel.add(imagePlaceHolder);
+        belowQsPanel.add(imageLabel);
         belowQsPanel.add(Box.createHorizontalGlue());
         belowQsPanel.add(Box.createRigidArea(new Dimension((int) (frame.getWidth() * 0.15), 1)));
 
@@ -269,9 +272,10 @@ public class GUI {
             e.printStackTrace();
         }
         belowQsPanel.setOpaque(false);
-        imagePlaceHolder = new JLabel(new ImageIcon(myPicture));
-        imagePlaceHolder.setOpaque(true);
-        imagePlaceHolder.setPreferredSize(new Dimension(350, 350));
+        this.imageIcon = new ImageIcon(myPicture);
+        imageLabel = new JLabel(this.imageIcon);
+        imageLabel.setOpaque(true);
+        imageLabel.setPreferredSize(new Dimension(350, 350));
     }
 
     /**
@@ -357,22 +361,26 @@ public class GUI {
     }
 
 
-    public void popupShowGainedPoints(Player[] player_arr, int[] gainedPoints, String correctAnswer)
+    public void popupShowGainedPoints(Player[] player_arr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
     {
         StringBuilder temp = new StringBuilder();
         temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
         for (int i = 0; i < player_arr.length; i++) {
-            if (gainedPoints[i] == 0){
+            if (!gainedPointsHash.containsKey(player_arr[i])){
+                temp.append(player_arr[i].getName()).append(" didn't responded.\n");
+                continue;
+            }
+            if (gainedPointsHash.get(player_arr[i]) == 0){
                 temp.append(player_arr[i].getName()).append(" didn't get any points.\n");
             }
             else {
-                if (gainedPoints[i] >= 0)
+                if (gainedPointsHash.get(player_arr[i]) >= 0)
 
-                    temp.append(player_arr[i].getName()).append(" gained : ").append(gainedPoints[i]);
+                    temp.append(player_arr[i].getName()).append(" gained : ").append(gainedPointsHash.get(player_arr[i]));
 
                 else
 
-                    temp.append(player_arr[i].getName()).append(" lost : ").append(gainedPoints[i] * (-1));
+                    temp.append(player_arr[i].getName()).append(" lost : ").append(gainedPointsHash.get(player_arr[i]) * (-1));
                 temp.append(" points.\n");
             }
         }temp.append("\n\n");
@@ -443,8 +451,12 @@ public class GUI {
         //Change All players color to default
         for (Player item: playersArr)
             changePlayerStatusToNormal(item);
-        imagePlaceHolder.setVisible(false);
-
+        imageLabel.setVisible(false);
+        if (Questions.isQuestionImage(questionObj)){
+            System.out.println("It is a question image");
+            loadImage(((QuestionImage)questionObj).getImageName());
+            imageLabel.setVisible(true);
+        }
         this.responsesObj.clearReset();
         this.playersArr = playersArr;
         this.responsesObj = responsesObj;
@@ -485,5 +497,14 @@ public class GUI {
     }
     private void changePlayerStatusToNormal(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.white);
+    }
+    private void loadImage(String fileName){
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(getClass().getResource("/packageQuestions/images/"+fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.imageIcon.setImage(myPicture);
     }
 }
