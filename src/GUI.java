@@ -171,7 +171,8 @@ public class GUI {
         //UIManager.put("MenuItem.font", font_global_20);
 
 
-        txtRoundType = new JLabel("Stop the Timer");
+        txtRoundType = new JLabel();
+        txtRoundType.setToolTipText("If you need any help go to MENU->HELP");
         txtRoundType.setForeground(Color.white);
         txtRoundType.setFont(font_global);
 
@@ -195,21 +196,22 @@ public class GUI {
         // Init the questionPanel
         questionPanel = new JPanel();
         questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
-        questionPanel.setBackground(Color.white);
+        questionPanel.setBackground(new Color(245, 245, 245));
         questionPanel.setOpaque(true);
 
-        txtTypeQuestion = new JLabel("Tech");
+        txtTypeQuestion = new JLabel();
         txtTypeQuestion.setFont(font_global);
-        txtTypeQuestion.setForeground(new Color(110, 160, 155));
-        txtQuestionName = new JTextArea("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et libero in lorem pulvinar aliquam sit.");
+        txtTypeQuestion.setForeground(new Color(63, 124, 172));
+        txtQuestionName = new JTextArea("Welcome to Buzz Quiz World");
         txtQuestionName.setFont(font_global);
         txtQuestionName.setOpaque(true);
         txtQuestionName.setLineWrap(true);
         txtQuestionName.setWrapStyleWord(true);
+        txtQuestionName.setOpaque(false);
         //txtQuestionName.setPreferredSize(new Dimension((int) (frame.getWidth() * 0.78), 110));
         txtQuestionName.setEnabled(false);
-        txtQuestionName.setDisabledTextColor(colorGrayBackground);
-        Dimension questionPanelDimension = new Dimension((int) (frame.getWidth() * 0.80), 110);
+        txtQuestionName.setDisabledTextColor(new Color(26, 30, 35));
+        Dimension questionPanelDimension = new Dimension((int) (frame.getWidth() * 0.80), 115);
         questionPanel.setMinimumSize(questionPanelDimension);
         questionPanel.setMaximumSize(questionPanelDimension);
         questionPanel.setPreferredSize(questionPanelDimension);
@@ -234,8 +236,8 @@ public class GUI {
         txtResKeys = new JLabel[numberOfResponses];
         txtRes = new JLabel[numberOfResponses];
         for (int i = 0; i < numberOfResponses; i++) {
-            txtResKeys[i] = new JLabel("P H");
-            txtRes[i] = new JLabel("Etiam orci felis, bibendum ac congue a metus.");
+            txtResKeys[i] = new JLabel();
+            txtRes[i] = new JLabel();
         }
         responsesPanel = new JPanel(new GridBagLayout());
         // Init grid bag for responsesPanel
@@ -262,7 +264,7 @@ public class GUI {
 
         BufferedImage myPicture = null;
         try {
-            myPicture = ImageIO.read(getClass().getResource("/splash/placeholder.png"));
+            myPicture = ImageIO.read(getClass().getResource("/splash/splash.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,7 +282,7 @@ public class GUI {
         scorePanel.setBackground(Color.BLACK);
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.X_AXIS));
         scorePanel.add(Box.createRigidArea(new Dimension(40, 0)));
-        txtRoundCount = new JLabel("ROUND 1");
+        txtRoundCount = new JLabel();
         txtRoundCount.setForeground(Color.WHITE);
         txtRoundCount.setFont(font_global);
     }
@@ -341,29 +343,41 @@ public class GUI {
     public String popupGetPlayerName(int i) {
 
         String temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
+        /*
         while (temp == null || temp.isBlank()) {
             JOptionPane.showMessageDialog(frame, "Player Name can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
+        }
+        */
+        if (temp == null || temp.isBlank()){ // If the user closed the window set the default name to be Player + i
+          temp = "Player "+i;
         }
         return temp;
 
     }
 
 
-    public void popupShowGainedPoints(Player[] player_arr, int[] gainedPoints)
+    public void popupShowGainedPoints(Player[] player_arr, int[] gainedPoints, String correctAnswer)
     {
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
+        temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
         for (int i = 0; i < player_arr.length; i++) {
-            if (gainedPoints[i] >= 0)
+            if (gainedPoints[i] == 0){
+                temp.append(player_arr[i].getName()).append(" didn't get any points.\n");
+            }
+            else {
+                if (gainedPoints[i] >= 0)
 
-                 temp+=player_arr[i].getName() + " gained : " + gainedPoints[i] + " points \n";
+                    temp.append(player_arr[i].getName()).append(" gained : ").append(gainedPoints[i]);
 
-            else
+                else
 
-                 temp+=player_arr[i].getName() + " lost : " + gainedPoints[i]*(-1) + " points \n";
-        }
+                    temp.append(player_arr[i].getName()).append(" lost : ").append(gainedPoints[i] * (-1));
+                temp.append(" points.\n");
+            }
+        }temp.append("\n\n");
 
-        JOptionPane.showMessageDialog(null, temp,
+        JOptionPane.showMessageDialog(null, temp.toString(),
                 "Results", JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -429,6 +443,7 @@ public class GUI {
         //Change All players color to default
         for (Player item: playersArr)
             changePlayerStatusToNormal(item);
+        imagePlaceHolder.setVisible(false);
 
         this.responsesObj.clearReset();
         this.playersArr = playersArr;
@@ -458,8 +473,7 @@ public class GUI {
      * @param roundCount The round type
      */
     public void changeRoundCount(int roundCount) {
-        String temp = txtRoundCount.getText().substring(0, 5);
-        txtRoundCount.setText(temp + " " + roundCount);
+        txtRoundCount.setText("ROUND " + roundCount);
     }
 
     public void changeRoundType(String roundType) {

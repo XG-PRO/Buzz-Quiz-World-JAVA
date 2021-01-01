@@ -26,11 +26,11 @@ public class Rounds {
         this.questions_obj = questions_obj;
         this.playersArr = playersArr;
         this.frame = frame;
-        this.responsesObj = new Responses(playersArr.length);
+
 
         //rounds_types = Utilities.CreateArrayListString(new String[] {"Right Answer","Bet","Stop The Counter","Quick Answer","Thermometer"});
         //rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer", "Bet"});
-        rounds_types = Utilities.CreateArrayListString(new String[]{"Bet",});
+        rounds_types = Utilities.CreateArrayListString(new String[]{"Quick Answer",});
         bet_types = new String[]{"250", "500", "750", "1000"};
 
     }
@@ -121,7 +121,7 @@ public class Rounds {
                     gainedPoints[j] = 0;
             }
 
-            frame.popupShowGainedPoints(playersArr, gainedPoints);
+            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
             frame.updatePlayersPoints(playersArr);
             responsesObj.clearReset();
 
@@ -166,8 +166,8 @@ public class Rounds {
 
             for (int j = 0; j < playersArr.length; j++) {
                 if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPoints[j] = bet_player[j] * 2;
-                    responsesObj.getPlayerAtPos(j).increasePoints( bet_player[j] * 2);
+                    gainedPoints[j] = bet_player[j];
+                    responsesObj.getPlayerAtPos(j).increasePoints(bet_player[j]);
                 }
                 else {
                     gainedPoints[j] = -bet_player[j];
@@ -175,7 +175,7 @@ public class Rounds {
                 }
             }
 
-            frame.popupShowGainedPoints(playersArr, gainedPoints);
+            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
             frame.updatePlayersPoints(playersArr);
             responsesObj.clearReset();
 
@@ -191,7 +191,40 @@ public class Rounds {
     }
 
     private void RoundType_QuickAnswer() {
+        frame.changeRoundType("Quick Answer");
+        for (int i = 0; i < number_of_questions; i++) {
+            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
+            if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
+                current_question_type = "Random";
+                temp = questions_obj.getRandomQuestionWithType("Random");
+            }
+            if (temp == null) {
+                Parser.Exit(0);  //RAN OUT OF QUESTIONS
+                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
+            }
+            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
+            responsesObj = frame.showQuestionAndGetResponses(temp);
 
+            int[] gainedPoints;
+            gainedPoints = new int[playersArr.length];
+
+            int winner_points = 1000;
+            for (int j = 0; j < playersArr.length; j++) {
+
+                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
+                    gainedPoints[j] = winner_points;
+                    responsesObj.getPlayerAtPos(j).increasePoints(winner_points);
+                } else
+                    gainedPoints[j] = 0;
+                winner_points/=2;
+            }
+
+            frame.popupShowGainedPoints(playersArr, gainedPoints,temp.getRightResponse());
+            frame.updatePlayersPoints(playersArr);
+            responsesObj.clearReset();
+
+
+        }
     }
 
     private void RoundType_Thermometer() {
