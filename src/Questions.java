@@ -18,6 +18,7 @@ public class Questions {
      * Default Constructor
      */
     public Questions() {
+
         hash = new HashMap<>();
         hashIterators = new HashMap<>();
     }
@@ -30,14 +31,8 @@ public class Questions {
      * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
     public void addQuestion(String type, String name, ArrayList<String> responses_array) {
-        Question obj = new Question(name, type, responses_array);
 
-        hash.putIfAbsent(obj.getType(), new ArrayList<>());
-        hash.get(obj.getType()).add(obj);
-        if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
-            Collections.shuffle(hash.get(obj.getType()));
-        }
-        hashIterators.put(type, hash.get(obj.getType()).iterator());
+        Question obj = new Question(name, type, responses_array);
 
         addQuestion(obj);
     }
@@ -51,13 +46,6 @@ public class Questions {
      */
     public void addQuestionImage(String type, String name, ArrayList<String> responses_array,String imageName) {
         Question obj = new QuestionImage(name, type, responses_array,imageName);
-
-        hash.putIfAbsent(obj.getType(), new ArrayList<>());
-        hash.get(obj.getType()).add(obj);
-        if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
-            Collections.shuffle(hash.get(obj.getType()));
-        }
-        hashIterators.put(type, hash.get(obj.getType()).iterator());
 
         addQuestion(obj);
     }
@@ -137,6 +125,8 @@ public class Questions {
      * @return an Arraylist of all the types of questions
      */
     public ArrayList<String> getTypes() {
-        return new ArrayList<>(hash.keySet());
+        ArrayList<String> temp = new ArrayList<>(hash.keySet());
+        temp.add("Random");
+        return temp;
     }
 }

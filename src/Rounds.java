@@ -179,16 +179,16 @@ public class Rounds {
     }
 
     private boolean pointCalculator(Question temp, int pos,int winPoints, int losePoints){
-        Player currentPlayer = responsesObj.getPlayerAtPos(pos);
+        //Player currentPlayer = responsesObj.getPlayerAtPos(pos);
         if (responsesObj.getResponseAtPos(pos).equals(temp.getRightResponse())) {
-            gainedPointsHash.put(currentPlayer,winPoints);
-            currentPlayer.increasePoints(winPoints);
+            gainedPointsHash.put(responsesObj.getPlayerAtPos(pos),winPoints);
+            responsesObj.getPlayerAtPos(pos).increasePoints(winPoints);
 
             return true;
         }
         else {
-            gainedPointsHash.put(currentPlayer, -losePoints);
-            currentPlayer.decreasePoints(losePoints);
+            gainedPointsHash.put(responsesObj.getPlayerAtPos(pos), -losePoints);
+            responsesObj.getPlayerAtPos(pos).decreasePoints(losePoints);
             return false;
         }
     }

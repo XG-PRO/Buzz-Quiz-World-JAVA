@@ -506,4 +506,19 @@ public class GUI {
         }
         this.imageIcon.setImage(myPicture);
     }
+
+    public String showMenu(String[] question_types,String old_question_type){
+        String current_question_type = old_question_type;
+        int resp = popupInput("Menu",new String[]{"Change Question Category","Start Round","Help"});
+        while (resp != 1){
+            if (resp==0)
+                current_question_type = question_types[popupInput("Choose question category",question_types)];
+            else if (resp == 2)
+                JOptionPane.showMessageDialog(null,"Info\nInfo in second line",
+                        "Info", JOptionPane.INFORMATION_MESSAGE);
+            resp = popupInput("Menu",new String[]{"Change Question Category","Start Round","Help"});
+
+        }
+        return current_question_type;
+    }
 }
