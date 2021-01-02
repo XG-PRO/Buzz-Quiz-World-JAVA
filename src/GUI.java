@@ -509,9 +509,9 @@ public class GUI {
 
     public String showMenu(String[] question_types,String old_question_type){
         String current_question_type = old_question_type;
-        int resp = popupInput("Menu",new String[]{"Change Question Category","Start Round","Help"});
-        while (resp != 1){
-            if (resp==0)
+        int resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
+        while (resp != 0){
+            if (resp==1)
                 current_question_type = question_types[popupInput("Choose question category",question_types)];
             else if (resp == 2)
                 JOptionPane.showMessageDialog(null,"Info\nInfo in second line",

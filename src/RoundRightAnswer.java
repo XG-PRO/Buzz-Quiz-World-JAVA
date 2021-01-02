@@ -1,22 +1,23 @@
-public class RoundRightAnswer extends Round{
+public class RoundRightAnswer extends Round {
 
-    RoundRightAnswer(Questions questionsObj,GUI frame, Player[] playersArr) {
+    RoundRightAnswer(Questions questionsObj, GUI frame, Player[] playersArr) {
         super(questionsObj, frame, playersArr);
     }
-    void playRound(){
+    @Override
+    public void playRound() {
         frame.changeRoundType("Right Answer");
-        currentQuestionType = frame.showMenu(questionsObj.getTypes().toArray(new String[0]), currentQuestionType);
-        for (int i = 0; i < numberOfQuestions; i++) {
-            Question temp = getRoundQuestion();
+        for (int i = 0; i < numberOfQuestionsPerRound; i++) {
+            Question questionObj = getRoundQuestion();
 
-            responsesObj = frame.showQuestionAndGetResponses(temp);
+            responsesObj = frame.showQuestionAndGetResponses(questionObj);
 
             gainedPointsHash.clear();
 
             for (int j = 0; j < playersArr.length; j++)
-                pointCalculator(temp,j,1000,0);
-            updateFrame(temp);
+                pointCalculator(questionObj,j,1000,0);
+
+            updateFrame_ShowPopUp_Clear_Responses(questionObj);
         }
     }
-
 }
+

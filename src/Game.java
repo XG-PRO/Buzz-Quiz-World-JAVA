@@ -3,7 +3,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 /** The Game Class initiates the start of the game
  * after gathering the resources needed (questions from file)**/
@@ -16,13 +15,8 @@ public class Game {
     Player[] playersArr;
 
 
-    private final ArrayList<String> rounds_types; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime
-    private String[] bet_types;   // A arraylist that contains all the bets the user can bet (ex 250,500...)
-    private String current_question_type = "Random"; // The initial round question type
-    private String current_round_type; // The current round type
-    private GUI frame;
-    private Responses responsesObj;
-    private HashMap gainedPointsHash;
+    private final Round[] roundsTypes; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime;
+    private final GUI frame;
 
     /**
      * Default Constructor
@@ -34,11 +28,22 @@ public class Game {
 
         readFileQuestions();
         frame = new GUI();
-        playersSet(frame);
+        setNumberofPlayer();
 
-        rounds_types = Utilities.CreateArrayListString(new String[]{"Right Answer",});
-        bet_types = new String[]{"250", "500", "750", "1000"};
-        this.gainedPointsHash = new HashMap<Player,Integer>(playersArr.length);
+
+        if (playersArr.length==1)
+            roundsTypes = new Round[]{
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundBet(questionsObj,frame,playersArr)
+            };
+        else
+            roundsTypes = new Round[]{
+                    //new RoundRightAnswer(questionsObj,frame,playersArr),
+                    //new RoundBet(questionsObj,frame,playersArr),
+                    new RoundQuickAnswer(questionsObj,frame,playersArr),
+
+            };
+
     }
 
 
@@ -51,44 +56,14 @@ public class Game {
 
         int number_of_rounds = 6;
         for (int i = 0; i < number_of_rounds; i++) {
-
-            current_round_type = rounds_types.get(Utilities.random_int(rounds_types.size())); // Each Round Type is picked randomly but the user can change it
-            //System.out.println("Current Round Count: " + (i+1)+"/"+number_of_rounds);
-            //Parser.PrintRoundNumber(i + 1, number_of_rounds); //
-            // EDO TO MENU
             frame.changeRoundCount(i+1);
-            switch (current_round_type) {
-                case "Bet":
-                    //RoundType_Bet();
-                    break;
-                case "Stop The Counter":
-                    //RoundType_StopTheCounter();
-                    break;
-                case "Quick Answer":
-                    //RoundType_QuickAnswer();
-                    break;
-                case "Thermometer":
-                    //RoundType_Thermometer();
-                    break;
-                default:
-                    //RoundType_RightAnswer();
-                    RoundRightAnswer t = new RoundRightAnswer(questionsObj,frame,playersArr);
-                    t.playRound();
-                    break;
-            }
 
+            Round currentRoundObj = roundsTypes[Utilities.random_int(roundsTypes.length)];
+            currentRoundObj.playRound();
         }
-        // Debug code
-        /*
-        while (temp != null) {
-            temp.debugShowInfo();
-            temp = qs.getRandomQuestion();
-        }
-        */
-
     }
 
-    void playersSet(GUI frame)
+    void setNumberofPlayer()
     {
         int numberOfPlayers = frame.popupAskNumberOfPlayer(2);
         playersArr = new Player[numberOfPlayers];

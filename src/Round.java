@@ -1,35 +1,44 @@
 import java.util.HashMap;
 
 public class Round {
-    protected Questions questionsObj;
-    protected final GUI frame;
+    protected static Questions questionsObj;
+    protected static GUI frame;
     protected Responses responsesObj;
-    protected final Player [] playersArr;
-    protected final HashMap<Player,Integer> gainedPointsHash;
-    protected int numberOfQuestions =  5;
-    protected String currentQuestionType = "Random";
+    protected static Player [] playersArr;
+    protected static HashMap<Player,Integer> gainedPointsHash;
+    protected final static int numberOfQuestionsPerRound =  5;
+    protected static String currentQuestionType = "Random";
     Round(Questions questionsObj,GUI frame, Player[] playersArr){
-        this.questionsObj = questionsObj;
-        this.frame = frame;
-        this.gainedPointsHash = new HashMap<>(playersArr.length);
-        this.playersArr = playersArr;
+        Round.questionsObj = questionsObj;
+        Round.frame = frame;
+        Round.gainedPointsHash = new HashMap<>(playersArr.length);
+        Round.playersArr = playersArr;
     }
-    protected void updateFrame(Question temp){
-        frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
+    protected void updateFrame_ShowPopUp_Clear_Responses(Question questionObj){
+        frame.popupShowGainedPoints(playersArr, gainedPointsHash,questionObj.getRightResponse());
         frame.updatePlayersPoints(playersArr);
         responsesObj.clearReset();
     }
-    protected boolean pointCalculator(Question temp, int pos,int winPoints, int losePoints){
-        //Player currentPlayer = responsesObj.getPlayerAtPos(pos);
-        if (responsesObj.getResponseAtPos(pos).equals(temp.getRightResponse())) {
-            gainedPointsHash.put(responsesObj.getPlayerAtPos(pos),winPoints);
-            responsesObj.getPlayerAtPos(pos).increasePoints(winPoints);
+
+    /**
+     * This method calculates the points for a player who answered at 'pos' position.
+     * @param questionObj The question object.
+     * @param pos The order of the player.
+     * @param winPoints The points that the player who responded at pos position will get if his responses was right.
+     * @param losePoints The points that the player who responded at pos position will get if his responses was wrong.
+     * @return True if player response was right / false if was wrong.
+     */
+    protected boolean pointCalculator(Question questionObj, int pos,int winPoints, int losePoints){
+        Player currentPlayer = responsesObj.getPlayerAtPos(pos);
+        if (responsesObj.getResponseAtPos(pos).equals(questionObj.getRightResponse())) {
+            gainedPointsHash.put(currentPlayer,winPoints);
+            currentPlayer.increasePoints(winPoints);
 
             return true;
         }
         else {
-            gainedPointsHash.put(responsesObj.getPlayerAtPos(pos), -losePoints);
-            responsesObj.getPlayerAtPos(pos).decreasePoints(losePoints);
+            gainedPointsHash.put(currentPlayer, -losePoints);
+            currentPlayer.decreasePoints(losePoints);
             return false;
         }
     }
@@ -44,5 +53,7 @@ public class Round {
             temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
         }
         return temp;
+    }
+    public void playRound(){
     }
 }
