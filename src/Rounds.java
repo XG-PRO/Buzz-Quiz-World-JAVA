@@ -86,6 +86,18 @@ public class Rounds {
         //current_question_type = me[0];
 
     }
+    private Question getRoundQuestion(){
+        Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
+        if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
+            current_question_type = "Random";
+            temp = questions_obj.getRandomQuestionWithType("Random");
+        }
+        if (temp == null) {
+            Parser.Exit(0);  //RAN OUT OF QUESTIONS
+            temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
+        }
+        return temp;
+    }
 
 
     /**
@@ -97,39 +109,18 @@ public class Rounds {
     private void RoundType_RightAnswer() {
         frame.changeRoundType("Right Answer");
         for (int i = 0; i < number_of_questions; i++) {
-            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
-            if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
-                current_question_type = "Random";
-                temp = questions_obj.getRandomQuestionWithType("Random");
-            }
-            if (temp == null) {
-                Parser.Exit(0);  //RAN OUT OF QUESTIONS
-                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
-            }
-            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
+            Question temp = getRoundQuestion();
+
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
             gainedPointsHash.clear();
 
-
-            for (int j = 0; j < playersArr.length; j++) {
-                Player currentPlayer = responsesObj.getPlayerAtPos(j);
-                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPointsHash.put(currentPlayer,1000);
-                    currentPlayer.increasePoints(1000);
-                } else
-                    gainedPointsHash.put(currentPlayer,0);
-            }
-
-            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
-            frame.updatePlayersPoints(playersArr);
-            responsesObj.clearReset();
-
-
+            for (int j = 0; j < playersArr.length; j++)
+                pointCalculator(temp,j,1000,0);
+            updateFrameAndResetResponses(temp);
         }
 
     }
-
 
 
     /**
@@ -140,47 +131,21 @@ public class Rounds {
     private void RoundType_Bet() {
         frame.changeRoundType("Bet");
         for (int i = 0; i < number_of_questions; i++) {
-            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
-            if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
-                current_question_type = "Random";
-                temp = questions_obj.getRandomQuestionWithType("Random");
-            }
-            if (temp == null) {
-                Parser.Exit(0);  //RAN OUT OF QUESTIONS
-                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
-            }
+            Question temp = getRoundQuestion();
 
             int [] bet_player = new int [playersArr.length];
 
             for (int j = 0; j< playersArr.length;j++)
                 bet_player[j] = Integer.parseInt(bet_types[frame.popupInput("Question Category is:\n" + temp.getType() + "\n\n" + playersArr[j].getName() + " place your bet:", bet_types)]);
 
-
-            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
-            //System.out.printf("Next Question");
             gainedPointsHash.clear();
 
+            for (int j = 0; j < playersArr.length; j++)
+                pointCalculator(temp,j,bet_player[j]*2,bet_player[j]);
 
-            for (int j = 0; j < playersArr.length; j++) {
-                Player currentPlayer = responsesObj.getPlayerAtPos(j);
-
-                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPointsHash.put(currentPlayer,bet_player[j]);
-                    currentPlayer.increasePoints(bet_player[j]);
-                }
-                else {
-                    gainedPointsHash.put(currentPlayer, -bet_player[j]);
-                    currentPlayer.decreasePoints(bet_player[j]);
-                }
-            }
-
-            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
-            frame.updatePlayersPoints(playersArr);
-            responsesObj.clearReset();
-
-
+            updateFrameAndResetResponses(temp);
         }
 
     }
@@ -194,39 +159,18 @@ public class Rounds {
     private void RoundType_QuickAnswer() {
         frame.changeRoundType("Quick Answer");
         for (int i = 0; i < number_of_questions; i++) {
-            Question temp = questions_obj.getRandomQuestionWithType(current_question_type);
-            if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
-                current_question_type = "Random";
-                temp = questions_obj.getRandomQuestionWithType("Random");
-            }
-            if (temp == null) {
-                Parser.Exit(0);  //RAN OUT OF QUESTIONS
-                temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
-            }
-            //System.out.printf("ID OF OBJECT INSIDE ROUNDS : "+responsesObj.hashCode());
+            Question temp = getRoundQuestion();
+
             responsesObj = frame.showQuestionAndGetResponses(temp);
 
             gainedPointsHash.clear(); // = new HashMap<Player,Integer>(playersArr.length);
 
-
             int winner_points = 1000;
-            for (int j = 0; j < playersArr.length; j++) {
-                Player currentPlayer = responsesObj.getPlayerAtPos(j);
-                if (responsesObj.getResponseAtPos(j).equals(temp.getRightResponse())) {
-                    gainedPointsHash.put(currentPlayer,winner_points);
-                    currentPlayer.increasePoints(winner_points);
+            for (int j = 0; j < playersArr.length; j++)
+                if (pointCalculator(temp,j,winner_points,0))
                     winner_points/=2;
 
-                } else
-                    gainedPointsHash.put(currentPlayer,0);
-
-            }
-
-            frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
-            frame.updatePlayersPoints(playersArr);
-            responsesObj.clearReset();
-
-
+            updateFrameAndResetResponses(temp);
         }
     }
 
@@ -234,5 +178,24 @@ public class Rounds {
 
     }
 
+    private boolean pointCalculator(Question temp, int pos,int winPoints, int losePoints){
+        Player currentPlayer = responsesObj.getPlayerAtPos(pos);
+        if (responsesObj.getResponseAtPos(pos).equals(temp.getRightResponse())) {
+            gainedPointsHash.put(currentPlayer,winPoints);
+            currentPlayer.increasePoints(winPoints);
+
+            return true;
+        }
+        else {
+            gainedPointsHash.put(currentPlayer, -losePoints);
+            currentPlayer.decreasePoints(losePoints);
+            return false;
+        }
+    }
+    private void updateFrameAndResetResponses(Question temp) {
+        frame.popupShowGainedPoints(playersArr, gainedPointsHash,temp.getRightResponse());
+        frame.updatePlayersPoints(playersArr);
+        responsesObj.clearReset();
+    }
 
 }

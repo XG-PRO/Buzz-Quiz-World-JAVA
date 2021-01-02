@@ -31,14 +31,14 @@ public class Questions {
      */
     public void addQuestion(String type, String name, ArrayList<String> responses_array) {
         Question obj = new Question(name, type, responses_array);
-        /*
+
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
         hash.get(obj.getType()).add(obj);
         if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
             Collections.shuffle(hash.get(obj.getType()));
         }
         hashIterators.put(type, hash.get(obj.getType()).iterator());
-        */
+
         addQuestion(obj);
     }
 
@@ -50,7 +50,16 @@ public class Questions {
      * @param imageName The file name of the image.
      */
     public void addQuestionImage(String type, String name, ArrayList<String> responses_array,String imageName) {
-        addQuestion(new QuestionImage(name, type, responses_array,imageName));
+        Question obj = new QuestionImage(name, type, responses_array,imageName);
+
+        hash.putIfAbsent(obj.getType(), new ArrayList<>());
+        hash.get(obj.getType()).add(obj);
+        if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
+            Collections.shuffle(hash.get(obj.getType()));
+        }
+        hashIterators.put(type, hash.get(obj.getType()).iterator());
+
+        addQuestion(obj);
     }
     public static boolean isQuestionImage(Question qsObj){
         if (qsObj instanceof QuestionImage){

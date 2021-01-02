@@ -360,7 +360,6 @@ public class GUI {
 
     }
 
-
     public void popupShowGainedPoints(Player[] player_arr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
     {
         StringBuilder temp = new StringBuilder();
