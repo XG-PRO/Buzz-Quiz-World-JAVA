@@ -58,26 +58,36 @@ public class GUI_Main extends GUI{
 
     }
 
-    public void popupShowGainedPoints(Player[] player_arr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
+    public void popupShowGainedPoints(Player[] playerArr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
     {
+        for (JLabel item: txtRes){
+            if (item.getText().equals(correctAnswer))
+                item.setForeground(Color.green);
+            else
+                item.setForeground(Color.red);
+        }
         StringBuilder temp = new StringBuilder();
         temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
-        for (int i = 0; i < player_arr.length; i++) {
-            if (!gainedPointsHash.containsKey(player_arr[i])){
-                temp.append(player_arr[i].getName()).append(" didn't responded.\n");
+        for (int i = 0; i < playerArr.length; i++) {
+            Player currentPlayer = playerArr[i];
+            if (!gainedPointsHash.containsKey(currentPlayer)){
+                changePlayerStatusToFalse(currentPlayer);
+                temp.append(currentPlayer.getName()).append(" didn't responded.\n");
                 continue;
             }
-            if (gainedPointsHash.get(player_arr[i]) == 0){
-                temp.append(player_arr[i].getName()).append(" didn't get any points.\n");
+            if (gainedPointsHash.get(currentPlayer) == 0){
+                changePlayerStatusToFalse(currentPlayer);
+                temp.append(currentPlayer.getName()).append(" didn't get any points.\n");
             }
             else {
-                if (gainedPointsHash.get(player_arr[i]) >= 0)
-
-                    temp.append(player_arr[i].getName()).append(" gained : ").append(gainedPointsHash.get(player_arr[i]));
-
-                else
-
-                    temp.append(player_arr[i].getName()).append(" lost : ").append(gainedPointsHash.get(player_arr[i]) * (-1));
+                if (gainedPointsHash.get(currentPlayer) >= 0){
+                    temp.append(currentPlayer.getName()).append(" gained : ").append(gainedPointsHash.get(currentPlayer));
+                    changePlayerStatusToTrue(currentPlayer);
+                }
+                else {
+                    temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1));
+                    changePlayerStatusToFalse(currentPlayer);
+                }
                 temp.append(" points.\n");
             }
         }temp.append("\n\n");
@@ -148,6 +158,10 @@ public class GUI_Main extends GUI{
         //Change All players color to default
         for (Player item: playersArr)
             changePlayerStatusToNormal(item);
+        // Change all responses color to white
+        for (JLabel item: txtRes)
+            item.setForeground(Color.white);
+
         imageLabel.setVisible(false);
         if (Questions.isQuestionImage(questionObj)){
             System.out.println("It is a question image");

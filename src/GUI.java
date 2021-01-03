@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-
+import javax.swing.UIManager.*;
 public class GUI {
     protected final int numberOfResponses = 4;
     protected final Color colorGrayBackground;
@@ -44,20 +44,22 @@ public class GUI {
      * Default Constructor building the UI using JAVA SWING Library
      */
     public GUI() {
+        //Disable scaling this
+        //System.setProperty("sun.java2d.uiScale", "1.5");
+
         //Set OptionPane font to
         font_global = new Font("Arial Black", Font.BOLD, 26);
         font_global_20 = new Font("Arial Black", Font.PLAIN, 20);
         colorGrayBackground = new Color(61, 72, 85);
 
         Color colorForOptionPanel = new Color(18,26,40);
-        UIManager.put("OptionPane.messageFont", new Font("Arial Black", Font.BOLD, 24));
-        UIManager.put("OptionPane.buttonFont", new Font("Arial Black", Font.PLAIN, 20));
-        UIManager.put("TextField.font", new Font("Arial Black", Font.PLAIN, 20));
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 20));
+        UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 16));
+        UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, 18));
         UIManager.put("OptionPane.messageForeground", Color.white);
         UIManager.put("OptionPane.background", colorForOptionPanel);
         UIManager.put("OptionPane.messagebackground", colorForOptionPanel);
         UIManager.put("Panel.background", colorForOptionPanel);
-
 
         // Make the frame
         frame = new JFrame();
@@ -330,6 +332,12 @@ public class GUI {
     protected void changePlayerStatusToNormal(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.white);
     }
+    protected void changePlayerStatusToFalse(Player playerObj){
+        playerToJLabel_HashMap.get(playerObj).setForeground(Color.RED);
+    }
+    protected void changePlayerStatusToTrue(Player playerObj){
+        playerToJLabel_HashMap.get(playerObj).setForeground(Color.GREEN);
+    }
     protected void loadImage(String fileName){
         BufferedImage myPicture = null;
         try {
@@ -339,6 +347,5 @@ public class GUI {
         }
         this.imageIcon.setImage(myPicture);
     }
-
 
 }
