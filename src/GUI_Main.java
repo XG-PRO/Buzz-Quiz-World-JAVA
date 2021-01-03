@@ -11,11 +11,19 @@ public class GUI_Main extends GUI{
         super();
     }
 
+    public void exitFrame(){
+        JOptionPane.showMessageDialog(frame,"Thanks for playing!",
+                "The game has ended", JOptionPane.INFORMATION_MESSAGE);
+        frame.dispose();
+    }
+
+
     /**
      * It changes the round counter (bottom - left) JLabel
      *
      * @param roundCount The round type
      */
+
 
 
     public void changeRoundCount(int roundCount) {
@@ -164,7 +172,7 @@ public class GUI_Main extends GUI{
 
         imageLabel.setVisible(false);
         if (Questions.isQuestionImage(questionObj)){
-            System.out.println("It is a question image");
+            //System.out.println("It is a question image");
             loadImage(((QuestionImage)questionObj).getImageName());
             imageLabel.setVisible(true);
         }
@@ -194,17 +202,7 @@ public class GUI_Main extends GUI{
             if (resp==1)
                 current_question_type = question_types[popupInput("Choose Question Category",question_types)];
             else if (resp == 2)
-                JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n" +
-                                "Choose a number of players and answer questions with your corresponding keys!\n" +
-                                "At the start of each round, you will be able to change the question category, which by default is random.\n" +
-                                "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
-                                "Right Answer gives 1000 points for a right answer and 0 to a wrong one.\n" +
-                                "Bet allows you to bet points and gain double the amount if answered correctly.\n" +
-                                "Quick Answer gives double points to the faster player to answer correctly.\n" +
-                                "Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.\n" +
-                                "Thermometer does some shit.\n" +
-                                "The highest scores will be recorded in a leaderboard. Have fun!",
-                        "Info", JOptionPane.INFORMATION_MESSAGE);
+                popupInfo();
             resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
         }
         return current_question_type;
@@ -216,5 +214,19 @@ public class GUI_Main extends GUI{
         temp.append(playerObj.getPoints());
         temp.append(" points.");
         JOptionPane.showMessageDialog(frame,temp);
+    }
+
+    public void popupInfo(){
+        JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n" +
+                        "Choose a number of players and answer questions with your corresponding keys!\n" +
+                        "At the start of each round, you will be able to change the question category, which by default is random.\n" +
+                        "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
+                        "Right Answer gives 1000 points for a right answer and 0 to a wrong one.\n" +
+                        "Bet allows you to bet points and gain double the amount if answered correctly.\n" +
+                        "Quick Answer gives double points to the faster player to answer correctly.\n" +
+                        "Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.\n" +
+                        "Thermometer does some shit.\n" +
+                        "The highest scores will be recorded in a leaderboard. Have fun!",
+                "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 }

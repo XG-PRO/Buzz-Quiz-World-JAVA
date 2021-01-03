@@ -26,6 +26,7 @@ public class Game {
 
         readFileQuestions();
         frame = new GUI_Main();
+        frame.popupInfo();
         setNumberOfPlayers();
 
 
@@ -59,6 +60,7 @@ public class Game {
         }
         //When round has finished
         frame.popupShowWinner(findPlayerWithMostPoints());
+        frame.exitFrame();
     }
 
     void setNumberOfPlayers()

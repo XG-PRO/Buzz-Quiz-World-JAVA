@@ -51,7 +51,7 @@ public class Questions {
     }
     public static boolean isQuestionImage(Question qsObj){
         if (qsObj instanceof QuestionImage){
-            System.out.println("Question Image");
+            //System.out.println("Question Image");
             return true;
         }
         return false;
