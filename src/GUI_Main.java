@@ -92,7 +92,7 @@ public class GUI_Main extends GUI{
             }
         }temp.append("\n\n");
 
-        JOptionPane.showMessageDialog(null, temp.toString(),
+        JOptionPane.showMessageDialog(this.frame, temp.toString(),
                 "Results", JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -194,7 +194,7 @@ public class GUI_Main extends GUI{
             if (resp==1)
                 current_question_type = question_types[popupInput("Choose Question Category",question_types)];
             else if (resp == 2)
-                JOptionPane.showMessageDialog(null,"Welcome to Buzz Quiz World!\n" +
+                JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n" +
                                 "Choose a number of players and answer questions with your corresponding keys!\n" +
                                 "At the start of each round, you will be able to change the question category, which by default is random.\n" +
                                 "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
@@ -206,8 +206,15 @@ public class GUI_Main extends GUI{
                                 "The highest scores will be recorded in a leaderboard. Have fun!",
                         "Info", JOptionPane.INFORMATION_MESSAGE);
             resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
-
         }
         return current_question_type;
+    }
+    public void popupShowWinner(Player playerObj){
+        StringBuilder temp = new StringBuilder();
+        temp.append(playerObj.getName());
+        temp.append(" won with ");
+        temp.append(playerObj.getPoints());
+        temp.append(" points.");
+        JOptionPane.showMessageDialog(frame,temp);
     }
 }

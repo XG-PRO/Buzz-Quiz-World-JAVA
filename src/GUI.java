@@ -5,12 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import javax.swing.UIManager.*;
+
 public class GUI {
     protected final int numberOfResponses = 4;
     protected final Color colorGrayBackground;
     //Panels
-    private final JFrame frame;
+    protected final JFrame frame;
     private JPanel questionPanel;
     private JPanel typePanel;
     private JPanel responsesPanel;
@@ -53,6 +53,7 @@ public class GUI {
         colorGrayBackground = new Color(61, 72, 85);
 
         Color colorForOptionPanel = new Color(18,26,40);
+        UIManager.put("OptionPane.border",BorderFactory.createLineBorder(colorForOptionPanel,18));
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 20));
         UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 16));
         UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, 18));
@@ -310,7 +311,7 @@ public class GUI {
                 responses,
                 null);
         while (n == -1) { // While the use closes the popup ask again and again and again....
-            JOptionPane.showMessageDialog(frame, "You Have To Select A Option To Continue\n", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "You Have To Select A Option To Continue\n", "Error", JOptionPane.ERROR_MESSAGE);
             n = JOptionPane.showOptionDialog(frame,
                     question,
                     null,

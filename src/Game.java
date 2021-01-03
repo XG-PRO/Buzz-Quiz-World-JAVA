@@ -24,8 +24,6 @@ public class Game {
     public Game() {
         questionsObj = new Questions();
 
-
-
         readFileQuestions();
         frame = new GUI_Main();
         setNumberOfPlayers();
@@ -52,8 +50,6 @@ public class Game {
      */
     void play() {
 
-
-
         int number_of_rounds = 6;
         for (int i = 0; i < number_of_rounds; i++) {
             frame.changeRoundCount(i+1);
@@ -61,6 +57,8 @@ public class Game {
             Round currentRoundObj = roundsTypes[Utilities.random_int(roundsTypes.length)];
             currentRoundObj.playRound();
         }
+        //When round has finished
+        frame.popupShowWinner(findPlayerWithMostPoints());
     }
 
     void setNumberOfPlayers()
@@ -147,7 +145,13 @@ public class Game {
 
 
     }
-
+    private Player findPlayerWithMostPoints(){
+        Player maxPlayer = playersArr[0];
+        for (Player item : playersArr)
+            if (item.getPoints() > maxPlayer.getPoints())
+                maxPlayer = item;
+        return maxPlayer;
+    }
 
 }
 

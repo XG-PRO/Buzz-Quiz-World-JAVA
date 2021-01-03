@@ -9,10 +9,10 @@ import java.util.HashMap;
  * the method addPlayerResponse should be called.
  */
 public class Responses {
-    private HashMap<Player,Boolean> playerResponse;
-    private Player[] plArr;
-    private String[] respArr;
-    private int numOfPlayers;
+    private final HashMap<Player,Boolean> playerResponse;
+    private final Player[] plArr;
+    private final String[] respArr;
+    private final int numOfPlayers;
     private int current_player_pos;
     private boolean ignoreInput;
 
@@ -27,7 +27,7 @@ public class Responses {
         this.respArr = new String[numOfPlayers];
         this.numOfPlayers = numOfPlayers;
         current_player_pos = 0;
-    };
+    }
 
     /**
      * Clear all the players responses (sets to null)
@@ -91,8 +91,6 @@ public class Responses {
     }
 
     public boolean haveAllPlayersResponed(){
-        if (current_player_pos == numOfPlayers)
-            return true;
-        return false;
+        return current_player_pos == numOfPlayers;
     }
 }
