@@ -2,17 +2,18 @@ import java.util.HashMap;
 
 public class Round {
     protected static Questions questionsObj;
-    protected static GUI frame;
+    protected static GUI_Main frame;
     protected Responses responsesObj;
     protected static Player [] playersArr;
     protected static HashMap<Player,Integer> gainedPointsHash;
     protected final static int numberOfQuestionsPerRound =  5;
     protected static String currentQuestionType = "Random";
-    Round(Questions questionsObj,GUI frame, Player[] playersArr){
+    Round(Questions questionsObj,GUI_Main frame, Player[] playersArr){
         Round.questionsObj = questionsObj;
         Round.frame = frame;
         Round.gainedPointsHash = new HashMap<>(playersArr.length);
         Round.playersArr = playersArr;
+
     }
     protected void updateFrame_ShowPopUp_Clear_Responses(Question questionObj){
         frame.popupShowGainedPoints(playersArr, gainedPointsHash,questionObj.getRightResponse());

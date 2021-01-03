@@ -16,7 +16,7 @@ public class Game {
 
 
     private final Round[] roundsTypes; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime;
-    private final GUI frame;
+    private final GUI_Main frame;
 
     /**
      * Default Constructor
@@ -27,8 +27,8 @@ public class Game {
 
 
         readFileQuestions();
-        frame = new GUI();
-        setNumberofPlayer();
+        frame = new GUI_Main();
+        setNumberOfPlayers();
 
 
         if (playersArr.length==1)
@@ -38,8 +38,8 @@ public class Game {
             };
         else
             roundsTypes = new Round[]{
-                    //new RoundRightAnswer(questionsObj,frame,playersArr),
-                    //new RoundBet(questionsObj,frame,playersArr),
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundBet(questionsObj,frame,playersArr),
                     new RoundQuickAnswer(questionsObj,frame,playersArr),
 
             };
@@ -63,7 +63,7 @@ public class Game {
         }
     }
 
-    void setNumberofPlayer()
+    void setNumberOfPlayers()
     {
         int numberOfPlayers = frame.popupAskNumberOfPlayer(2);
         playersArr = new Player[numberOfPlayers];

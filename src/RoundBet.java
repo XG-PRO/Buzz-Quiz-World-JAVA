@@ -1,12 +1,13 @@
 public class RoundBet extends Round{
-    private String[] betTypes;
-    RoundBet(Questions questionsObj, GUI frame, Player[] playersArr) {
+    private final String[] betTypes;
+    RoundBet(Questions questionsObj, GUI_Main frame, Player[] playersArr) {
         super(questionsObj, frame, playersArr);
          betTypes = new String[]{"250", "500", "750", "1000"};
     }
     @Override
     public void playRound(){
         frame.changeRoundType("Bet");
+        currentQuestionType = frame.showMenu(questionsObj.getTypes().toArray(new String[0]), currentQuestionType);
         for (int i = 0; i < numberOfQuestionsPerRound; i++) {
             Question temp = getRoundQuestion();
 

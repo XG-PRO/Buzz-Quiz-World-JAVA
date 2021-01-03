@@ -4,43 +4,37 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class GUI {
-    private final int numberOfResponses = 4;
-    private final Color colorGrayBackground;
+    protected final int numberOfResponses = 4;
+    protected final Color colorGrayBackground;
     //Panels
-    private JFrame frame;
-    private JPanel mainPanel;
+    private final JFrame frame;
     private JPanel questionPanel;
     private JPanel typePanel;
     private JPanel responsesPanel;
-    private JPanel centerPanel;
     private JPanel belowQsPanel;
 
-    private JLabel imageLabel;
+    protected JLabel imageLabel;
     private ImageIcon imageIcon;
-    private JLabel txtTypeQuestion;
-    private JLabel txtRoundType;
+    protected JLabel txtTypeQuestion;
+    protected JLabel txtRoundType;
 
-    private JTextArea txtQuestionName;
-    private JLabel[] txtResKeys;
-    private JLabel[] txtRes;
-    private JLabel txtRoundCount;
+    protected JTextArea txtQuestionName;
+    protected JLabel[] txtResKeys;
+    protected JLabel[] txtRes;
+    protected JLabel txtRoundCount;
 
-    private HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
-    private HashMap<Character, JLabel> characterToJLable_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
-    private HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
-    private Font font_global;
-    private Font font_global_20;
-    private int numberOfPlayers;
-    private Player[] playersArr;
-    private Responses responsesObj;
-    private JPanel scorePanel;
-    private JMenu menu;
+    protected HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
+    protected HashMap<Character, JLabel> characterToJLabel_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
+    protected HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
+    protected Font font_global;
+    protected Font font_global_20;
+    protected int numberOfPlayers;
+    protected Player[] playersArr;
+    protected Responses responsesObj;
+    protected JPanel scorePanel;
     private JMenuBar menubar;
 
 
@@ -79,13 +73,13 @@ public class GUI {
             frame.setIconImage(new ImageIcon(imageURL).getImage());
 
         // Init the mainPanel
-        mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         // Init the centerPanel
-        centerPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         // Init the HashMap's
-        characterToJLable_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
+        characterToJLabel_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
         characterToPlayer_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
 
         initMenu();
@@ -129,10 +123,8 @@ public class GUI {
                 char key = Character.toUpperCase(evt.getKeyChar());
                 if (responsesObj != null && characterToPlayer_HashMap.containsKey(key)) {
                     Player pl = characterToPlayer_HashMap.get(key);
-                    responsesObj.addPlayerResponse(pl, characterToJLable_HashMap.get(key).getText());
+                    responsesObj.addPlayerResponse(pl, characterToJLabel_HashMap.get(key).getText());
                     changePlayerStatusToReplied(pl);
-                    //    System.out.printf("The status of Responses is "+responsesObj.haveAllPlayersResponed());
-                    //    System.out.printf("ID OF OBJECT : "+responsesObj.hashCode());
                 }
             }
         });
@@ -148,7 +140,7 @@ public class GUI {
     private void initMenu() {
 
         menubar = new JMenuBar();
-        menu = new JMenu();
+        JMenu menu = new JMenu();
         BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(getClass().getResource("/splash/settings-32.png"));
@@ -297,7 +289,7 @@ public class GUI {
      *
      * @param question  A String    .The Question that the use will have to answer.
      * @param responses A String[](Array) .The Available options (buttons0 )the user can press.
-     * @return
+     * @return n, which corresponds to the player's option
      */
     public int popupInput(String question, String[] responses) {
         int n;
@@ -306,6 +298,7 @@ public class GUI {
         for (int i = 0; i<responses.length;i++)
             insidePanel.add(new JButton(responses[i]));
          */
+
         n = JOptionPane.showOptionDialog(frame,
                 question,
                 null,
@@ -328,176 +321,16 @@ public class GUI {
         return n;
     }
 
-    /**
-     * Ask from the user the number of players, and returns the result.
-     * @param maxNumberOfPlayers The maximum number of players.
-     * @return Returns the number of players.
-     */
-    public int popupAskNumberOfPlayer(int maxNumberOfPlayers) {
-        String [] t = new String[maxNumberOfPlayers];
-        t[0] = "1 Player";
-        for (int i = 1; i < maxNumberOfPlayers; i++) {
-            t[i] = (i+1) + " Players";
-        }
-        numberOfPlayers = popupInput("Number of Players?", t) + 1;
-        this.responsesObj = new Responses(numberOfPlayers);
-        return numberOfPlayers;
-    }
 
-    public String popupGetPlayerName(int i) {
 
-        String temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
-        /*
-        while (temp == null || temp.isBlank()) {
-            JOptionPane.showMessageDialog(frame, "Player Name can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
-        }
-        */
-        if (temp == null || temp.isBlank()){ // If the user closed the window set the default name to be Player + i
-          temp = "Player "+i;
-        }
-        return temp;
 
-    }
-
-    public void popupShowGainedPoints(Player[] player_arr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
-    {
-        StringBuilder temp = new StringBuilder();
-        temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
-        for (int i = 0; i < player_arr.length; i++) {
-            if (!gainedPointsHash.containsKey(player_arr[i])){
-                temp.append(player_arr[i].getName()).append(" didn't responded.\n");
-                continue;
-            }
-            if (gainedPointsHash.get(player_arr[i]) == 0){
-                temp.append(player_arr[i].getName()).append(" didn't get any points.\n");
-            }
-            else {
-                if (gainedPointsHash.get(player_arr[i]) >= 0)
-
-                    temp.append(player_arr[i].getName()).append(" gained : ").append(gainedPointsHash.get(player_arr[i]));
-
-                else
-
-                    temp.append(player_arr[i].getName()).append(" lost : ").append(gainedPointsHash.get(player_arr[i]) * (-1));
-                temp.append(" points.\n");
-            }
-        }temp.append("\n\n");
-
-        JOptionPane.showMessageDialog(null, temp.toString(),
-                "Results", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    /**
-     * This method adds the players in the bottom panel.
-     * Also this method adds the respond keys.
-     * <b>This method adds the playerArr to the private fields of GUI</b>
-     * @param playersArr A Array containing Player objects.
-     */
-    public void drawPlayersInfoToGUI(Player[] playersArr) {
-        this.playersArr = playersArr;
-        playerToJLabel_HashMap = new HashMap<>();
-        for (int i = 0; i < playersArr.length; i++) {
-            playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
-            playerToJLabel_HashMap.get(playersArr[i]).setFont(font_global);
-            playerToJLabel_HashMap.get(playersArr[i]).setForeground(Color.WHITE);
-            scorePanel.add(playerToJLabel_HashMap.get(playersArr[i]));
-            scorePanel.revalidate();
-            scorePanel.add(Box.createHorizontalGlue());
-            scorePanel.revalidate();
-            //System.out.println("i :" + i + " name : " + playersArr[i].getName());
-        }
-
-        for (int i = 0; i < numberOfResponses; i++) {
-            String temp = "";
-            for (int j = 0; j < numberOfPlayers; j++) {
-                temp += playersArr[j].getKeyboard_responses()[i] + " ";
-            }
-            txtResKeys[i].setText(temp);
-
-        }
-
-        for (int i = 0; i < numberOfResponses; i++) {
-            for (Player playerObj : playersArr) {
-                characterToJLable_HashMap.put(playerObj.getKeyboard_responses()[i], txtRes[i]);
-                characterToPlayer_HashMap.put(playerObj.getKeyboard_responses()[i], playerObj);
-            }
-        }
-    }
-
-    /**
-     * This method updates the score JLabel in the bottom panel for every player.
-     *
-     * @param playersArr A Array containing Players objects.
-     */
-    public void updatePlayersPoints(Player[] playersArr) {
-        for (Player item : playersArr) {
-            JLabel label_p = playerToJLabel_HashMap.get(item);
-            String temp = label_p.getText().substring(0, label_p.getText().indexOf(':') + 1);
-            temp += item.getPoints();
-            label_p.setText(temp);
-        }
-
-    }
-
-    /**
-     * This method draws the the question,responses and category of question on the GUI.
-     * Also it resets the Player color to default.
-     * @param questionObj The question object
-     * @return
-     */
-    public Responses showQuestionAndGetResponses(Question questionObj) {
-        //Change All players color to default
-        for (Player item: playersArr)
-            changePlayerStatusToNormal(item);
-        imageLabel.setVisible(false);
-        if (Questions.isQuestionImage(questionObj)){
-            System.out.println("It is a question image");
-            loadImage(((QuestionImage)questionObj).getImageName());
-            imageLabel.setVisible(true);
-        }
-        this.responsesObj.clearReset();
-        this.playersArr = playersArr;
-        this.responsesObj = responsesObj;
-        txtQuestionName.setText(questionObj.getQuestion());
-        txtTypeQuestion.setText(questionObj.getType());
-        ArrayList<String> respArr = new ArrayList<>(questionObj.getResponses());
-        Collections.shuffle(respArr);
-        for (int i = 0; i < txtRes.length; i++) {
-            txtRes[i].setText(respArr.get(i));
-        }
-        while (!responsesObj.haveAllPlayersResponed()) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return responsesObj;
-
-    }
-
-    /**
-     * It changes the round counter (bottom - left) JLabel
-     *
-     * @param roundCount The round type
-     */
-    public void changeRoundCount(int roundCount) {
-        txtRoundCount.setText("ROUND " + roundCount);
-    }
-
-    public void changeRoundType(String roundType) {
-        txtRoundType.setText(roundType);
-    }
-
-    private void changePlayerStatusToReplied(Player playerObj){
+    protected void changePlayerStatusToReplied(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(new Color(109, 116, 116));
     }
-    private void changePlayerStatusToNormal(Player playerObj){
+    protected void changePlayerStatusToNormal(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.white);
     }
-    private void loadImage(String fileName){
+    protected void loadImage(String fileName){
         BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(getClass().getResource("/packageQuestions/images/"+fileName));
@@ -507,18 +340,5 @@ public class GUI {
         this.imageIcon.setImage(myPicture);
     }
 
-    public String showMenu(String[] question_types,String old_question_type){
-        String current_question_type = old_question_type;
-        int resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
-        while (resp != 0){
-            if (resp==1)
-                current_question_type = question_types[popupInput("Choose question category",question_types)];
-            else if (resp == 2)
-                JOptionPane.showMessageDialog(null,"Info\nInfo in second line",
-                        "Info", JOptionPane.INFORMATION_MESSAGE);
-            resp = popupInput("Menu",new String[]{"Change Question Category","Start Round","Help"});
 
-        }
-        return current_question_type;
-    }
 }
