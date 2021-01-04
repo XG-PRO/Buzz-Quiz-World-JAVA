@@ -15,8 +15,13 @@ public class Round {
         Round.playersArr = playersArr;
 
     }
+
+    /**
+     * This method shows the popup gained points, updates the player points in the frame, clears the responsesObj
+     * @param questionObj
+     */
     protected void updateFrame_ShowPopUp_Clear_Responses(Question questionObj){
-        frame.popupShowGainedPoints(playersArr, gainedPointsHash,questionObj.getRightResponse());
+        frame.popupShowGainedPoints(playersArr, gainedPointsHash,questionObj.getRightResponse(),responsesObj);
         frame.updatePlayersPoints(playersArr);
         responsesObj.clearReset();
     }
@@ -43,6 +48,14 @@ public class Round {
             return false;
         }
     }
+
+    protected boolean pointCalculatorTimer(Question questionObj, int pos){
+        Player currentPlayer = responsesObj.getPlayerAtPos(pos);
+        if (currentPlayer == null)
+            return false;
+        return pointCalculator(questionObj,pos,(int) (responsesObj.getTimeAtPos(pos)*0.2),0);
+
+    }
     protected Question getRoundQuestion(){
         Question temp = questionsObj.getRandomQuestionWithType(currentQuestionType);
         if (temp == null) { // THE CURRENT QUESTION TYPE HAS NO MORE QUESTIONS
@@ -50,11 +63,14 @@ public class Round {
             temp = questionsObj.getRandomQuestionWithType("Random");
         }
         if (temp == null) {
-            Parser.Exit(0);  //RAN OUT OF QUESTIONS
+            Utilities.whoWon(playersArr);
+            frame.exitFrame(1);  //RAN OUT OF QUESTIONS
             temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
         }
         return temp;
     }
     public void playRound(){
     }
+
+
 }

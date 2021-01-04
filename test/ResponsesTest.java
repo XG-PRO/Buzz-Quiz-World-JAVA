@@ -11,16 +11,16 @@ class ResponsesTest {
         Player pl2 = new Player("dummy2",new char[]{});
         Responses responses_obj = new Responses(2);
 
-        responses_obj.addPlayerResponse(pl2, "true");
-        responses_obj.addPlayerResponse(pl2, "false");
+        responses_obj.addPlayerResponse(pl2, "true",0);
+        responses_obj.addPlayerResponse(pl2, "false",0);
 
 
         responses_obj.clearReset();
 
 
 
-        responses_obj.addPlayerResponse(pl1, "false");
-        responses_obj.addPlayerResponse(pl2, "true");
+        responses_obj.addPlayerResponse(pl1, "false",0);
+        responses_obj.addPlayerResponse(pl2, "true",0);
 
         assertEquals(responses_obj.getPlayerAtPos(1),pl2);
         assertEquals(responses_obj.getResponseAtPos(1),"true");
@@ -35,8 +35,8 @@ class ResponsesTest {
         Player pl2 = new Player("dummy2",new char[]{});
         Responses responses_obj = new Responses(2);
 
-        responses_obj.addPlayerResponse(pl2, "true");
-        responses_obj.addPlayerResponse(pl1, "false");
+        responses_obj.addPlayerResponse(pl2, "true",0);
+        responses_obj.addPlayerResponse(pl1, "false",0);
 
         assertEquals(responses_obj.getPlayerAtPos(0),pl2);
         assertEquals(responses_obj.getResponseAtPos(0),"true");
@@ -52,8 +52,8 @@ class ResponsesTest {
         Player pl2 = new Player("dummy2",new char[]{});
         Responses responses_obj = new Responses(2);
 
-        responses_obj.addPlayerResponse(pl2, "true");
-        responses_obj.addPlayerResponse(pl1, "false");
+        responses_obj.addPlayerResponse(pl2, "true",0);
+        responses_obj.addPlayerResponse(pl1, "false",0);
 
         assertEquals(responses_obj.getPlayerAtPos(0),pl2);
 
@@ -66,8 +66,8 @@ class ResponsesTest {
         Player pl2 = new Player("dummy2",new char[]{});
         Responses responses_obj = new Responses(2);
 
-        responses_obj.addPlayerResponse(pl2, "true");
-        responses_obj.addPlayerResponse(pl1, "false");
+        responses_obj.addPlayerResponse(pl2, "true",0);
+        responses_obj.addPlayerResponse(pl1, "false",0);
 
         assertEquals(responses_obj.getResponseAtPos(0),"true");
 
@@ -80,11 +80,11 @@ class ResponsesTest {
         Player pl2 = new Player("dummy2",new char[]{});
         Responses responses_obj = new Responses(2);
 
-        responses_obj.addPlayerResponse(pl2, "10");
-        responses_obj.addPlayerResponse(pl1, "20");
+        responses_obj.addPlayerResponse(pl2, "10",0);
+        responses_obj.addPlayerResponse(pl1, "20",0);
 
-        responses_obj.addPlayerResponse(pl2, "15");
-        responses_obj.addPlayerResponse(pl1, "23");
+        responses_obj.addPlayerResponse(pl2, "15",0);
+        responses_obj.addPlayerResponse(pl1, "23",0);
 
         assertEquals(responses_obj.getPlayerAtPos(0),pl2);
         assertEquals(responses_obj.getResponseAtPos(0),"10");
@@ -94,8 +94,8 @@ class ResponsesTest {
 
         responses_obj.clearReset();
 
-        responses_obj.addPlayerResponse(pl1, "23");
-        responses_obj.addPlayerResponse(pl2, "15");
+        responses_obj.addPlayerResponse(pl1, "23",0);
+        responses_obj.addPlayerResponse(pl2, "15",0);
         assertEquals(responses_obj.getResponseAtPos(0),"23");
         assertEquals(responses_obj.getResponseAtPos(1),"15");
     }

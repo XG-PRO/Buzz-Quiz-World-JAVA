@@ -25,7 +25,7 @@ public class Game {
         questionsObj = new Questions();
 
         readFileQuestions();
-        frame = new GUI_Main();
+        frame = new GUI_Main(questionsObj.getTypes());
         frame.popupInfo();
         setNumberOfPlayers();
 
@@ -33,13 +33,16 @@ public class Game {
         if (playersArr.length==1)
             roundsTypes = new Round[]{
                     new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundStopTheTimer(questionsObj,frame,playersArr),
                     new RoundBet(questionsObj,frame,playersArr)
             };
         else
             roundsTypes = new Round[]{
-                    new RoundRightAnswer(questionsObj,frame,playersArr),
-                    new RoundBet(questionsObj,frame,playersArr),
-                    new RoundQuickAnswer(questionsObj,frame,playersArr),
+                    //new RoundRightAnswer(questionsObj,frame,playersArr),
+                    //new RoundStopTheTimer(questionsObj,frame,playersArr),
+                    //new RoundBet(questionsObj,frame,playersArr),
+                    //new RoundQuickAnswer(questionsObj,frame,playersArr),
+                    new RoundThermometer(questionsObj,frame,playersArr)
 
             };
 
@@ -59,8 +62,8 @@ public class Game {
             currentRoundObj.playRound();
         }
         //When round has finished
-        frame.popupShowWinner(findPlayerWithMostPoints());
-        frame.exitFrame();
+        Utilities.whoWon(playersArr);
+        frame.exitFrame(0);
     }
 
     void setNumberOfPlayers()
@@ -154,6 +157,8 @@ public class Game {
                 maxPlayer = item;
         return maxPlayer;
     }
+
+
 
 }
 

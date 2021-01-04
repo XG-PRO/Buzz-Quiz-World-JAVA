@@ -6,11 +6,12 @@ public class RoundQuickAnswer extends Round{
     @Override
     public void playRound(){
         frame.changeRoundType("Quick Answer");
-        currentQuestionType = frame.showMenu(questionsObj.getTypes().toArray(new String[0]), currentQuestionType);
+
         for (int i = 0; i < numberOfQuestionsPerRound; i++) {
+            currentQuestionType = frame.getChosenCategory();
             Question temp = getRoundQuestion();
 
-            responsesObj = frame.showQuestionAndGetResponses(temp);
+            responsesObj = frame.showQuestionAndGetResponses(temp,false);
 
             gainedPointsHash.clear(); // = new HashMap<Player,Integer>(playersArr.length);
 

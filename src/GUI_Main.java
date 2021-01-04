@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,16 +10,33 @@ import java.util.concurrent.TimeUnit;
 
 public class GUI_Main extends GUI{
 
-    GUI_Main() {
-        super();
+    GUI_Main(ArrayList<String> categoriesOfQuestions) {
+        super(categoriesOfQuestions);
     }
 
-    public void exitFrame(){
-        JOptionPane.showMessageDialog(frame,"Thanks for playing!",
-                "The game has ended", JOptionPane.INFORMATION_MESSAGE);
+    /**
+     * Shows a popup and closes the frame
+     * @param k if k = 0, All Rounds have been completed.
+     *          if k = 1, No more questions
+     *          if k = -1, Error :(
+     */
+    public void exitFrame(int k){
+        if (k==0)
+            JOptionPane.showMessageDialog(frame,"All Rounds have been completed!\nThanks for playing!",
+                    "The game has ended", JOptionPane.INFORMATION_MESSAGE);
+        if (k==1)
+            JOptionPane.showMessageDialog(frame,"Sadly there are no more questions in the directory. You answered them all?\nThanks for playing!",
+                    "The game has ended", JOptionPane.INFORMATION_MESSAGE);
+        if (k==-1)
+            JOptionPane.showMessageDialog(frame,"An error has occurred",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        popupShowWinners();
         frame.dispose();
+        System.exit(k);
     }
-
+    public String getChosenCategory(){
+        return group.getSelection().getActionCommand();
+    }
 
     /**
      * It changes the round counter (bottom - left) JLabel
@@ -66,35 +86,36 @@ public class GUI_Main extends GUI{
 
     }
 
-    public void popupShowGainedPoints(Player[] playerArr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer)
+    public void popupShowGainedPoints(Player[] playerArr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer,Responses responsesObj)
     {
         for (JLabel item: txtRes){
-            if (item.getText().equals(correctAnswer))
+            if (item.getText().equals(correctAnswer))//Set the respones to green if is true
                 item.setForeground(Color.green);
             else
-                item.setForeground(Color.red);
+                item.setForeground(Color.red);//Set the respones to red if is false
         }
         StringBuilder temp = new StringBuilder();
         temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
         for (int i = 0; i < playerArr.length; i++) {
-            Player currentPlayer = playerArr[i];
+            Player currentPlayer = responsesObj.getPlayerAtPos(i);
             if (!gainedPointsHash.containsKey(currentPlayer)){
-                changePlayerStatusToFalse(currentPlayer);
-                temp.append(currentPlayer.getName()).append(" didn't responded.\n");
+                temp.append(currentPlayer.getName()).append(" didn't respond.\n");
                 continue;
             }
-            if (gainedPointsHash.get(currentPlayer) == 0){
+            if (responsesObj.getResponseAtPos(i).equals(correctAnswer))
+                changePlayerStatusToTrue(currentPlayer);
+            else
                 changePlayerStatusToFalse(currentPlayer);
+
+            if (gainedPointsHash.get(currentPlayer) == 0){
                 temp.append(currentPlayer.getName()).append(" didn't get any points.\n");
             }
             else {
                 if (gainedPointsHash.get(currentPlayer) >= 0){
                     temp.append(currentPlayer.getName()).append(" gained : ").append(gainedPointsHash.get(currentPlayer));
-                    changePlayerStatusToTrue(currentPlayer);
                 }
                 else {
                     temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1));
-                    changePlayerStatusToFalse(currentPlayer);
                 }
                 temp.append(" points.\n");
             }
@@ -162,14 +183,14 @@ public class GUI_Main extends GUI{
      * @param questionObj The question object
      * @return responsesObj the player's responses
      */
-    public Responses showQuestionAndGetResponses(Question questionObj) {
+    public Responses showQuestionAndGetResponses(Question questionObj,boolean isTimer) {
         //Change All players color to default
         for (Player item: playersArr)
             changePlayerStatusToNormal(item);
         // Change all responses color to white
         for (JLabel item: txtRes)
             item.setForeground(Color.white);
-
+        timerLabel.setVisible(false);
         imageLabel.setVisible(false);
         if (Questions.isQuestionImage(questionObj)){
             //System.out.println("It is a question image");
@@ -184,35 +205,38 @@ public class GUI_Main extends GUI{
         for (int i = 0; i < txtRes.length; i++) {
             txtRes[i].setText(respArr.get(i));
         }
+        if (isTimer){
+            timerLabel.setVisible(true);
+            actionPerformed();
+        }
         while (!responsesObj.haveAllPlayersResponed()) {
             try {
                 TimeUnit.MILLISECONDS.sleep(250);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
+        if (isTimer)
+            timer.stop();
         return responsesObj;
 
     }
-    public String showMenu(String[] question_types,String old_question_type){
-        String current_question_type = old_question_type;
-        int resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
-        while (resp != 0){
-            if (resp==1)
-                current_question_type = question_types[popupInput("Choose Question Category",question_types)];
-            else if (resp == 2)
-                popupInfo();
-            resp = popupInput("Menu",new String[]{"Start Round","Change Question Category","Help"});
-        }
-        return current_question_type;
-    }
-    public void popupShowWinner(Player playerObj){
+    public void popupShowWinners(){
         StringBuilder temp = new StringBuilder();
-        temp.append(playerObj.getName());
-        temp.append(" won with ");
-        temp.append(playerObj.getPoints());
-        temp.append(" points.");
+        int numberOfWinners = 0;
+        for (Player item : playersArr){
+            if (item.isHasWon()){
+
+                temp.append(item.getName());
+                temp.append(" won with ");
+                temp.append(item.getPoints());
+                temp.append(" points.");
+                numberOfWinners++;
+            }
+            temp.append("\n");
+            if (numberOfWinners>1)
+                temp.append("It was a draw");
+        }
         JOptionPane.showMessageDialog(frame,temp);
     }
 
@@ -229,4 +253,26 @@ public class GUI_Main extends GUI{
                         "The highest scores will be recorded in a leaderboard. Have fun!",
                 "Info", JOptionPane.INFORMATION_MESSAGE);
     }
+    public void actionPerformed() {
+        timerLabel.setText("5000");
+        timer = new Timer(100, new ActionListener() {
+            private int count = 5000;
+            final boolean[] has_timer_stopped = {true};
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (count <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    has_timer_stopped[0] = true;
+                } else {
+                    count -= 100;
+                    has_timer_stopped[0] = false;
+                }
+                timerLabel.setText(Integer.toString(count));
+
+            }
+
+        });
+        timer.start();
+    }
+
 }

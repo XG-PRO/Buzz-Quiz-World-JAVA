@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GUI {
@@ -17,6 +18,7 @@ public class GUI {
     private JPanel belowQsPanel;
 
     protected JLabel imageLabel;
+    protected JLabel timerLabel;
     private ImageIcon imageIcon;
     protected JLabel txtTypeQuestion;
     protected JLabel txtRoundType;
@@ -35,15 +37,16 @@ public class GUI {
     protected Player[] playersArr;
     protected Responses responsesObj;
     protected JPanel scorePanel;
+
     private JMenuBar menubar;
+    protected ButtonGroup group;
 
-
-
+    protected Timer timer;
 
     /**
      * Default Constructor building the UI using JAVA SWING Library
      */
-    public GUI() {
+    public GUI(ArrayList<String> categoriesOfQuestions) {
         //Disable scaling this
         //System.setProperty("sun.java2d.uiScale", "1.5");
 
@@ -85,7 +88,7 @@ public class GUI {
         characterToJLabel_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
         characterToPlayer_HashMap = new HashMap<>(numberOfPlayers * numberOfResponses);
 
-        initMenu();
+        initMenu(categoriesOfQuestions);
 
         initTypePanel();
 
@@ -126,7 +129,7 @@ public class GUI {
                 char key = Character.toUpperCase(evt.getKeyChar());
                 if (responsesObj != null && characterToPlayer_HashMap.containsKey(key)) {
                     Player pl = characterToPlayer_HashMap.get(key);
-                    responsesObj.addPlayerResponse(pl, characterToJLabel_HashMap.get(key).getText());
+                    responsesObj.addPlayerResponse(pl, characterToJLabel_HashMap.get(key).getText(),Integer.parseInt(timerLabel.getText()));
                     changePlayerStatusToReplied(pl);
                 }
             }
@@ -140,7 +143,7 @@ public class GUI {
     /**
      * This private method initializes the JMenu
      */
-    private void initMenu() {
+    private void initMenu(ArrayList<String> categoriesOfQuestions) {
 
         menubar = new JMenuBar();
         JMenu menu = new JMenu();
@@ -158,6 +161,25 @@ public class GUI {
         //menu.setFont(font_global);
         menu.setForeground(Color.white);
         menu.add(menuItem);
+        JMenu submenu = new JMenu("Category of Questions");
+        JRadioButtonMenuItem rbMenuItem;
+        this.group = new ButtonGroup();
+        for (int i = 0; i<categoriesOfQuestions.size();i++) {
+            rbMenuItem = new JRadioButtonMenuItem(categoriesOfQuestions.get(i));
+            rbMenuItem.setActionCommand(categoriesOfQuestions.get(i));
+            rbMenuItem.setSelected(true);
+            group.add(rbMenuItem);
+            submenu.add(rbMenuItem);
+
+
+        }
+
+        //submenu.add(rbMenuItem);
+        //group.add(rbMenuItem);
+        //rbMenuItem = new JRadioButtonMenuItem("Science");
+        //group.add(rbMenuItem);
+        //submenu.add(rbMenuItem);
+        menu.add(submenu);
         menubar.add(menu);
     }
 
@@ -170,6 +192,13 @@ public class GUI {
 
 
         txtRoundType = new JLabel();
+
+        timerLabel = new JLabel("0");
+        timerLabel.setVisible(false);
+        timerLabel.setToolTipText("Time Remaining");
+        timerLabel.setForeground(Color.white);
+        timerLabel.setFont(font_global);
+
         txtRoundType.setToolTipText("If you need any help go to MENU->HELP");
         txtRoundType.setForeground(Color.white);
         txtRoundType.setFont(font_global);
@@ -179,10 +208,12 @@ public class GUI {
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.LINE_AXIS));
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
         typePanel.add(menubar);
+
         typePanel.add(Box.createGlue());
         typePanel.add(txtRoundType);
         typePanel.add(Box.createGlue());
-        //typePanel.add(txtTypeQuestion);
+
+        typePanel.add(timerLabel);
         typePanel.add(Box.createRigidArea(new Dimension(40, 0)));
     }
 
@@ -216,7 +247,6 @@ public class GUI {
         questionPanel.add(txtQuestionName);
         questionPanel.add(txtTypeQuestion);
     }
-
 
     /**
      * This private method initializes the JPanel "belowQsPanel"

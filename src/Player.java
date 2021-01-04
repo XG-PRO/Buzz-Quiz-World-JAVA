@@ -7,6 +7,9 @@ public class Player {
     private int points;
     private final char[] keyboard_responses;
 
+
+
+    private boolean hasWon = false;
     public Player(String name, char[] keys){
         points = 0;
         this.name = name;
@@ -42,6 +45,14 @@ public class Player {
     public char[] getKeyboard_responses(){
         return keyboard_responses;
     }
+
+    public void setHasWon(boolean hasWon) {
+        this.hasWon = hasWon;
+    }
+    public boolean isHasWon() {
+        return hasWon;
+    }
+
 
 }
 

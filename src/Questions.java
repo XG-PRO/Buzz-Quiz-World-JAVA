@@ -126,7 +126,7 @@ public class Questions {
      */
     public ArrayList<String> getTypes() {
         ArrayList<String> temp = new ArrayList<>(hash.keySet());
-        temp.add("Random");
+        temp.add(0,"Random");
         return temp;
     }
 }

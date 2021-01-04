@@ -14,17 +14,18 @@ public class Responses {
     private final String[] respArr;
     private final int numOfPlayers;
     private int current_player_pos;
-    private boolean ignoreInput;
 
+    private int time[];
     /**
      * Default Contactor
      * @param numOfPlayers The number of players in game.
      */
     public Responses(int numOfPlayers){
-        ignoreInput = false;
+
         this.playerResponse =new HashMap<>(numOfPlayers);
         this.plArr = new Player[numOfPlayers];
         this.respArr = new String[numOfPlayers];
+        this.time = new int[numOfPlayers];
         this.numOfPlayers = numOfPlayers;
         current_player_pos = 0;
     }
@@ -36,11 +37,13 @@ public class Responses {
         for (int i =0 ; i < numOfPlayers; i++){
             plArr[i] = null;
             respArr[i] = null;
+            time[i] = 0;
         }
         for (Player key : playerResponse.keySet()){
             playerResponse.put(key,false);
         }
         current_player_pos = 0;
+
     }
 
     /**
@@ -48,7 +51,7 @@ public class Responses {
      * @param pl The player object
      * @param playerResponseString String. The player response.
      */
-    public boolean addPlayerResponse(Player pl, String playerResponseString){
+    public boolean addPlayerResponse(Player pl, String playerResponseString,int time){
         if (playerResponse.containsKey(pl)){ //If the player has already answered the question just ignore it.
             if (playerResponse.get(pl))
                 return false;
@@ -60,6 +63,7 @@ public class Responses {
         this.plArr[current_player_pos] = pl;
         this.respArr[current_player_pos] = playerResponseString;
         playerResponse.put(pl,true);
+        this.time[current_player_pos] = time;
         current_player_pos++;
         //System.out.println("Added RESPONSE\n\tPlayer:"+pl.getName()+"\n\tString:"+playerResponseString);
         //System.out.println("\t number of players : "+numOfPlayers);
@@ -85,9 +89,8 @@ public class Responses {
     public String getResponseAtPos(int pos){
         return respArr[pos];
     }
-
-    public void setIgnoreInput(boolean ignoreInput){
-        this.ignoreInput = ignoreInput;
+    public int getTimeAtPos(int pos){
+        return time[pos];
     }
 
     public boolean haveAllPlayersResponed(){
