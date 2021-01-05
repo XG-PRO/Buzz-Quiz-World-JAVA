@@ -38,12 +38,11 @@ public class Game {
             };
         else
             roundsTypes = new Round[]{
-                    //new RoundRightAnswer(questionsObj,frame,playersArr),
-                    //new RoundStopTheTimer(questionsObj,frame,playersArr),
-                    //new RoundBet(questionsObj,frame,playersArr),
-                    //new RoundQuickAnswer(questionsObj,frame,playersArr),
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundStopTheTimer(questionsObj,frame,playersArr),
+                    new RoundBet(questionsObj,frame,playersArr),
+                    new RoundQuickAnswer(questionsObj,frame,playersArr),
                     new RoundThermometer(questionsObj,frame,playersArr)
-
             };
 
     }
