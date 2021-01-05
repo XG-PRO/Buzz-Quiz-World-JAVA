@@ -3,19 +3,21 @@
  */
 
 public class Player {
+    private final String name;
     private int points;
-    //private ArrayList<String> keyboard_responses;
+    private final char[] keyboard_responses;
 
-    public Player(){
+
+
+    private boolean hasWon = false;
+    public Player(String name, char[] keys){
         points = 0;
-        /*
+        this.name = name;
+        keyboard_responses = new char[keys.length];
+        for (int i =0;i<keys.length; i++)
+            keyboard_responses[i] = keys[i];
+        }
 
-        //Defensive Copying
-        this.keyboard_responses = new ArrayList<String>(keyboard_responses.size());
-        this.keyboard_responses.addAll(keyboard_responses);
-
-       */
-    }
 
     /** The below three functions return the current points of the player,
      * increase them and decrease them by a certain amount
@@ -31,9 +33,26 @@ public class Player {
         points+=p;
     }
 
+
     public void decreasePoints(int p){
         points-=p;
     }
+
+    public String getName(){
+        return name;
+    }
+
+    public char[] getKeyboard_responses(){
+        return keyboard_responses;
+    }
+
+    public void setHasWon(boolean hasWon) {
+        this.hasWon = hasWon;
+    }
+    public boolean isHasWon() {
+        return hasWon;
+    }
+
 
 }
 

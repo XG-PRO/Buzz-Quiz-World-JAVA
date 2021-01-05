@@ -18,30 +18,44 @@ public class Questions {
      * Default Constructor
      */
     public Questions() {
+
         hash = new HashMap<>();
         hashIterators = new HashMap<>();
     }
 
 
     /**
+     * Adds a question in the Questions structure.
      * @param name            A string that contains the question itself.
      * @param type            A string that contains the type of the question.
      * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
      */
     public void addQuestion(String type, String name, ArrayList<String> responses_array) {
+
         Question obj = new Question(name, type, responses_array);
-        /*
-        hash.putIfAbsent(obj.getType(), new ArrayList<>());
-        hash.get(obj.getType()).add(obj);
-        if(hash.get(obj.getType()).size() % 10 == 0){ // Every 5th element the arraylist that contains the questions will be shuffled;
-            Collections.shuffle(hash.get(obj.getType()));
-        }
-        hashIterators.put(type, hash.get(obj.getType()).iterator());
-        */
+
         addQuestion(obj);
     }
 
+    /**
+     * Adds a question image in the Questions structure.
+     * @param name            A string that contains the question itself.
+     * @param type            A string that contains the type of the question.
+     * @param responses_array An ArrayList(String) that contains the responses, THE FIRST RESPONSE IS ALWAYS THE RIGHT ONE.
+     * @param imageName The file name of the image.
+     */
+    public void addQuestionImage(String type, String name, ArrayList<String> responses_array,String imageName) {
+        Question obj = new QuestionImage(name, type, responses_array,imageName);
 
+        addQuestion(obj);
+    }
+    public static boolean isQuestionImage(Question qsObj){
+        if (qsObj instanceof QuestionImage){
+            //System.out.println("Question Image");
+            return true;
+        }
+        return false;
+    }
     /**
      * @param obj A question object
      * Since each question added uses tha hash method, every time a question is shown to the user,
@@ -51,7 +65,7 @@ public class Questions {
 
         hash.putIfAbsent(obj.getType(), new ArrayList<>());
         hash.get(obj.getType()).add(obj);
-        if (hash.get(obj.getType()).size() % 10 == 0) { // Every 5th element the arraylist that contains the questions will be shuffled;
+        if (hash.get(obj.getType()).size() % 3 == 0) { // Every 3th element the arraylist that contains the questions will be shuffled;
             Collections.shuffle(hash.get(obj.getType()));
         }
         hashIterators.put(obj.getType(), hash.get(obj.getType()).iterator());
@@ -98,7 +112,7 @@ public class Questions {
 
 
     /**
-     * Resets all questions status, to not shown before, useful for restarts
+     * Resets all questions status, to not shown before, useful to reset
      */
     public void resetAllViewed() {
         for (String key : hash.keySet()) {
@@ -111,6 +125,8 @@ public class Questions {
      * @return an Arraylist of all the types of questions
      */
     public ArrayList<String> getTypes() {
-        return new ArrayList<>(hash.keySet());
+        ArrayList<String> temp = new ArrayList<>(hash.keySet());
+        temp.add(0,"Random");
+        return temp;
     }
 }

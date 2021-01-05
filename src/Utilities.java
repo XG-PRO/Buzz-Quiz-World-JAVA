@@ -46,5 +46,16 @@ public class Utilities {
     public static int random_int(int max) {
             return new Random().nextInt(max);
             //return random.ints(min, max).findFirst().getAsInt();
-        }
+
+    }
+    public static void whoWon(Player playersArr[]){
+        int maxPoints = playersArr[0].getPoints();
+        for(Player item : playersArr)
+            if (maxPoints<item.getPoints())
+                maxPoints = item.getPoints();
+        for(Player item : playersArr)
+            if (item.getPoints() == maxPoints)
+                item.setHasWon(true);
+    }
+
 }

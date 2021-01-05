@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,39 +10,80 @@ import java.util.Collections;
 public class Game {
     // @field a questions object that keeps all the questions inside
     // The below parameters are used to complement the usage of the corresponding classes
-    private final Questions qs;
-    private final Rounds rs;
-    private final Player pl;
+    private final Questions questionsObj;
 
+    Player[] playersArr;
+
+
+    private final Round[] roundsTypes; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime;
+    private final GUI_Main frame;
 
     /**
      * Default Constructor
      */
     public Game() {
-        qs = new Questions();
-        pl = new Player();
-        rs = new Rounds(qs, pl);
+        questionsObj = new Questions();
+
+        readFileQuestions();
+        frame = new GUI_Main(questionsObj.getTypes());
+        frame.popupInfo();
+        setNumberOfPlayers();
+
+
+        if (playersArr.length==1)
+            roundsTypes = new Round[]{
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundStopTheTimer(questionsObj,frame,playersArr),
+                    new RoundBet(questionsObj,frame,playersArr)
+            };
+        else
+            roundsTypes = new Round[]{
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundStopTheTimer(questionsObj,frame,playersArr),
+                    new RoundBet(questionsObj,frame,playersArr),
+                    new RoundQuickAnswer(questionsObj,frame,playersArr),
+                    new RoundThermometer(questionsObj,frame,playersArr)
+            };
 
     }
+
 
     /**
      * Starts the game
      */
     void play() {
-        readFileQuestions("files/quiz.tsv");
 
-        Parser.printWelcome();
+        int number_of_rounds = 6;
+        for (int i = 0; i < number_of_rounds; i++) {
+            frame.changeRoundCount(i+1);
 
-        rs.StartRound();
-
-        // Debug code
-        /*
-        while (temp != null) {
-            temp.debugShowInfo();
-            temp = qs.getRandomQuestion();
+            Round currentRoundObj = roundsTypes[Utilities.random_int(roundsTypes.length)];
+            currentRoundObj.playRound();
         }
-        */
+        //When round has finished
+        Utilities.whoWon(playersArr);
+        frame.exitFrame(0);
+    }
 
+    void setNumberOfPlayers()
+    {
+        int numberOfPlayers = frame.popupAskNumberOfPlayer(2);
+        playersArr = new Player[numberOfPlayers];
+
+        char[][] acceptable_responses = new char[numberOfPlayers][4];
+
+            acceptable_responses[0] = new char[]{'Q','W','E','R'};
+
+        if (playersArr.length>1)
+            acceptable_responses[1] = new char[]{'1','2','3','4'};
+
+        for (int i=0; i<numberOfPlayers; i++)
+        {
+            playersArr[i] = new Player("Player " + i, acceptable_responses[i]);
+            playersArr[i] = new Player(frame.popupGetPlayerName(i+1), acceptable_responses[i]);
+        }
+
+        frame.drawPlayersInfoToGUI(playersArr);
     }
 
 
@@ -49,18 +91,22 @@ public class Game {
      * reads the questions from a .tsv(tab separated values) file.
      * Κατηγορία(TAB)Ερώτηση(TAB)Απάντηση 1(TAB)Απάντηση 2(TAB)Απάντηση 3(TAB)Απάντηση 4(TAB)Σωστή απάντηση(TAB)Όνομα εικόνας
      */
-    private void readFileQuestions(String filename) { // Source: https://stackoverflow.com/questions/61443542/reading-tsv-file-in-java
+    private void readFileQuestions() { // Source: https://stackoverflow.com/questions/61443542/reading-tsv-file-in-java
 
-        try (BufferedReader TSVReader = new BufferedReader(new FileReader(filename))) {
+        String fileName = "packageQuestions/quiz.tsv";
+        InputStream f = getClass().getResourceAsStream(fileName);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(f))) {
+
             final int index_type = 0;
             final int index_question = 1;
             final int index_resp_start = 2;
             final int index_resp_finish = 5;
             final int index_resp_correct = 6;
-            //final int index_image_src = 7;
+            final int index_image_src = 7;
 
             String line;
-            while ((line = TSVReader.readLine()) != null) {  // for every line in the file
+            while ((line = reader.readLine()) != null) {  // for every line in the file
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
                 /*
                 lineItems[0]//κατηγορία
@@ -89,14 +135,28 @@ public class Game {
                     System.out.println("The type of question '" + lineItems[index_question] + "' CAN NOT BE 'Random'!\n");
                     throw new Exception();
                 }
-                qs.addQuestion(lineItems[index_type], lineItems[index_question], responses);
-
+                if (!lineItems[index_image_src].equals("NoImage")){
+                    questionsObj.addQuestionImage(lineItems[index_type], lineItems[index_question], responses,lineItems[index_image_src]);
+                }else{
+                    questionsObj.addQuestion(lineItems[index_type], lineItems[index_question], responses);
+                }
             }
         } catch (Exception e) {
             System.out.println("Something went wrong when trying to read the .tsv file.");
+            e.printStackTrace();
             System.exit(-1);
         }
+
+
     }
+    private Player findPlayerWithMostPoints(){
+        Player maxPlayer = playersArr[0];
+        for (Player item : playersArr)
+            if (item.getPoints() > maxPlayer.getPoints())
+                maxPlayer = item;
+        return maxPlayer;
+    }
+
 
 
 }
