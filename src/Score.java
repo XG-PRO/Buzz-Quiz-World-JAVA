@@ -5,20 +5,13 @@ public class Score implements Comparable<Score>, Serializable {
 
 
     private final String  playerName;
-    private int highestPoints;
-    private int numberOfWins;
+    private final int highestPoints;
+    private final int numberOfWins;
 
     public Score(String playerName, int highestPoints, int numberOfWins) {
         this.playerName = playerName;
         this.highestPoints = highestPoints;
         this.numberOfWins = numberOfWins;
-    }
-    public void setHighestPoints(int highestPoints) {
-        this.highestPoints = highestPoints;
-    }
-
-    public void increaseNumberOfWins() {
-        this.numberOfWins++;
     }
 
 

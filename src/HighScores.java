@@ -3,6 +3,11 @@ import java.util.*;
 
 public class HighScores {
     private TreeSet<Score> scoreTreeSet;
+
+    /**
+     * Default constructor
+     */
+    @SuppressWarnings("unchecked")
     public HighScores(){
         boolean fileExist = true;
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("scores.dat"))) {
@@ -12,16 +17,16 @@ public class HighScores {
             fileExist = false;
             //e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            //toe.printStackTrace();
+            //e.printStackTrace();
             fileExist = false;
         }
         if (!fileExist){
             this.scoreTreeSet = new TreeSet<>();
             writeToFile();
         }
-        System.out.println("Current State of Object");
+        System.out.println("Current State of File");
         printScoresInOrder();
-        System.out.println("END Current state of Object");
+        System.out.println("END Current state of File");
     }
     public void addHighScore(String nameOfPlayer, int score) {
         Score current = null;
@@ -33,22 +38,49 @@ public class HighScores {
             current = new Score(nameOfPlayer, score, 1);
         }
         else {
+            int oldScore = current.getHighestPoints();
+            if (score > oldScore)
+                oldScore = score;
             scoreTreeSet.remove(current);
-            current = new Score(nameOfPlayer, score, current.getNumberOfWins()+1);
+            current = new Score(nameOfPlayer, oldScore, current.getNumberOfWins()+1);
 
         }scoreTreeSet.add(current);
 
         writeToFile();
     }
 
-    void printScoresInOrder(){
-        Iterator scoreIterator = scoreTreeSet.descendingIterator();
+    /**
+     *
+     * @return An [n][3] Array where n the number of entries
+     *             In the first collum player name.<br>
+     *             In the second collum player high score.<br>
+     *             In the third collum player number of wins.<br>
+     */
+    public String[][] getHighScoresTable(){
+        String[][]Array = new String[scoreTreeSet.size()][3];
+        int i = 0;
+        Iterator<Score> scoreIterator = scoreTreeSet.descendingIterator();
         while (scoreIterator.hasNext()){
-            Score item = (Score) scoreIterator.next();
+            Score item = scoreIterator.next();
+            Array[i][0]= item.getPlayerName();
+            Array[i][1]= String.valueOf(item.getHighestPoints());
+            Array[i][2]= String.valueOf(item.getNumberOfWins());
+            i++;
+        }
+        return Array;
+    }
+
+    /**
+     * Prints all the saved scores useful for debugging.
+     */
+    public void printScoresInOrder(){
+        Iterator<Score> scoreIterator = scoreTreeSet.descendingIterator();
+        while (scoreIterator.hasNext()){
+            Score item = scoreIterator.next();
             System.out.println(item.toString()+ " CODE"+item.hashCode());
         }
     }
-    void writeToFile(){
+    private void writeToFile(){
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("scores.dat"))) {
             out.writeObject(this.scoreTreeSet);
         } catch (FileNotFoundException e) {

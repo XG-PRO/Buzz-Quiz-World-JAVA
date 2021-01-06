@@ -5,28 +5,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /** The Game Class initiates the start of the game
- * after gathering the resources needed (questions from file)**/
+ *  after gathering the resources needed (questions from file)
+ *
+ * **/
 
 public class Game {
     // @field a questions object that keeps all the questions inside
     // The below parameters are used to complement the usage of the corresponding classes
     private final Questions questionsObj;
 
-    Player[] playersArr;
-
+    private Player[] playersArr;
+    private final HighScores highScoresObj;
 
     private final Round[] roundsTypes; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime;
     private final GUI_Main frame;
 
     /**
-     * Default Constructor
+     * Default Constructor, Starts the GUI, asks the number of players,
      */
     public Game() {
         questionsObj = new Questions();
-
+        highScoresObj = new HighScores();
         readFileQuestions();
-        frame = new GUI_Main(questionsObj.getTypes());
-        frame.popupLeaderboard();
+        frame = new GUI_Main(questionsObj.getTypes(), highScoresObj);
         frame.popupInfo();
 
         setNumberOfPlayers();
@@ -34,9 +35,9 @@ public class Game {
 
         if (playersArr.length==1)
             roundsTypes = new Round[]{
-                    //new RoundRightAnswer(questionsObj,frame,playersArr),
+                    new RoundRightAnswer(questionsObj,frame,playersArr),
                     new RoundStopTheTimer(questionsObj,frame,playersArr),
-                    //new RoundBet(questionsObj,frame,playersArr)
+                    new RoundBet(questionsObj,frame,playersArr)
             };
         else
             roundsTypes = new Round[]{
@@ -64,9 +65,18 @@ public class Game {
         }
         //When round has finished
         Utilities.whoWon(playersArr);
+        frame.popupShowWinners();
+        for (Player item : playersArr)
+            if (item.getHasWon())
+                highScoresObj.addHighScore(item.getName(), item.getPoints());
+
+        frame.popupLeaderboard(highScoresObj.getHighScoresTable());
         frame.exitFrame(0);
     }
 
+    /**
+     * This method ask with a popup the number of players
+     */
     void setNumberOfPlayers()
     {
         int numberOfPlayers = frame.popupAskNumberOfPlayer(2);
@@ -99,27 +109,29 @@ public class Game {
         InputStream f = getClass().getResourceAsStream(fileName);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(f))) {
-
+            /*
+            lineItems[0]//κατηγορία
+            lineItems[1]//ερώτηση
+            lineItems[2]//απαντηση 1
+            lineItems[3]//απαντηση 2
+            lineItems[4]//απαντηση 3
+            lineItems[5]//απαντηση 4
+            lineItems[6]//σωστη απαντηση
+            lineItems[7]//ονομα εικόνας
+             */
             final int index_type = 0;
             final int index_question = 1;
+
             final int index_resp_start = 2;
             final int index_resp_finish = 5;
+
             final int index_resp_correct = 6;
             final int index_image_src = 7;
 
             String line;
             while ((line = reader.readLine()) != null) {  // for every line in the file
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
-                /*
-                lineItems[0]//κατηγορία
-                lineItems[1]//ερώτηση
-                lineItems[2]//απαντηση 1
-                lineItems[3]//απαντηση 2
-                lineItems[4]//απαντηση 3
-                lineItems[5]//απαντηση 4
-                lineItems[6]//σωστη απαντηση
-                lineItems[7]//ονομα εικόνας
-                 */
+
                 int correct_pos = 0;
                 ArrayList<String> responses = new ArrayList<>(4); // add the responses
                 for (int i = index_resp_start; i <= index_resp_finish; i++) {
@@ -129,19 +141,19 @@ public class Game {
                     }
                 }
 
-                if (0 != correct_pos) { // The correct response isn't at pos 0
+                if (0 != correct_pos) { // The correct response isn't at pos 0 because the person who wrote the question doesnt know what standards mean
                     //System.out.println("The correct response isn't at pos 0 : '" + lineItems[index_question] + "' ");
                     Collections.swap(responses, correct_pos, 0); // Move the correct response at pos 1
                 }
                 if (lineItems[index_type].equals("Random")) {
-                    System.out.println("The type of question '" + lineItems[index_question] + "' CAN NOT BE 'Random'!\n");
-                    throw new Exception();
+                    System.out.println("The CATEGORY of question '" + lineItems[index_question] + "' CAN NOT BE 'Random'!\n");
+                    System.exit(-1);
                 }
-                if (!lineItems[index_image_src].equals("NoImage")){
-                    questionsObj.addQuestionImage(lineItems[index_type], lineItems[index_question], responses,lineItems[index_image_src]);
-                }else{
+                if (lineItems[index_image_src].equals("NoImage"))
                     questionsObj.addQuestion(lineItems[index_type], lineItems[index_question], responses);
-                }
+                else
+                    questionsObj.addQuestionImage(lineItems[index_type], lineItems[index_question], responses,lineItems[index_image_src]);
+
             }
         } catch (Exception e) {
             System.out.println("Something went wrong when trying to read the .tsv file.");
@@ -149,16 +161,7 @@ public class Game {
             System.exit(-1);
         }
 
-
     }
-    private Player findPlayerWithMostPoints(){
-        Player maxPlayer = playersArr[0];
-        for (Player item : playersArr)
-            if (item.getPoints() > maxPlayer.getPoints())
-                maxPlayer = item;
-        return maxPlayer;
-    }
-
 
 
 }

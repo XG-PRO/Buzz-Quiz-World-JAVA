@@ -48,7 +48,7 @@ public class Utilities {
             //return random.ints(min, max).findFirst().getAsInt();
 
     }
-    public static void whoWon(Player playersArr[]){
+    public static void whoWon(Player[] playersArr){
         int maxPoints = playersArr[0].getPoints();
         for(Player item : playersArr)
             if (maxPoints<item.getPoints())

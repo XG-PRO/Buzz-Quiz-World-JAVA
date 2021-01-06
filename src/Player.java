@@ -6,16 +6,13 @@ public class Player {
     private final String name;
     private int points;
     private final char[] keyboard_responses;
-
-
-
     private boolean hasWon = false;
+
     public Player(String name, char[] keys){
         points = 0;
         this.name = name;
         keyboard_responses = new char[keys.length];
-        for (int i =0;i<keys.length; i++)
-            keyboard_responses[i] = keys[i];
+        System.arraycopy(keys, 0, keyboard_responses, 0, keys.length);
     }
 
 

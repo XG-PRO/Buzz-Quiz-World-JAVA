@@ -1,11 +1,16 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static javax.swing.BorderFactory.createEmptyBorder;
 
 public class GUI {
     protected final int numberOfResponses = 4;
@@ -31,8 +36,11 @@ public class GUI {
     protected HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
     protected HashMap<Character, JLabel> characterToJLabel_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
     protected HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
+
     protected Font font_Verdana_Bold26;
     protected Font font_Verdana_Plain20;
+    protected Font font_Verdana_Bold_20;
+    protected Font font_Verdana_Plain_18;
     protected Color colorForOptionPanel;
     protected int numberOfPlayers;
     protected Player[] playersArr;
@@ -41,25 +49,24 @@ public class GUI {
 
     private JMenuBar menubar;
     protected ButtonGroup group;
-
+    protected HighScores highScoresObj;
     protected Timer timer;
 
     /**
      * Default Constructor building the UI using JAVA SWING Library
      */
-    public GUI(ArrayList<String> categoriesOfQuestions) {
+    public GUI(ArrayList<String> categoriesOfQuestions, HighScores highScoresObj) {
 
         //Disable scaling this
         //System.setProperty("sun.java2d.uiScale", "1.5");
-
-        //Set OptionPane font to
+        this.highScoresObj = highScoresObj;
+        //Set OptionPane font tom
         font_Verdana_Bold26 = new Font("Verdana", Font.BOLD, 26);
         font_Verdana_Plain20 = new Font("Verdana", Font.PLAIN, 20);
 
-        Font font_Verdana_Bold_20 = new Font("Verdana", Font.BOLD, 20);
-        Font font_Verdana_Plain_18 = new Font("Verdana", Font.PLAIN, 18);
+        font_Verdana_Bold_20 = new Font("Verdana", Font.BOLD, 20);
+        font_Verdana_Plain_18 = new Font("Verdana", Font.PLAIN, 18);
         colorGrayBackground = new Color(61, 72, 85);
-
 
 
         colorForOptionPanel = new Color(18,26,40);
@@ -72,6 +79,8 @@ public class GUI {
         UIManager.put("OptionPane.messagebackground", colorForOptionPanel);
         UIManager.put("Panel.background", colorForOptionPanel);
 
+        //UIManager.put("RadioButtonMenuItem.font",font_Verdana_Plain20);
+        //UIManager.put("Menu.font",font_Verdana_Plain20);
         // Make the frame
         frame = new JFrame();
         frame.setTitle("Buzz Quiz World 2020");
@@ -161,19 +170,27 @@ public class GUI {
             e.printStackTrace();
         }
         menu.setIcon(new ImageIcon(myPicture));
-        JMenuItem menuItem = new JMenuItem("Change Number of Players");
-        menuItem.setForeground(Color.RED);
-        //menuItem.setFont(font_global);
+        JMenuItem seeLeaderboardMenuItem = new JMenuItem("See Leaderboard");
+        seeLeaderboardMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popupLeaderboard(highScoresObj.getHighScoresTable());
+            }
+        });
+        seeLeaderboardMenuItem.setFont(font_Verdana_Bold_20);
+
         menubar.setBackground(Color.black);
-        //menu.setFont(font_global);
-        menu.setForeground(Color.white);
-        menu.add(menuItem);
+
+        menu.add(seeLeaderboardMenuItem);
+        menu.addSeparator();
         JMenu submenu = new JMenu("Category of Questions");
+        submenu.setFont(font_Verdana_Bold_20);
         JRadioButtonMenuItem rbMenuItem;
         this.group = new ButtonGroup();
         for (int i = 0; i<categoriesOfQuestions.size();i++) {
             rbMenuItem = new JRadioButtonMenuItem(categoriesOfQuestions.get(i));
             rbMenuItem.setActionCommand(categoriesOfQuestions.get(i));
+            rbMenuItem.setFont(font_Verdana_Bold_20);
             rbMenuItem.setSelected(true);
             group.add(rbMenuItem);
             submenu.add(rbMenuItem);
@@ -181,12 +198,21 @@ public class GUI {
 
         }
 
-        //submenu.add(rbMenuItem);
-        //group.add(rbMenuItem);
-        //rbMenuItem = new JRadioButtonMenuItem("Science");
-        //group.add(rbMenuItem);
-        //submenu.add(rbMenuItem);
+        JMenuItem seeInfoMenuItem = new JMenuItem("Help");
+        seeInfoMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popupInfo();
+            }
+        });
+        seeInfoMenuItem.setFont(font_Verdana_Bold_20);
+
         menu.add(submenu);
+        menu.addSeparator();
+        menu.add(seeInfoMenuItem);
+
+
+
         menubar.add(menu);
     }
 
@@ -385,5 +411,54 @@ public class GUI {
         }
         this.imageIcon.setImage(myPicture);
     }
+    public void popupLeaderboard(String [][] Array){
+        /*
+        Object[][] rows = {
+                {"Player 1","10000","2"},
+        };
 
+         */
+        Object[] cols = {
+                "Name","Score","Wins"
+        };
+
+        JTable table = new JTable(Array, cols);
+        table.setEnabled(false);
+        table.getTableHeader().setForeground(Color.white);
+        table.getTableHeader().setBackground(colorForOptionPanel);
+        table.getTableHeader().setFont(font_Verdana_Plain20);
+        table.setBackground(colorForOptionPanel);
+        table.setForeground(Color.WHITE);
+        table.setShowVerticalLines(false);
+        table.setFont(font_Verdana_Plain20);
+        table.setAutoResizeMode( JTable.AUTO_RESIZE_ALL_COLUMNS );
+        table.setRowHeight(25);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i< table.getColumnCount(); i++)
+            table.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+
+        JScrollPane scrollPane= new JScrollPane(table);
+        scrollPane.setBorder(createEmptyBorder());
+        scrollPane.getViewport().setBackground(colorForOptionPanel);
+        scrollPane.setSize(new Dimension(650, 10));
+        scrollPane.setPreferredSize(new Dimension(650, scrollPane.getPreferredSize().height));
+
+        JOptionPane.showMessageDialog(null, scrollPane,"LeaderBoard",JOptionPane.PLAIN_MESSAGE);
+
+    }
+    public void popupInfo(){
+        JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n\n" +
+                        "Choose a number of players and answer questions with your corresponding keys!\n" +
+                        "At the start of each round, you will be able to change the question category, which by default is random.\n" +
+                        "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
+                        "    Right Answer gives 1000 points for a right answer and 0 to a wrong one.\n" +
+                        "    Bet allows you to bet points and gain double the amount if answered correctly.\n" +
+                        "    Quick Answer gives double points to the faster player to answer correctly.\n" +
+                        "    Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.\n" +
+                        "    Thermometer does some shit.\n" +
+                        "The highest scores will be recorded in a leaderboard. Have fun!",
+                "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

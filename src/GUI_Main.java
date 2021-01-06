@@ -12,8 +12,8 @@ import static javax.swing.BorderFactory.createEmptyBorder;
 
 public class GUI_Main extends GUI{
 
-    GUI_Main(ArrayList<String> categoriesOfQuestions) {
-        super(categoriesOfQuestions);
+    GUI_Main(ArrayList<String> categoriesOfQuestions, HighScores highScoresObj) {
+        super(categoriesOfQuestions, highScoresObj);
     }
 
     /**
@@ -32,7 +32,6 @@ public class GUI_Main extends GUI{
         if (k==-1)
             JOptionPane.showMessageDialog(frame,"An error has occurred",
                     "Error", JOptionPane.ERROR_MESSAGE);
-        popupShowWinners();
         frame.dispose();
         System.exit(k);
     }
@@ -75,12 +74,6 @@ public class GUI_Main extends GUI{
     public String popupGetPlayerName(int i) {
 
         String temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
-        /*
-        while (temp == null || temp.isBlank()) {
-            JOptionPane.showMessageDialog(frame, "Player Name can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            temp = JOptionPane.showInputDialog("Enter Name of Player " + i + " :\n","Player "+i);
-        }
-        */
         if (temp == null || temp.isBlank()){ // If the user closed the window set the default name to be Player + i
             temp = "Player "+i;
         }
@@ -97,10 +90,10 @@ public class GUI_Main extends GUI{
     public void popupShowGainedPoints(HashMap<Player, Integer> gainedPointsHash, String correctAnswer, Responses responsesObj)
     {
         for (JLabel item: txtRes){
-            if (item.getText().equals(correctAnswer))//Set the respones to green if is true
+            if (item.getText().equals(correctAnswer))//Set the responses to green if is true
                 item.setForeground(Color.green);
             else
-                item.setForeground(Color.red);//Set the respones to red if is false
+                item.setForeground(Color.red);//Set the responses to red if is false
         }
         StringBuilder temp = new StringBuilder();
         temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n");
@@ -141,11 +134,11 @@ public class GUI_Main extends GUI{
     public void drawPlayersInfoToGUI(Player[] playersArr) {
         this.playersArr = playersArr;
         playerToJLabel_HashMap = new HashMap<>();
-        for (int i = 0; i < playersArr.length; i++) {
-            playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
-            playerToJLabel_HashMap.get(playersArr[i]).setFont(font_Verdana_Bold26);
-            playerToJLabel_HashMap.get(playersArr[i]).setForeground(Color.WHITE);
-            scorePanel.add(playerToJLabel_HashMap.get(playersArr[i]));
+        for (Player player : playersArr) {
+            playerToJLabel_HashMap.put(player, new JLabel(player.getName() + ":" + player.getPoints()));
+            playerToJLabel_HashMap.get(player).setFont(font_Verdana_Bold26);
+            playerToJLabel_HashMap.get(player).setForeground(Color.WHITE);
+            scorePanel.add(playerToJLabel_HashMap.get(player));
             scorePanel.revalidate();
             scorePanel.add(Box.createHorizontalGlue());
             scorePanel.revalidate();
@@ -153,11 +146,11 @@ public class GUI_Main extends GUI{
         }
 
         for (int i = 0; i < numberOfResponses; i++) {
-            String temp = "";
+            StringBuilder temp = new StringBuilder();
             for (int j = 0; j < numberOfPlayers; j++) {
-                temp += playersArr[j].getKeyboard_responses()[i] + " ";
+                temp.append(playersArr[j].getKeyboard_responses()[i]).append(" ");
             }
-            txtResKeys[i].setText(temp);
+            txtResKeys[i].setText(temp.toString());
 
         }
 
@@ -270,54 +263,8 @@ public class GUI_Main extends GUI{
         JOptionPane.showMessageDialog(frame,temp);
     }
 
-    public void popupInfo(){
-        JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n" +
-                        "Choose a number of players and answer questions with your corresponding keys!\n" +
-                        "At the start of each round, you will be able to change the question category, which by default is random.\n" +
-                        "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
-                        "Right Answer gives 1000 points for a right answer and 0 to a wrong one.\n" +
-                        "Bet allows you to bet points and gain double the amount if answered correctly.\n" +
-                        "Quick Answer gives double points to the faster player to answer correctly.\n" +
-                        "Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.\n" +
-                        "Thermometer does some shit.\n" +
-                        "The highest scores will be recorded in a leaderboard. Have fun!",
-                "Info", JOptionPane.INFORMATION_MESSAGE);
-    }
-    public void popupLeaderboard(){
 
-        Object[][] rows = {
-                {"Player 1","10000","2"},
-        };
-        Object[] cols = {
-                "Name","Score","Wins"
-        };
 
-        JTable table = new JTable(rows, cols);
-        table.setEnabled(false);
-        table.getTableHeader().setForeground(Color.white);
-        table.getTableHeader().setBackground(colorForOptionPanel);
-        table.getTableHeader().setFont(font_Verdana_Plain20);
-        table.setBackground(colorForOptionPanel);
-        table.setForeground(Color.WHITE);
-        table.setShowVerticalLines(false);
-        table.setFont(font_Verdana_Plain20);
-        table.setAutoResizeMode( JTable.AUTO_RESIZE_ALL_COLUMNS );
-        table.setRowHeight(25);
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        for (int i = 0; i< table.getColumnCount(); i++)
-            table.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
-
-        JScrollPane scrollPane= new JScrollPane(table);
-        scrollPane.setBorder(createEmptyBorder());
-        scrollPane.getViewport().setBackground(colorForOptionPanel);
-        scrollPane.setSize(new Dimension(650, 10));
-        scrollPane.setPreferredSize(new Dimension(650, scrollPane.getPreferredSize().height));
-
-        JOptionPane.showMessageDialog(null, scrollPane,"LeaderBoard",JOptionPane.DEFAULT_OPTION);
-
-    }
     public void actionPerformed() {
         timerLabel.setText("5000");
         timer = new Timer(100, new ActionListener() {
