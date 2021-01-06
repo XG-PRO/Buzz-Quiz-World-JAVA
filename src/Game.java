@@ -26,15 +26,17 @@ public class Game {
 
         readFileQuestions();
         frame = new GUI_Main(questionsObj.getTypes());
+        frame.popupLeaderboard();
         frame.popupInfo();
+
         setNumberOfPlayers();
 
 
         if (playersArr.length==1)
             roundsTypes = new Round[]{
-                    new RoundRightAnswer(questionsObj,frame,playersArr),
+                    //new RoundRightAnswer(questionsObj,frame,playersArr),
                     new RoundStopTheTimer(questionsObj,frame,playersArr),
-                    new RoundBet(questionsObj,frame,playersArr)
+                    //new RoundBet(questionsObj,frame,playersArr)
             };
         else
             roundsTypes = new Round[]{

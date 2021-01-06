@@ -21,7 +21,8 @@ public class Round {
      * @param questionObj
      */
     protected void updateFrame_ShowPopUp_Clear_Responses(Question questionObj){
-        frame.popupShowGainedPoints(playersArr, gainedPointsHash,questionObj.getRightResponse(),responsesObj);
+
+        frame.popupShowGainedPoints(gainedPointsHash,questionObj.getRightResponse(),responsesObj);
         frame.updatePlayersPoints(playersArr);
         responsesObj.clearReset();
     }

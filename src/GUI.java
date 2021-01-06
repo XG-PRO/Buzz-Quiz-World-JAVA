@@ -31,8 +31,9 @@ public class GUI {
     protected HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
     protected HashMap<Character, JLabel> characterToJLabel_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
     protected HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
-    protected Font font_global;
-    protected Font font_global_20;
+    protected Font font_Verdana_Bold26;
+    protected Font font_Verdana_Plain20;
+    protected Color colorForOptionPanel;
     protected int numberOfPlayers;
     protected Player[] playersArr;
     protected Responses responsesObj;
@@ -47,19 +48,25 @@ public class GUI {
      * Default Constructor building the UI using JAVA SWING Library
      */
     public GUI(ArrayList<String> categoriesOfQuestions) {
+
         //Disable scaling this
         //System.setProperty("sun.java2d.uiScale", "1.5");
 
         //Set OptionPane font to
-        font_global = new Font("Arial Black", Font.BOLD, 26);
-        font_global_20 = new Font("Arial Black", Font.PLAIN, 20);
+        font_Verdana_Bold26 = new Font("Verdana", Font.BOLD, 26);
+        font_Verdana_Plain20 = new Font("Verdana", Font.PLAIN, 20);
+
+        Font font_Verdana_Bold_20 = new Font("Verdana", Font.BOLD, 20);
+        Font font_Verdana_Plain_18 = new Font("Verdana", Font.PLAIN, 18);
         colorGrayBackground = new Color(61, 72, 85);
 
-        Color colorForOptionPanel = new Color(18,26,40);
+
+
+        colorForOptionPanel = new Color(18,26,40);
         UIManager.put("OptionPane.border",BorderFactory.createLineBorder(colorForOptionPanel,18));
-        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 20));
+        UIManager.put("OptionPane.messageFont",font_Verdana_Bold_20 );
         UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 16));
-        UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, 18));
+        UIManager.put("TextField.font", font_Verdana_Plain_18 );
         UIManager.put("OptionPane.messageForeground", Color.white);
         UIManager.put("OptionPane.background", colorForOptionPanel);
         UIManager.put("OptionPane.messagebackground", colorForOptionPanel);
@@ -197,11 +204,11 @@ public class GUI {
         timerLabel.setVisible(false);
         timerLabel.setToolTipText("Time Remaining");
         timerLabel.setForeground(Color.white);
-        timerLabel.setFont(font_global);
+        timerLabel.setFont(font_Verdana_Bold26);
 
         txtRoundType.setToolTipText("If you need any help go to MENU->HELP");
         txtRoundType.setForeground(Color.white);
-        txtRoundType.setFont(font_global);
+        txtRoundType.setFont(font_Verdana_Bold26);
 
         typePanel = new JPanel();
         typePanel.setBackground(Color.BLACK);
@@ -229,10 +236,10 @@ public class GUI {
         questionPanel.setOpaque(true);
 
         txtTypeQuestion = new JLabel();
-        txtTypeQuestion.setFont(font_global);
+        txtTypeQuestion.setFont(font_Verdana_Bold26);
         txtTypeQuestion.setForeground(new Color(63, 124, 172));
         txtQuestionName = new JTextArea("Welcome to Buzz Quiz World");
-        txtQuestionName.setFont(font_global);
+        txtQuestionName.setFont(font_Verdana_Bold26);
         txtQuestionName.setOpaque(true);
         txtQuestionName.setLineWrap(true);
         txtQuestionName.setWrapStyleWord(true);
@@ -277,13 +284,13 @@ public class GUI {
             c.gridx = 0;
             c.gridy = i;
             c.fill = GridBagConstraints.HORIZONTAL;
-            txtResKeys[i].setFont(font_global_20);
+            txtResKeys[i].setFont(font_Verdana_Plain20);
             txtResKeys[i].setForeground(new Color(157, 193, 189));
             txtResKeys[i].setHorizontalAlignment(JLabel.CENTER);
             responsesPanel.add(txtResKeys[i], c);
 
             c.gridx += 1;
-            txtRes[i].setFont(font_global);
+            txtRes[i].setFont(font_Verdana_Bold26);
             txtRes[i].setForeground(Color.WHITE);
             txtRes[i].setPreferredSize(new Dimension(670, 80));
             txtRes[i].setHorizontalAlignment(JLabel.LEFT);
@@ -313,7 +320,7 @@ public class GUI {
         scorePanel.add(Box.createRigidArea(new Dimension(40, 0)));
         txtRoundCount = new JLabel();
         txtRoundCount.setForeground(Color.WHITE);
-        txtRoundCount.setFont(font_global);
+        txtRoundCount.setFont(font_Verdana_Bold26);
     }
 
 

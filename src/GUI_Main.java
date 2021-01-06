@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import static javax.swing.BorderFactory.createEmptyBorder;
 
 public class GUI_Main extends GUI{
 
@@ -85,7 +88,13 @@ public class GUI_Main extends GUI{
 
     }
 
-    public void popupShowGainedPoints(Player[] playerArr, HashMap<Player,Integer> gainedPointsHash, String correctAnswer,Responses responsesObj)
+    /**
+     * This method shows a popup with the results (Correct response, how many points the player gained)
+     * @param gainedPointsHash A HashMap containing <b>key:Player object value Integer gained Points.</b>
+     * @param correctAnswer A String containing the correct Answer.
+     * @param responsesObj A responsesObj to access player responses.
+     */
+    public void popupShowGainedPoints(HashMap<Player, Integer> gainedPointsHash, String correctAnswer, Responses responsesObj)
     {
         for (JLabel item: txtRes){
             if (item.getText().equals(correctAnswer))//Set the respones to green if is true
@@ -94,11 +103,10 @@ public class GUI_Main extends GUI{
                 item.setForeground(Color.red);//Set the respones to red if is false
         }
         StringBuilder temp = new StringBuilder();
-        temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n\n");
-        for (int i = 0; i < playerArr.length; i++) {
+        temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n");
+        for (int i = 0; i < gainedPointsHash.size(); i++) {
             Player currentPlayer = responsesObj.getPlayerAtPos(i);
-            if (!gainedPointsHash.containsKey(currentPlayer)){
-                temp.append(currentPlayer.getName()).append(" didn't respond.\n");
+            if (!gainedPointsHash.containsKey(currentPlayer) || currentPlayer == null){
                 continue;
             }
             if (responsesObj.getResponseAtPos(i).equals(correctAnswer))
@@ -135,7 +143,7 @@ public class GUI_Main extends GUI{
         playerToJLabel_HashMap = new HashMap<>();
         for (int i = 0; i < playersArr.length; i++) {
             playerToJLabel_HashMap.put(playersArr[i], new JLabel(playersArr[i].getName() + ":" + playersArr[i].getPoints()));
-            playerToJLabel_HashMap.get(playersArr[i]).setFont(font_global);
+            playerToJLabel_HashMap.get(playersArr[i]).setFont(font_Verdana_Bold26);
             playerToJLabel_HashMap.get(playersArr[i]).setForeground(Color.WHITE);
             scorePanel.add(playerToJLabel_HashMap.get(playersArr[i]));
             scorePanel.revalidate();
@@ -177,49 +185,72 @@ public class GUI_Main extends GUI{
     }
 
     /**
-     * This method draws the the question,responses and category of question on the GUI.
+     * This method show the question, the responses and the category of question on the GUI.
      * Also it resets the Player color to default.
      * @param questionObj The question object
      * @return responsesObj the player's responses
      */
     public Responses showQuestionAndGetResponses(Question questionObj,boolean isTimer) {
-        //Change All players color to default
+        // Change All players color to default
         for (Player item: playersArr)
             changePlayerStatusToNormal(item);
         // Change all responses color to white
         for (JLabel item: txtRes)
             item.setForeground(Color.white);
+
         timerLabel.setVisible(false);
         imageLabel.setVisible(false);
+
+        //If Question Type is QuestionImage the show the image
         if (Questions.isQuestionImage(questionObj)){
-            //System.out.println("It is a question image");
             loadImage(((QuestionImage)questionObj).getImageName());
             imageLabel.setVisible(true);
         }
-        this.responsesObj.clearReset();
-        txtQuestionName.setText(questionObj.getQuestion());
-        txtTypeQuestion.setText(questionObj.getType());
+
+        this.responsesObj.clearReset(); // Reset the responsesObj
+
+        txtQuestionName.setText(questionObj.getQuestion()); // Sets the question
+        txtTypeQuestion.setText(questionObj.getType()); // Sets the question category.
+
+        //Creates a copy of the responses and randomizes them.
         ArrayList<String> respArr = new ArrayList<>(questionObj.getResponses());
         Collections.shuffle(respArr);
+
+        // Put the responses to each JLabel Response
         for (int i = 0; i < txtRes.length; i++) {
             txtRes[i].setText(respArr.get(i));
         }
+
+        //If the round type is stop the timer
         if (isTimer){
-            timerLabel.setVisible(true);
-            actionPerformed();
+
+            timerLabel.setVisible(true); // Shows the timer JLabel
+            actionPerformed(); // Start the timer
+            // While (all players have not  respond) and timer is still running don't return the responses yet
+            while (!responsesObj.haveAllPlayersResponed() && timer.isRunning()) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100); // We had to add this for some reason.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            timer.stop();
         }
-        while (!responsesObj.haveAllPlayersResponed()) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        //If the round type is NOT stop the timer
+        else{
+            // While (all players have not  respond) don't return the responses yet
+            while (!responsesObj.haveAllPlayersResponed()) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(250); // We had to add this for some reason.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        if (isTimer)
-            timer.stop();
-        return responsesObj;
 
+        return responsesObj;
     }
+
     public void popupShowWinners(){
         StringBuilder temp = new StringBuilder();
         int numberOfWinners = 0;
@@ -251,6 +282,41 @@ public class GUI_Main extends GUI{
                         "Thermometer does some shit.\n" +
                         "The highest scores will be recorded in a leaderboard. Have fun!",
                 "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+    public void popupLeaderboard(){
+
+        Object[][] rows = {
+                {"Player 1","10000","2"},
+        };
+        Object[] cols = {
+                "Name","Score","Wins"
+        };
+
+        JTable table = new JTable(rows, cols);
+        table.setEnabled(false);
+        table.getTableHeader().setForeground(Color.white);
+        table.getTableHeader().setBackground(colorForOptionPanel);
+        table.getTableHeader().setFont(font_Verdana_Plain20);
+        table.setBackground(colorForOptionPanel);
+        table.setForeground(Color.WHITE);
+        table.setShowVerticalLines(false);
+        table.setFont(font_Verdana_Plain20);
+        table.setAutoResizeMode( JTable.AUTO_RESIZE_ALL_COLUMNS );
+        table.setRowHeight(25);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for (int i = 0; i< table.getColumnCount(); i++)
+            table.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+
+        JScrollPane scrollPane= new JScrollPane(table);
+        scrollPane.setBorder(createEmptyBorder());
+        scrollPane.getViewport().setBackground(colorForOptionPanel);
+        scrollPane.setSize(new Dimension(650, 10));
+        scrollPane.setPreferredSize(new Dimension(650, scrollPane.getPreferredSize().height));
+
+        JOptionPane.showMessageDialog(null, scrollPane,"LeaderBoard",JOptionPane.DEFAULT_OPTION);
+
     }
     public void actionPerformed() {
         timerLabel.setText("5000");

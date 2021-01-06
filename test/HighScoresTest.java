@@ -17,7 +17,7 @@ class HighScoresTest {
         HighScores highScoresObj = new HighScores();
 
         highScoresObj.addHighScore("Player 1",100);
-        highScoresObj.addHighScore("Player 2",50);
+        highScoresObj.addHighScore("Player 2",100);
         highScoresObj.printScoresInOrder();
 
         System.out.println("----");
@@ -25,5 +25,7 @@ class HighScoresTest {
 
         highScoresObj.addHighScore("Player 2",150);
         highScoresObj.printScoresInOrder();
+
+
     }
 }

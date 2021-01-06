@@ -44,7 +44,12 @@ public class Score implements Comparable<Score>, Serializable {
      */
     @Override
     public int compareTo(Score o) {
-        return Integer.compare(this.highestPoints, o.highestPoints);
+        int result = Integer.compare(this.highestPoints, o.highestPoints);
+        if (result == 0 )// If the players have the same points check their wins
+            result = Integer.compare(this.numberOfWins, o.numberOfWins);
+        if (result == 0 )// If the players have the same wins check their names
+            result = playerName.compareTo(o.playerName);
+        return result;
     }
 
     @Override
