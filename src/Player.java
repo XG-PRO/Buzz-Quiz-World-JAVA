@@ -16,7 +16,6 @@ public class Player {
         keyboard_responses = new char[keys.length];
         for (int i =0;i<keys.length; i++)
             keyboard_responses[i] = keys[i];
-        }
 
 
     /** The below three functions return the current points of the player,

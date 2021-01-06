@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -225,7 +224,7 @@ public class GUI_Main extends GUI{
         StringBuilder temp = new StringBuilder();
         int numberOfWinners = 0;
         for (Player item : playersArr){
-            if (item.isHasWon()){
+            if (item.getHasWon()){
 
                 temp.append(item.getName());
                 temp.append(" won with ");
