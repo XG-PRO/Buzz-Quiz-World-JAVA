@@ -21,7 +21,8 @@ public class Game {
     private final GUI_Main frame;
 
     /**
-     * Default Constructor, Starts the GUI, asks the number of players,
+     * Default Constructor, Starts the GUI, asks the number of players
+     * and creates rounds
      */
     public Game() {
         questionsObj = new Questions();
@@ -32,13 +33,14 @@ public class Game {
 
         setNumberOfPlayers();
 
-
+        //Single player allows only Right Answer, Bet and Stop The Timer
         if (playersArr.length==1)
             roundsTypes = new Round[]{
                     new RoundRightAnswer(questionsObj,frame,playersArr),
                     new RoundStopTheTimer(questionsObj,frame,playersArr),
                     new RoundBet(questionsObj,frame,playersArr)
             };
+        //Multiplayer allows all round types
         else
             roundsTypes = new Round[]{
                     new RoundRightAnswer(questionsObj,frame,playersArr),
@@ -56,16 +58,16 @@ public class Game {
      */
     void play() {
 
-        int number_of_rounds = 6;
+        int number_of_rounds = 6;   //The number of rounds. Normally changeable but by default is 6
         for (int i = 0; i < number_of_rounds; i++) {
             frame.changeRoundCount(i+1);
 
-            Round currentRoundObj = roundsTypes[Utilities.random_int(roundsTypes.length)];
-            currentRoundObj.playRound();
+            Round currentRoundObj = roundsTypes[Utilities.random_int(roundsTypes.length)];  //A round can have a random type
+            currentRoundObj.playRound();    //Play that corresponding round (override)
         }
-        //When round has finished
-        Utilities.whoWon(playersArr);
 
+        //Checks who has won, prints results and terminates
+        Utilities.whoWon(playersArr);
         frame.exitFrame(0);
     }
 
@@ -82,14 +84,19 @@ public class Game {
             acceptable_responses[0] = new char[]{'Q','W','E','R'};
 
         if (playersArr.length>1)
+        {
             acceptable_responses[1] = new char[]{'1','2','3','4'};
+            //Further response keys for more players can be added here
+        }
 
+        //Creates each player's response keys
         for (int i=0; i<numberOfPlayers; i++)
         {
             playersArr[i] = new Player("Player " + i, acceptable_responses[i]);
             playersArr[i] = new Player(frame.popupGetPlayerName(i+1), acceptable_responses[i]);
         }
 
+        //Show the players into the frame
         frame.drawPlayersInfoToGUI(playersArr);
     }
 

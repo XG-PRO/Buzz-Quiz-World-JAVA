@@ -8,8 +8,12 @@ public class Player {
     private final char[] keyboard_responses;
     private boolean hasWon = false;
 
+    /** Each player has his own name, keys and points
+     * @param name the name of the player
+     * @param keys his corresponding response keys
+     */
     public Player(String name, char[] keys){
-        points = 0;
+        this.points = 0;
         this.name = name;
         keyboard_responses = new char[keys.length];
         System.arraycopy(keys, 0, keyboard_responses, 0, keys.length);
@@ -19,7 +23,8 @@ public class Player {
     /** The below three functions return the current points of the player,
      * increase them and decrease them by a certain amount
      * and can be used by any appropriate class.
-     *
+     * They can also return a player's corresponding response keys,
+     * his name and whether he has won or not (which can also be set publicly)
      */
     public int getPoints()
     {

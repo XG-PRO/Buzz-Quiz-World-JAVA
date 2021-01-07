@@ -51,7 +51,7 @@ public class GUI {
     protected Timer timer;
 
     /**
-     * Default Constructor building the UI using JAVA SWING Library
+     * Default Constructor building the UI template using JAVA SWING Library
      */
     public GUI(ArrayList<String> categoriesOfQuestions) {
 
@@ -155,12 +155,14 @@ public class GUI {
 
 
     /**
-     * This private method initializes the JMenu
+     * This private method initializes the JMenu (shown as a cog)
      */
     private void initMenu(ArrayList<String> categoriesOfQuestions) {
 
         menubar = new JMenuBar();
         JMenu menu = new JMenu();
+
+        //Image and background of the menu
         BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(getClass().getResource("/splash/settings-32.png"));
@@ -170,12 +172,16 @@ public class GUI {
             System.exit(-1);
         }
         menu.setIcon(new ImageIcon(myPicture));
+
+
+        //Adds the "Leaderboard" into the menu
         JMenuItem seeLeaderboardMenuItem = new JMenuItem("See Leaderboard");
         seeLeaderboardMenuItem.addActionListener(e -> popupLeaderboard(highScoresObj.getHighScoresTable()));
         seeLeaderboardMenuItem.setFont(font_Verdana_Bold_20);
 
         menubar.setBackground(Color.black);
 
+        //Adds the "Selection of Question Category" into the menu
         menu.add(seeLeaderboardMenuItem);
         menu.addSeparator();
         JMenu submenu = new JMenu("Category of Questions");
@@ -193,6 +199,7 @@ public class GUI {
 
         }
 
+        //Adds the "Info" into the menu
         JMenuItem seeInfoMenuItem = new JMenuItem("Help");
         seeInfoMenuItem.addActionListener(e -> popupInfo());
         seeInfoMenuItem.setFont(font_Verdana_Bold_20);
@@ -375,20 +382,47 @@ public class GUI {
     }
 
 
-
-
+    /**
+     * Makes a player's name gray if he replied to the question
+     * and others haven't answered yet
+     * @param playerObj the corresponding player
+     */
     protected void changePlayerStatusToReplied(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(new Color(109, 116, 116));
     }
+
+    /**
+     * Makes a player's name white (default)
+     * if a new question is shown after everyone has answered
+     * @param playerObj the corresponding player
+     */
     protected void changePlayerStatusToNormal(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.white);
     }
+
+    /**
+     * Makes a player's name red if the player has answered
+     * incorrectly after everyone has also answered
+     * @param playerObj the corresponding player
+     */
     protected void changePlayerStatusToFalse(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.RED);
     }
+
+    /**
+     * Makes a player's name green if the player has answered
+     * correctly after everyone has also answered
+     * @param playerObj the corresponding player
+     */
     protected void changePlayerStatusToTrue(Player playerObj){
         playerToJLabel_HashMap.get(playerObj).setForeground(Color.GREEN);
     }
+
+    /**
+     * Loads and sets an image into the frame if a
+     * question has an image filename to its data
+     * @param fileName the image's pathname
+     */
     protected void loadImage(String fileName){
         BufferedImage myPicture = null;
         try {
@@ -398,6 +432,12 @@ public class GUI {
         }
         this.imageIcon.setImage(myPicture);
     }
+
+
+    /**
+     * Shows the current leaderboard based on its corresponding file
+     * @param Array stores in the memory data from leaderboard.dat
+     */
     public void popupLeaderboard(String [][] Array){
 
         Object[] cols = {
@@ -430,6 +470,11 @@ public class GUI {
         JOptionPane.showMessageDialog(null, scrollPane,"LeaderBoard",JOptionPane.PLAIN_MESSAGE);
 
     }
+
+    /**
+     * Shows some basic info of the game to the player
+     */
+
     public void popupInfo(){
         JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n\n" +
                         "Choose a number of players and answer questions with your corresponding keys!\n" +

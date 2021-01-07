@@ -22,7 +22,9 @@ public class Utilities {
         return OUT;
     }
     /*
-    OUR LEGACY CODE
+    //OUR LEGACY CODE
+
+
     public static ArrayList<Character> generateLetters(int count){
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         ArrayList<Character> OUT = new ArrayList<>();

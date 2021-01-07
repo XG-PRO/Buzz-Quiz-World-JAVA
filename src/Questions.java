@@ -19,6 +19,7 @@ public class Questions {
      */
     public Questions() {
 
+        //Questions will be dynamically stored and randomized here
         hash = new HashMap<>();
         hashIterators = new HashMap<>();
     }
@@ -50,11 +51,8 @@ public class Questions {
         addQuestion(obj);
     }
     public static boolean isQuestionImage(Question qsObj){
-        if (qsObj instanceof QuestionImage){
-            //System.out.println("Question Image");
-            return true;
-        }
-        return false;
+        //System.out.println("Question Image");
+        return (qsObj instanceof QuestionImage);
     }
     /**
      * @param obj A question object

@@ -5,41 +5,56 @@ public class HighScores {
     private TreeSet<Score> scoreTreeSet;
 
     /**
-     * Default constructor
+     * Default constructor, reads and/or creates the leaderboard file
      */
     @SuppressWarnings("unchecked")
     public HighScores(){
         boolean fileExist = true;
+        //If the file exists, read it and store it
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("scores.dat"))) {
-            scoreTreeSet = (TreeSet<Score>) in.readObject();
+            scoreTreeSet = (TreeSet<Score>) in.readObject();   //Stores the score information into a dynamic Score tree
         } catch (IOException e) {
-            //System.out.println("File Not Found\nCreating file...");
+            System.out.println("File Not Found\nCreating file...");
             fileExist = false;
             //e.printStackTrace();
         } catch (ClassNotFoundException e) {
             //e.printStackTrace();
             fileExist = false;
         }
+
+        //If the file doesn't exists, create it
         if (!fileExist){
             this.scoreTreeSet = new TreeSet<>();
             writeToFile();
         }
         //printScoresInOrder();
     }
+
+    /**
+     * Adds the scores and wins of a player into the leaderboard
+     * @param currentPlayer the corresponding player
+     */
     public void addHighScore(Player currentPlayer ) {
         Score current = null;
         int win = 0;
-        if (currentPlayer.getHasWon()){
+        if (currentPlayer.getHasWon()){ //If the player has won, add a win, otherwise don't
             win = 1;
         }
+
+        //Search the current player into the leaderboard
         for (Score item : scoreTreeSet) {
             if (item.getPlayerName().equals(currentPlayer.getName()))
                 current = item;
         }
+
+        //If the player searched doesn't exist, create him
         if (current == null){
             current = new Score(currentPlayer.getName(), currentPlayer.getPoints(), win);
         }
+
+        //If the player already exists, update him
         else {
+            //If his current score is higher than his older one, update it by removing the old one and recreating it with the new values, otherwise don't
             int oldScore = current.getHighestPoints();
             if (currentPlayer.getPoints() > oldScore)
                 oldScore = currentPlayer.getPoints();
@@ -54,9 +69,9 @@ public class HighScores {
     /**
      *
      * @return An [n][3] Array where n the number of entries
-     *             In the first collum player name.<br>
-     *             In the second collum player high score.<br>
-     *             In the third collum player number of wins.<br>
+     *             In the first collum lies the player name.<br>
+     *             In the second collum lies the player's high score.<br>
+     *             In the third collum lies the player's number of wins.<br>
      */
     public String[][] getHighScoresTable(){
         String[][]Array = new String[scoreTreeSet.size()][3];
@@ -73,7 +88,7 @@ public class HighScores {
     }
 
     /**
-     * Prints all the saved scores useful for debugging.
+     * Prints all the saved scores, useful for debugging.
      */
     public void printScoresInOrder(){
         Iterator<Score> scoreIterator = scoreTreeSet.descendingIterator();
@@ -82,6 +97,10 @@ public class HighScores {
             System.out.println(item.toString()+ " CODE"+item.hashCode());
         }
     }
+
+    /**
+     * Method that writes the current stored information into the file
+     */
     private void writeToFile(){
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("scores.dat"))) {
             out.writeObject(this.scoreTreeSet);

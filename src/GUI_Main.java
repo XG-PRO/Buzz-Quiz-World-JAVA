@@ -15,6 +15,7 @@ public class GUI_Main extends GUI{
 
     /**
      * Shows a popup and closes the frame
+     * Also shows the winners and the leaderboard before terminating the program
      * @param k if k = 0, All Rounds have been completed.
      *          if k = 1, No more questions
      *          if k = -1, Error :(
@@ -34,6 +35,8 @@ public class GUI_Main extends GUI{
         frame.dispose();
         System.exit(k);
     }
+
+
     public String getChosenCategory(){
         return group.getSelection().getActionCommand();
     }
@@ -44,8 +47,6 @@ public class GUI_Main extends GUI{
      * @param roundCount The round type
      */
 
-
-
     public void changeRoundCount(int roundCount) {
         txtRoundCount.setText("ROUND " + roundCount);
     }
@@ -54,6 +55,8 @@ public class GUI_Main extends GUI{
         txtRoundType.setText(roundType);
     }
 
+
+
     /**
      * Ask from the user the number of players, and returns the result.
      * @param maxNumberOfPlayers The maximum number of players.
@@ -61,11 +64,11 @@ public class GUI_Main extends GUI{
      */
     public int popupAskNumberOfPlayer(int maxNumberOfPlayers) {
         String [] t = new String[maxNumberOfPlayers];
-        t[0] = "1 Player";
+        t[0] = "1 Player";      //Default number of players if no other players are inserted
         for (int i = 1; i < maxNumberOfPlayers; i++) {
             t[i] = (i+1) + " Players";
         }
-        numberOfPlayers = popupInput("Number of Players?", t) + 1;
+        numberOfPlayers = popupInput("Number of Players?", t) + 1;  //Ask and get the number of players
         this.responsesObj = new Responses(numberOfPlayers);
         return numberOfPlayers;
     }
@@ -94,34 +97,35 @@ public class GUI_Main extends GUI{
             else
                 item.setForeground(Color.red);//Set the responses to red if is false
         }
+
+        //A method which shows point results according to the answer and the points
         StringBuilder temp = new StringBuilder();
         temp.append("The correct answer was : ").append(correctAnswer).append(".\n\n");
         for (int i = 0; i < gainedPointsHash.size(); i++) {
             Player currentPlayer = responsesObj.getPlayerAtPos(i);
-            if (!gainedPointsHash.containsKey(currentPlayer) || currentPlayer == null){
+            if (!gainedPointsHash.containsKey(currentPlayer) || currentPlayer == null)  //If an error occurs with a player, terminate the loop
                 continue;
-            }
-            if (responsesObj.getResponseAtPos(i).equals(correctAnswer))
+            if (responsesObj.getResponseAtPos(i).equals(correctAnswer))     //If a player answers correctly, make his name green
                 changePlayerStatusToTrue(currentPlayer);
             else
-                changePlayerStatusToFalse(currentPlayer);
+                changePlayerStatusToFalse(currentPlayer);                   //If a player answers incorrectly, make his name red
 
             if (gainedPointsHash.get(currentPlayer) == 0){
-                temp.append(currentPlayer.getName()).append(" didn't get any points.\n");
+                temp.append(currentPlayer.getName()).append(" didn't get any points.\n");   //The corresponding player got exactly 0 points
             }
             else {
                 if (gainedPointsHash.get(currentPlayer) >= 0){
-                    temp.append(currentPlayer.getName()).append(" gained : ").append(gainedPointsHash.get(currentPlayer));
+                    temp.append(currentPlayer.getName()).append(" gained : ").append(gainedPointsHash.get(currentPlayer));  //The corresponding player got positive points
                 }
                 else {
-                    temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1));
+                    temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1)); //The corresponding player got begative points
                 }
                 temp.append(" points.\n");
             }
         }temp.append("\n\n");
 
         JOptionPane.showMessageDialog(this.frame, temp.toString(),
-                "Results", JOptionPane.PLAIN_MESSAGE);
+                "Results", JOptionPane.PLAIN_MESSAGE);      //Print the above results into the frame
     }
 
     /**
@@ -133,6 +137,8 @@ public class GUI_Main extends GUI{
     public void drawPlayersInfoToGUI(Player[] playersArr) {
         this.playersArr = playersArr;
         playerToJLabel_HashMap = new HashMap<>();
+
+        //Adds each player's name into the bottom panel as well as their score
         for (Player player : playersArr) {
             playerToJLabel_HashMap.put(player, new JLabel(player.getName() + ":" + player.getPoints()));
             playerToJLabel_HashMap.get(player).setFont(font_Verdana_Bold26);
@@ -144,6 +150,7 @@ public class GUI_Main extends GUI{
             //System.out.println("i :" + i + " name : " + playersArr[i].getName());
         }
 
+
         for (int i = 0; i < numberOfResponses; i++) {
             StringBuilder temp = new StringBuilder();
             for (int j = 0; j < numberOfPlayers; j++) {
@@ -153,6 +160,7 @@ public class GUI_Main extends GUI{
 
         }
 
+        //Adds corresponding response keys on the screen for each player
         for (int i = 0; i < numberOfResponses; i++) {
             for (Player playerObj : playersArr) {
                 characterToJLabel_HashMap.put(playerObj.getKeyboard_responses()[i], txtRes[i]);
@@ -177,7 +185,7 @@ public class GUI_Main extends GUI{
     }
 
     /**
-     * This method show the question, the responses and the category of question on the GUI.
+     * This method shows the question, the responses and the category of questions on the GUI.
      * Also it resets the Player color to default.
      * @param questionObj The question object
      * @return responsesObj the player's responses
@@ -216,8 +224,9 @@ public class GUI_Main extends GUI{
         //If the round type is stop the timer
         if (isTimer){
 
-            timerLabel.setVisible(true); // Shows the timer JLabel
-            actionPerformed(); // Start the timer
+            timerLabel.setVisible(true);    // Shows the timer JLabel
+            actionPerformed();  // Start the timer
+
             // While (all players have not  respond) and timer is still running don't return the responses yet
             while (!responsesObj.haveAllPlayersResponed() && timer.isRunning()) {
                 try {
@@ -228,6 +237,7 @@ public class GUI_Main extends GUI{
             }
             timer.stop();
         }
+
         //If the round type is NOT stop the timer
         else{
             // While (all players have not  respond) don't return the responses yet
@@ -243,6 +253,13 @@ public class GUI_Main extends GUI{
         return responsesObj;
     }
 
+
+    /**
+     * This method adds the winner(s) of the game
+     * into the leaderboard and prints them on a popup window
+     * It also runs the following popup for the leaderboard
+     * (which runs in GUI.java)
+     */
     public void popupShowWinners(){
 
         // Add player higher
@@ -277,7 +294,7 @@ public class GUI_Main extends GUI{
 
 
     /**
-     * Starts the timer
+     * Starts a timer of 5000 ms and decreases it by 100 ms every 100 ms
      */
     private void actionPerformed() {
         timerLabel.setText("5000");
