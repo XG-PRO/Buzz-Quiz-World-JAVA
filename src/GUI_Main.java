@@ -228,7 +228,7 @@ public class GUI_Main extends GUI{
             actionPerformed();  // Start the timer
 
             // While (all players have not  respond) and timer is still running don't return the responses yet
-            while (!responsesObj.haveAllPlayersResponed() && timer.isRunning()) {
+            while (responsesObj.atLeastOnePlayerHaveNOTRespond() && timer.isRunning()) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(100); // We had to add this for some reason.
                 } catch (InterruptedException e) {
@@ -241,7 +241,7 @@ public class GUI_Main extends GUI{
         //If the round type is NOT stop the timer
         else{
             // While (all players have not  respond) don't return the responses yet
-            while (!responsesObj.haveAllPlayersResponed()) {
+            while (responsesObj.atLeastOnePlayerHaveNOTRespond()) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(250); // We had to add this for some reason.
                 } catch (InterruptedException e) {

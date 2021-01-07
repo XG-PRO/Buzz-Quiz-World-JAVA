@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
-
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;

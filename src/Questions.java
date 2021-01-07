@@ -19,7 +19,6 @@ public class Questions {
      */
     public Questions() {
 
-        //Questions will be dynamically stored and randomized here
         hash = new HashMap<>();
         hashIterators = new HashMap<>();
     }
@@ -52,7 +51,7 @@ public class Questions {
     }
     public static boolean isQuestionImage(Question qsObj){
         //System.out.println("Question Image");
-        return (qsObj instanceof QuestionImage);
+        return qsObj instanceof QuestionImage;
     }
     /**
      * @param obj A question object
@@ -107,17 +106,6 @@ public class Questions {
         return null;
 
     }
-
-
-    /**
-     * Resets all questions status, to not shown before, useful to reset
-     */
-    public void resetAllViewed() {
-        for (String key : hash.keySet()) {
-            hashIterators.put(key, hash.get(key).iterator());
-        }
-    }
-
 
     /**
      * @return an Arraylist of all the types of questions

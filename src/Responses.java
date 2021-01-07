@@ -15,7 +15,7 @@ public class Responses {
     private final int numOfPlayers;
     private int current_player_pos;
 
-    private int time[];
+    private final int[] time;
     /**
      * Default Contactor
      * @param numOfPlayers The number of players in game.
@@ -39,9 +39,7 @@ public class Responses {
             respArr[i] = null;
             time[i] = 0;
         }
-        for (Player key : playerResponse.keySet()){
-            playerResponse.put(key,false);
-        }
+        playerResponse.replaceAll((k, v) -> false);
         current_player_pos = 0;
 
     }
@@ -51,24 +49,20 @@ public class Responses {
      * @param pl The player object
      * @param playerResponseString String. The player response.
      */
-    public boolean addPlayerResponse(Player pl, String playerResponseString,int time){
+    public void addPlayerResponse(Player pl, String playerResponseString, int time){
         if (playerResponse.containsKey(pl)){ //If the player has already answered the question just ignore it.
             if (playerResponse.get(pl))
-                return false;
+                return;
         }
         if (current_player_pos >= numOfPlayers) {
             System.out.println("ERROR! in Responses 'addPlayerResponse'. You have tried to add more responses. (number of responses >= numb of players). Try to clean the responses object every time the round has ended");
-            return false;
+            return;
         }
         this.plArr[current_player_pos] = pl;
         this.respArr[current_player_pos] = playerResponseString;
         playerResponse.put(pl,true);
         this.time[current_player_pos] = time;
         current_player_pos++;
-        //System.out.println("Added RESPONSE\n\tPlayer:"+pl.getName()+"\n\tString:"+playerResponseString);
-        //System.out.println("\t number of players : "+numOfPlayers);
-        //System.out.println("\t number of replied players : "+current_player_pos);
-        return true;
     }
 
     /**
@@ -93,7 +87,7 @@ public class Responses {
         return time[pos];
     }
 
-    public boolean haveAllPlayersResponed(){
-        return current_player_pos == numOfPlayers;
+    public boolean atLeastOnePlayerHaveNOTRespond(){
+        return current_player_pos != numOfPlayers;
     }
 }

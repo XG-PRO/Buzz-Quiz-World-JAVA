@@ -54,21 +54,6 @@ public class Question {
     public final String  getType() {
         return type;
     }
-
-    /**
-     * Prints all the field of the question, used by the developer mainly
-     */
-    public void debugShowInfo() {
-        System.out.println("----------");
-        System.out.println("ID        : " + this.hashCode());
-        System.out.println("Name      : " + this.name);
-        System.out.println("Type      : " + this.type);
-        System.out.println("Responses :");
-        for (String item : responses_array) {
-            System.out.println("          " + item);
-        }
-        System.out.println("----------");
-    }
     public String getRightResponse(){
         return responses_array.get(0);
     }
