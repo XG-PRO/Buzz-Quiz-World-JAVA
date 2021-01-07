@@ -80,9 +80,11 @@ public class Round {
             currentQuestionType = "Random";
             temp = questionsObj.getRandomQuestionWithType("Random");
         }
+
         if (temp == null) { //If there are no more questions in the directory, save the results, show the winners and terminate the game
             //Utilities.whoWon(playersArr);
-            frame.exitFrame(1);  //RAN OUT OF QUESTIONS
+            //frame.exitFrame(1);
+            System.exit(-1);  //RAN OUT OF QUESTIONS
             temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
         }
         return temp;

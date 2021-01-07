@@ -379,6 +379,8 @@ public class GUI {
     }
 
 
+
+
     /**
      * Makes a player's name gray if he replied to the question
      * and others haven't answered yet
@@ -487,4 +489,6 @@ public class GUI {
                         "The highest scores as well as wins will be recorded in a leaderboard. Have fun!",
                 "Info", JOptionPane.INFORMATION_MESSAGE);
     }
+
+
 }
