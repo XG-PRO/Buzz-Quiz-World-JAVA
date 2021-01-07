@@ -15,7 +15,7 @@ public class Game {
     private final Questions questionsObj;
 
     private Player[] playersArr;
-    private final HighScores highScoresObj;
+
 
     private final Round[] roundsTypes; // A arraylist that contains all the types of rounds, in which other types of rounds can be added anytime;
     private final GUI_Main frame;
@@ -25,9 +25,9 @@ public class Game {
      */
     public Game() {
         questionsObj = new Questions();
-        highScoresObj = new HighScores();
+
         readFileQuestions();
-        frame = new GUI_Main(questionsObj.getTypes(), highScoresObj);
+        frame = new GUI_Main(questionsObj.getTypes());
         frame.popupInfo();
 
         setNumberOfPlayers();
@@ -65,12 +65,7 @@ public class Game {
         }
         //When round has finished
         Utilities.whoWon(playersArr);
-        frame.popupShowWinners();
-        for (Player item : playersArr)
-            if (item.getHasWon())
-                highScoresObj.addHighScore(item.getName(), item.getPoints());
 
-        frame.popupLeaderboard(highScoresObj.getHighScoresTable());
         frame.exitFrame(0);
     }
 
@@ -103,22 +98,12 @@ public class Game {
      * reads the questions from a .tsv(tab separated values) file.
      * Κατηγορία(TAB)Ερώτηση(TAB)Απάντηση 1(TAB)Απάντηση 2(TAB)Απάντηση 3(TAB)Απάντηση 4(TAB)Σωστή απάντηση(TAB)Όνομα εικόνας
      */
-    private void readFileQuestions() { // Source: https://stackoverflow.com/questions/61443542/reading-tsv-file-in-java
+    private void readFileQuestions() {
 
         String fileName = "packageQuestions/quiz.tsv";
         InputStream f = getClass().getResourceAsStream(fileName);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(f))) {
-            /*
-            lineItems[0]//κατηγορία
-            lineItems[1]//ερώτηση
-            lineItems[2]//απαντηση 1
-            lineItems[3]//απαντηση 2
-            lineItems[4]//απαντηση 3
-            lineItems[5]//απαντηση 4
-            lineItems[6]//σωστη απαντηση
-            lineItems[7]//ονομα εικόνας
-             */
             final int index_type = 0;
             final int index_question = 1;
 

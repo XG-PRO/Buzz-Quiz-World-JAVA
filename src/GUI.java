@@ -2,8 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -55,11 +53,11 @@ public class GUI {
     /**
      * Default Constructor building the UI using JAVA SWING Library
      */
-    public GUI(ArrayList<String> categoriesOfQuestions, HighScores highScoresObj) {
+    public GUI(ArrayList<String> categoriesOfQuestions) {
 
         //Disable scaling this
         //System.setProperty("sun.java2d.uiScale", "1.5");
-        this.highScoresObj = highScoresObj;
+        this.highScoresObj = new HighScores();
         //Set OptionPane font tom
         font_Verdana_Bold26 = new Font("Verdana", Font.BOLD, 26);
         font_Verdana_Plain20 = new Font("Verdana", Font.PLAIN, 20);
@@ -168,15 +166,12 @@ public class GUI {
             myPicture = ImageIO.read(getClass().getResource("/splash/settings-32.png"));
         } catch (IOException e) {
             e.printStackTrace();
+            frame.dispose();
+            System.exit(-1);
         }
         menu.setIcon(new ImageIcon(myPicture));
         JMenuItem seeLeaderboardMenuItem = new JMenuItem("See Leaderboard");
-        seeLeaderboardMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                popupLeaderboard(highScoresObj.getHighScoresTable());
-            }
-        });
+        seeLeaderboardMenuItem.addActionListener(e -> popupLeaderboard(highScoresObj.getHighScoresTable()));
         seeLeaderboardMenuItem.setFont(font_Verdana_Bold_20);
 
         menubar.setBackground(Color.black);
@@ -187,9 +182,9 @@ public class GUI {
         submenu.setFont(font_Verdana_Bold_20);
         JRadioButtonMenuItem rbMenuItem;
         this.group = new ButtonGroup();
-        for (int i = 0; i<categoriesOfQuestions.size();i++) {
-            rbMenuItem = new JRadioButtonMenuItem(categoriesOfQuestions.get(i));
-            rbMenuItem.setActionCommand(categoriesOfQuestions.get(i));
+        for (String categoriesOfQuestion : categoriesOfQuestions) {
+            rbMenuItem = new JRadioButtonMenuItem(categoriesOfQuestion);
+            rbMenuItem.setActionCommand(categoriesOfQuestion);
             rbMenuItem.setFont(font_Verdana_Bold_20);
             rbMenuItem.setSelected(true);
             group.add(rbMenuItem);
@@ -199,12 +194,7 @@ public class GUI {
         }
 
         JMenuItem seeInfoMenuItem = new JMenuItem("Help");
-        seeInfoMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                popupInfo();
-            }
-        });
+        seeInfoMenuItem.addActionListener(e -> popupInfo());
         seeInfoMenuItem.setFont(font_Verdana_Bold_20);
 
         menu.add(submenu);
@@ -252,7 +242,7 @@ public class GUI {
 
 
     /**
-     * This private method initializes the JPanel "questionPanel", the JLabel's "txtquestionName", "txtTypeQuestion"
+     * This private method initializes the JPanel "questionPanel", the JLabel's "txt question Name", "txtTypeQuestion"
      */
     private void initQuestionPanel() {
         // Init the questionPanel
@@ -328,6 +318,8 @@ public class GUI {
             myPicture = ImageIO.read(getClass().getResource("/splash/splash.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
+            frame.dispose();
+            System.exit(-1);
         }
         belowQsPanel.setOpaque(false);
         this.imageIcon = new ImageIcon(myPicture);
@@ -359,11 +351,6 @@ public class GUI {
      */
     public int popupInput(String question, String[] responses) {
         int n;
-        /*
-        JPanel insidePanel = new JPanel(new GridLayout(responses.length,1));
-        for (int i = 0; i<responses.length;i++)
-            insidePanel.add(new JButton(responses[i]));
-         */
 
         n = JOptionPane.showOptionDialog(frame,
                 question,
@@ -412,12 +399,7 @@ public class GUI {
         this.imageIcon.setImage(myPicture);
     }
     public void popupLeaderboard(String [][] Array){
-        /*
-        Object[][] rows = {
-                {"Player 1","10000","2"},
-        };
 
-         */
         Object[] cols = {
                 "Name","Score","Wins"
         };

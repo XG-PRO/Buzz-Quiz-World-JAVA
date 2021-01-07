@@ -13,7 +13,7 @@ public class HighScores {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("scores.dat"))) {
             scoreTreeSet = (TreeSet<Score>) in.readObject();
         } catch (IOException e) {
-            System.out.println("File Not Found\nCreating file...");
+            //System.out.println("File Not Found\nCreating file...");
             fileExist = false;
             //e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -24,25 +24,27 @@ public class HighScores {
             this.scoreTreeSet = new TreeSet<>();
             writeToFile();
         }
-        System.out.println("Current State of File");
-        printScoresInOrder();
-        System.out.println("END Current state of File");
+        //printScoresInOrder();
     }
-    public void addHighScore(String nameOfPlayer, int score) {
+    public void addHighScore(Player currentPlayer ) {
         Score current = null;
+        int win = 0;
+        if (currentPlayer.getHasWon()){
+            win = 1;
+        }
         for (Score item : scoreTreeSet) {
-            if (item.getPlayerName().equals(nameOfPlayer))
+            if (item.getPlayerName().equals(currentPlayer.getName()))
                 current = item;
         }
         if (current == null){
-            current = new Score(nameOfPlayer, score, 1);
+            current = new Score(currentPlayer.getName(), currentPlayer.getPoints(), win);
         }
         else {
             int oldScore = current.getHighestPoints();
-            if (score > oldScore)
-                oldScore = score;
+            if (currentPlayer.getPoints() > oldScore)
+                oldScore = currentPlayer.getPoints();
             scoreTreeSet.remove(current);
-            current = new Score(nameOfPlayer, oldScore, current.getNumberOfWins()+1);
+            current = new Score(currentPlayer.getName(), oldScore, current.getNumberOfWins()+win);
 
         }scoreTreeSet.add(current);
 

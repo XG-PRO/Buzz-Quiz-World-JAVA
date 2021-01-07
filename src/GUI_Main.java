@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,12 +7,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import static javax.swing.BorderFactory.createEmptyBorder;
-
 public class GUI_Main extends GUI{
 
-    GUI_Main(ArrayList<String> categoriesOfQuestions, HighScores highScoresObj) {
-        super(categoriesOfQuestions, highScoresObj);
+    GUI_Main(ArrayList<String> categoriesOfQuestions ) {
+        super(categoriesOfQuestions);
     }
 
     /**
@@ -23,6 +20,7 @@ public class GUI_Main extends GUI{
      *          if k = -1, Error :(
      */
     public void exitFrame(int k){
+
         if (k==0)
             JOptionPane.showMessageDialog(frame,"All Rounds have been completed!\nThanks for playing!",
                     "The game has ended", JOptionPane.INFORMATION_MESSAGE);
@@ -32,6 +30,7 @@ public class GUI_Main extends GUI{
         if (k==-1)
             JOptionPane.showMessageDialog(frame,"An error has occurred",
                     "Error", JOptionPane.ERROR_MESSAGE);
+        popupShowWinners();
         frame.dispose();
         System.exit(k);
     }
@@ -245,10 +244,15 @@ public class GUI_Main extends GUI{
     }
 
     public void popupShowWinners(){
+
+        // Add player higher
+        for (Player item : playersArr)
+                highScoresObj.addHighScore(item);
+
         StringBuilder temp = new StringBuilder();
         int numberOfWinners = 0;
-        for (Player item : playersArr){
-            if (item.getHasWon()){
+        for (Player item : playersArr) {
+            if (item.getHasWon()) {
 
                 temp.append(item.getName());
                 temp.append(" won with ");
@@ -256,16 +260,26 @@ public class GUI_Main extends GUI{
                 temp.append(" points.");
                 numberOfWinners++;
             }
+            else{
+                temp.append(item.getName());
+                temp.append(" got ");
+                temp.append(item.getPoints());
+                temp.append(" points.");
+            }
             temp.append("\n");
-            if (numberOfWinners>1)
+            if (numberOfWinners > 1)
                 temp.append("It was a draw");
         }
-        JOptionPane.showMessageDialog(frame,temp);
+        JOptionPane.showMessageDialog(frame, temp);
+        popupLeaderboard(highScoresObj.getHighScoresTable());
+
     }
 
 
-
-    public void actionPerformed() {
+    /**
+     * Starts the timer
+     */
+    private void actionPerformed() {
         timerLabel.setText("5000");
         timer = new Timer(100, new ActionListener() {
             private int count = 5000;

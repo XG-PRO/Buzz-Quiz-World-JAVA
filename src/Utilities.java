@@ -21,11 +21,8 @@ public class Utilities {
         Collections.addAll(OUT, IN);
         return OUT;
     }
-    public static ArrayList<Character> CreateArrayListCharacter(Character [] IN) {
-        ArrayList<Character> OUT = new ArrayList<>(IN.length);
-        Collections.addAll(OUT, IN);
-        return OUT;
-    }
+    /*
+    OUR LEGACY CODE
     public static ArrayList<Character> generateLetters(int count){
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         ArrayList<Character> OUT = new ArrayList<>();
@@ -38,6 +35,7 @@ public class Utilities {
         return OUT;
     }
 
+     */
     /**
      * Generates a random int in a range [0,max].
      * @param max The max value must be max>0;
@@ -49,13 +47,15 @@ public class Utilities {
 
     }
     public static void whoWon(Player[] playersArr){
-        int maxPoints = playersArr[0].getPoints();
-        for(Player item : playersArr)
-            if (maxPoints<item.getPoints())
-                maxPoints = item.getPoints();
-        for(Player item : playersArr)
-            if (item.getPoints() == maxPoints)
-                item.setHasWon(true);
+        if (playersArr.length >1 ){
+            int maxPoints = playersArr[0].getPoints();
+            for(Player item : playersArr)
+                if (maxPoints<item.getPoints())
+                    maxPoints = item.getPoints();
+            for(Player item : playersArr)
+                if (item.getPoints() == maxPoints)
+                    item.setHasWon(true);
+        }
     }
 
 }

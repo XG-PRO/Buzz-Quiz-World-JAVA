@@ -16,14 +16,14 @@ class HighScoresTest {
     void addScore() {
         HighScores highScoresObj = new HighScores();
 
-        highScoresObj.addHighScore("Player 1",100);
-        highScoresObj.addHighScore("Player 2",100);
+        //highScoresObj.addHighScore("Player 1",100);
+        //highScoresObj.addHighScore("Player 2",100);
         highScoresObj.printScoresInOrder();
 
         System.out.println("----");
 
 
-        highScoresObj.addHighScore("Player 2",150);
+        //highScoresObj.addHighScore("Player 2",150);
         highScoresObj.printScoresInOrder();
 
 

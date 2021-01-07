@@ -65,6 +65,7 @@ public class Round {
         }
         if (temp == null) {
             Utilities.whoWon(playersArr);
+            frame.popupShowWinners();
             frame.exitFrame(1);  //RAN OUT OF QUESTIONS
             temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
         }
