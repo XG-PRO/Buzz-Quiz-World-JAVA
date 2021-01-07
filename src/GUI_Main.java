@@ -264,7 +264,7 @@ public class GUI_Main extends GUI{
 
         // Add player higher
         for (Player item : playersArr)
-                highScoresObj.addHighScore(item);
+            highScoresObj.addHighScore(item);
 
         StringBuilder temp = new StringBuilder();
         int numberOfWinners = 0;

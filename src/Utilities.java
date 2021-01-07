@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class Utilities {
 
-    /** These 3 functions basically ease the structure and internal development
+    /** These 2 functions basically ease the structure and internal development
      * of the MENU for the parser. They can all be generally used, either for input or output.
      * The most useful one is the generateLetters function which does
      * all of the above but even more dynamically.
@@ -48,6 +48,12 @@ public class Utilities {
         //return random.ints(min, max).findFirst().getAsInt();
 
     }
+
+    /**
+     * Global static method to compare players points for a winner to be declared
+     * A draw/tie gives both players a win
+     * @param playersArr the players of the game
+     */
     public static void whoWon(Player[] playersArr){
         if (playersArr.length >1 ){
             int maxPoints = playersArr[0].getPoints();
