@@ -13,7 +13,7 @@ public class Utilities {
      * The most useful one is the generateLetters function which does
      * all of the above but even more dynamically.
      * @param IN and count indicate the options or number of options the developer wants to generate
-     * @return a string OUT which contains ansswer protocols in order.
+     * @return a string OUT which contains answer protocols in order.
      */
 
     public static ArrayList<String> CreateArrayListString(String [] IN) {
@@ -21,23 +21,7 @@ public class Utilities {
         Collections.addAll(OUT, IN);
         return OUT;
     }
-    /*
-    //OUR LEGACY CODE
 
-
-    public static ArrayList<Character> generateLetters(int count){
-        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        ArrayList<Character> OUT = new ArrayList<>();
-        if (alphabet.length() < count){
-            System.out.println("OTAN DINEIS EPILOGES STON XRISTI AUTA PATHENEIS");
-            System.exit(-1);
-        }
-        for (int i = 0; i < count; i++)
-            OUT.add(alphabet.charAt(i));
-        return OUT;
-    }
-
-     */
     /**
      * Generates a random int in a range [0,max].
      * @param max The max value must be max>0;

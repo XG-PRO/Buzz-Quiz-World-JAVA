@@ -57,14 +57,13 @@ public class Round {
      * but with the timer as a win value
      * @param questionObj  current question
      * @param pos current player in accordance to his response
-     * @return  pointCalculator values regarding the timer
      */
 
-    protected boolean pointCalculatorTimer(Question questionObj, int pos){
+    protected void pointCalculatorTimer(Question questionObj, int pos){
         Player currentPlayer = responsesObj.getPlayerAtPos(pos);
         if (currentPlayer == null)
-            return false;
-        return pointCalculator(questionObj, pos, (int) (responsesObj.getTimeAtPos(pos) * 0.2), 0);
+            return;
+        pointCalculator(questionObj, pos, (int) (responsesObj.getTimeAtPos(pos) * 0.2), 0);
 
     }
 
@@ -82,8 +81,6 @@ public class Round {
         }
 
         if (temp == null) { //If there are no more questions in the directory, save the results, show the winners and terminate the game
-            //Utilities.whoWon(playersArr);
-            //frame.exitFrame(1);
             System.exit(-1);  //RAN OUT OF QUESTIONS
             temp = new Question("NULL", "NULL", Utilities.CreateArrayListString(new String[]{"NULL"})); // I added this for IntelliJ warnings
         }

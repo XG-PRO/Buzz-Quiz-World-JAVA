@@ -1,11 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class GUI_Main extends GUI_Logic{
 
@@ -98,7 +94,7 @@ public class GUI_Main extends GUI_Logic{
                     temp.append(currentPlayer.getName()).append(" gained : ").append(gainedPointsHash.get(currentPlayer));  //The corresponding player got positive points
                 }
                 else {
-                    temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1)); //The corresponding player got begative points
+                    temp.append(currentPlayer.getName()).append(" lost : ").append(gainedPointsHash.get(currentPlayer) * (-1)); //The corresponding player got negative points
                 }
                 temp.append(" points.\n");
             }
