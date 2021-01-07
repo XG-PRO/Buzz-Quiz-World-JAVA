@@ -476,13 +476,15 @@ public class GUI {
         JOptionPane.showMessageDialog(frame,"Welcome to Buzz Quiz World!\n\n" +
                         "Choose a number of players and answer questions with your corresponding keys!\n" +
                         "At the start of each round, you will be able to change the question category, which by default is random.\n" +
+                        "The game has 6 rounds of questions in total, with 5 question in each round except Thermometer.\n" +
                         "There are 5 types of rounds selected at random. Answer correctly and win!\n" +
                         "    Right Answer gives 1000 points for a right answer and 0 to a wrong one.\n" +
                         "    Bet allows you to bet points and gain double the amount if answered correctly.\n" +
                         "    Quick Answer gives double points to the faster player to answer correctly.\n" +
                         "    Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.\n" +
-                        "    Thermometer does some shit.\n" +
-                        "The highest scores will be recorded in a leaderboard. Have fun!",
+                        "    Thermometer presents questions until a player answers 5 correctly. The first one to do so gains 5000 points.\n" +
+                        "For more information and selections, click the cog on the upper left corner.\n" +
+                        "The highest scores as well as wins will be recorded in a leaderboard. Have fun!",
                 "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 }
