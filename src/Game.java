@@ -67,7 +67,7 @@ public class Game {
         }
 
         //Checks who has won, prints results and terminates
-        Utilities.whoWon(playersArr);
+        //Utilities.whoWon(playersArr);
         frame.exitFrame(0);
     }
 

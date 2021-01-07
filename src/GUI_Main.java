@@ -262,6 +262,9 @@ public class GUI_Main extends GUI{
      */
     public void popupShowWinners(){
 
+        //Check who won to present him
+        whoWon();
+
         // Add player higher
         for (Player item : playersArr)
             highScoresObj.addHighScore(item);
@@ -292,6 +295,17 @@ public class GUI_Main extends GUI{
 
     }
 
+    public  void whoWon(){
+        if (playersArr.length >1 ){
+            int maxPoints = playersArr[0].getPoints();
+            for(Player item : playersArr)
+                if (maxPoints<item.getPoints())
+                    maxPoints = item.getPoints();
+            for(Player item : playersArr)
+                if (item.getPoints() == maxPoints)
+                    item.setHasWon(true);
+        }
+    }
 
     /**
      * Starts a timer of 5000 ms and decreases it by 100 ms every 100 ms
