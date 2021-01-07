@@ -54,6 +54,7 @@ public class Utilities {
      * A draw/tie gives both players a win
      * @param playersArr the players of the game
      */
+    /*
     public static void whoWon(Player[] playersArr){
         if (playersArr.length >1 ){
             int maxPoints = playersArr[0].getPoints();
@@ -65,5 +66,7 @@ public class Utilities {
                     item.setHasWon(true);
         }
     }
+
+     */
 
 }
