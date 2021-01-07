@@ -50,11 +50,8 @@ public class Questions {
         addQuestion(obj);
     }
     public static boolean isQuestionImage(Question qsObj){
-        if (qsObj instanceof QuestionImage){
-            //System.out.println("Question Image");
-            return true;
-        }
-        return false;
+        //System.out.println("Question Image");
+        return qsObj instanceof QuestionImage;
     }
     /**
      * @param obj A question object
@@ -109,17 +106,6 @@ public class Questions {
         return null;
 
     }
-
-
-    /**
-     * Resets all questions status, to not shown before, useful to reset
-     */
-    public void resetAllViewed() {
-        for (String key : hash.keySet()) {
-            hashIterators.put(key, hash.get(key).iterator());
-        }
-    }
-
 
     /**
      * @return an Arraylist of all the types of questions

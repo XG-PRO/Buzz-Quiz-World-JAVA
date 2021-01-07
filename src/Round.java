@@ -18,7 +18,7 @@ public class Round {
 
     /**
      * This method shows the popup gained points, updates the player points in the frame, clears the responsesObj
-     * @param questionObj
+     * @param questionObj A Question Object
      */
     protected void updateFrame_ShowPopUp_Clear_Responses(Question questionObj){
 
@@ -50,11 +50,11 @@ public class Round {
         }
     }
 
-    protected boolean pointCalculatorTimer(Question questionObj, int pos){
+    protected void pointCalculatorTimer(Question questionObj, int pos){
         Player currentPlayer = responsesObj.getPlayerAtPos(pos);
         if (currentPlayer == null)
-            return false;
-        return pointCalculator(questionObj,pos,(int) (responsesObj.getTimeAtPos(pos)*0.2),0);
+            return;
+        pointCalculator(questionObj, pos, (int) (responsesObj.getTimeAtPos(pos) * 0.2), 0);
 
     }
     protected Question getRoundQuestion(){

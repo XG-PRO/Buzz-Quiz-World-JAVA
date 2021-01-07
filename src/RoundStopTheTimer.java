@@ -11,8 +11,6 @@ public class RoundStopTheTimer extends Round{
             currentQuestionType = frame.getChosenCategory();
             Question temp = getRoundQuestion();
 
-            int [] win_player = new int [playersArr.length];
-
             responsesObj = frame.showQuestionAndGetResponses(temp,true);
 
             gainedPointsHash.clear();

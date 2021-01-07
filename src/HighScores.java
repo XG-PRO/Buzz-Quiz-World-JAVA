@@ -1,5 +1,6 @@
 import java.io.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 public class HighScores {
     private TreeSet<Score> scoreTreeSet;
@@ -12,13 +13,10 @@ public class HighScores {
         boolean fileExist = true;
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("scores.dat"))) {
             scoreTreeSet = (TreeSet<Score>) in.readObject();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             //System.out.println("File Not Found\nCreating file...");
             fileExist = false;
             //e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            //e.printStackTrace();
-            fileExist = false;
         }
         if (!fileExist){
             this.scoreTreeSet = new TreeSet<>();

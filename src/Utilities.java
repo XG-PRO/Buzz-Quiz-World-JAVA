@@ -42,8 +42,8 @@ public class Utilities {
      * @return The random int
      */
     public static int random_int(int max) {
-            return new Random().nextInt(max);
-            //return random.ints(min, max).findFirst().getAsInt();
+        return new Random().nextInt(max);
+        //return random.ints(min, max).findFirst().getAsInt();
 
     }
     public static void whoWon(Player[] playersArr){

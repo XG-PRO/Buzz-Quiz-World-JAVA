@@ -25,7 +25,6 @@ public class RoundThermometer extends Round {
                     seriCounter.put(currentPlayer, seriCounter.get(currentPlayer)+1);
                 }
             }
-            Player firstPlayerToReach5QS = null;
             if (Collections.max(seriCounter.values()) >= 5)
                 for (int j = 0; j < playersArr.length; j++) {
                     Player currentPlayer = responsesObj.getPlayerAtPos(j);

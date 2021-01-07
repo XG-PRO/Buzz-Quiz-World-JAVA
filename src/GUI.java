@@ -32,14 +32,14 @@ public class GUI {
     protected JLabel txtRoundCount;
 
     protected HashMap<Player, JLabel> playerToJLabel_HashMap; // Hash Map from Player to JLabel Points (bottom panel)
-    protected HashMap<Character, JLabel> characterToJLabel_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
-    protected HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
+    protected final HashMap<Character, JLabel> characterToJLabel_HashMap; // Hash Map from Character (Respond Key) to JLabel Question respond
+    protected final HashMap<Character, Player> characterToPlayer_HashMap; // Hash Map (Respond Key) to Player
 
-    protected Font font_Verdana_Bold26;
-    protected Font font_Verdana_Plain20;
-    protected Font font_Verdana_Bold_20;
-    protected Font font_Verdana_Plain_18;
-    protected Color colorForOptionPanel;
+    protected final Font font_Verdana_Bold26;
+    protected final Font font_Verdana_Plain20;
+    protected final Font font_Verdana_Bold_20;
+    protected final Font font_Verdana_Plain_18;
+    protected final Color colorForOptionPanel;
     protected int numberOfPlayers;
     protected Player[] playersArr;
     protected Responses responsesObj;
@@ -47,7 +47,7 @@ public class GUI {
 
     private JMenuBar menubar;
     protected ButtonGroup group;
-    protected HighScores highScoresObj;
+    protected final HighScores highScoresObj;
     protected Timer timer;
 
     /**
@@ -55,10 +55,8 @@ public class GUI {
      */
     public GUI(ArrayList<String> categoriesOfQuestions) {
 
-        //Disable scaling this
-        //System.setProperty("sun.java2d.uiScale", "1.5");
         this.highScoresObj = new HighScores();
-        //Set OptionPane font tom
+        //Set Fonts
         font_Verdana_Bold26 = new Font("Verdana", Font.BOLD, 26);
         font_Verdana_Plain20 = new Font("Verdana", Font.PLAIN, 20);
 
@@ -77,8 +75,7 @@ public class GUI {
         UIManager.put("OptionPane.messagebackground", colorForOptionPanel);
         UIManager.put("Panel.background", colorForOptionPanel);
 
-        //UIManager.put("RadioButtonMenuItem.font",font_Verdana_Plain20);
-        //UIManager.put("Menu.font",font_Verdana_Plain20);
+
         // Make the frame
         frame = new JFrame();
         frame.setTitle("Buzz Quiz World 2020");
