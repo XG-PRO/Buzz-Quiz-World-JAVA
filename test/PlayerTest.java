@@ -1,13 +1,25 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PlayerTest {
+    Player obj;
+    @BeforeEach
+    void setUp() {
+        obj = new Player("dummy",new char[]{'a','b','c','d'});
+        assertEquals(obj.getPoints(),0);
+    }
+
+    @AfterEach
+    void tearDown() {
+        obj = null;
+    }
 
     @Test
     void getPoints() {
-        Player obj = new Player("dummy",new char[]{'a','b'});
-        assertEquals(obj.getPoints(),0);
 
         obj.increasePoints(100);
         assertEquals(obj.getPoints(),100);
@@ -17,9 +29,6 @@ class PlayerTest {
 
     @Test
     void increasePoints() {
-        Player obj = new Player("dummy",new char[]{'a','b'});
-        assertEquals(obj.getPoints(),0);
-
         obj.increasePoints(100);
         assertEquals(obj.getPoints(),100);
         obj.increasePoints(50);
@@ -29,9 +38,6 @@ class PlayerTest {
 
     @Test
     void decreasePoints() {
-        Player obj = new Player("dummy",new char[]{'a','b'});
-        assertEquals(obj.getPoints(),0);
-
         obj.increasePoints(100);
         assertEquals(obj.getPoints(),100);
         obj.decreasePoints(50);
@@ -40,13 +46,11 @@ class PlayerTest {
 
     @Test
     void getName() {
-        Player obj = new Player("dummy",new char[]{'a','b'});
         assertEquals(obj.getName(),"dummy");
     }
 
     @Test
     void getKeyboard_responses() {
-        Player obj = new Player("dummy",new char[]{'a','b','c','d'});
         assertArrayEquals(obj.getKeyboard_responses(),new char[]{'a','b','c','d'});
     }
 }

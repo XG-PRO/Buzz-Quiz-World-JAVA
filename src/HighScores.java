@@ -25,7 +25,7 @@ public class HighScores {
             this.scoreTreeSet = new TreeSet<>();
             writeToFile();
         }
-        //printScoresInOrder();
+        //Print File Status
     }
 
     /**
@@ -86,17 +86,6 @@ public class HighScores {
     }
 
     /**
-     * Prints all the saved scores, useful for debugging.
-     */
-    public void printScoresInOrder(){
-        Iterator<Score> scoreIterator = scoreTreeSet.descendingIterator();
-        while (scoreIterator.hasNext()){
-            Score item = scoreIterator.next();
-            System.out.println(item.toString()+ " CODE"+item.hashCode());
-        }
-    }
-
-    /**
      * Method that writes the current stored information into the file
      */
     private void writeToFile(){
@@ -109,5 +98,13 @@ public class HighScores {
             System.out.println("Problem when trying to create the file");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * It deletes all the scores in the file.
+     */
+    public void deleteAllScores(){
+        this.scoreTreeSet.clear();
+        writeToFile();
     }
 }

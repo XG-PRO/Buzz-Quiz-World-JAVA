@@ -31,11 +31,18 @@ public class Player {
         return points;
     }
 
+    /**
+     *
+     * @param p increase player points
+     */
     public void increasePoints(int p){
         points+=p;
     }
 
-
+    /**
+     *
+     * @param p decrease player points
+     */
     public void decreasePoints(int p){
         points-=p;
     }
@@ -44,13 +51,25 @@ public class Player {
         return name;
     }
 
+    /**
+     *
+     * @return a player's corresponding response keys,
+     */
     public char[] getKeyboard_responses(){
         return keyboard_responses;
     }
 
+    /**
+     *
+     * @param hasWon set whether player has won or not
+     */
     public void setHasWon(boolean hasWon) {
         this.hasWon = hasWon;
     }
+    /**
+     *
+     * @return if player has won or not
+     */
     public boolean getHasWon() {
         return hasWon;
     }

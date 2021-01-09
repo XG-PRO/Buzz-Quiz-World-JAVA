@@ -1,15 +1,28 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ResponsesTest {
-
-
+    Player pl1;
+    Player pl2;
+    Responses responses_obj;
+    @BeforeEach
+    void setUp(){
+        pl1 = new Player("dummy1",new char[]{});
+        pl2 = new Player("dummy2",new char[]{});
+        responses_obj = new Responses(2);
+    }
+    @AfterEach
+    void teardown() {
+        pl1 = null;
+        pl2 = null;
+        responses_obj.clearReset();
+    }
     @Test
     void clear_responses() {
-        Player pl1 = new Player("dummy1",new char[]{});
-        Player pl2 = new Player("dummy2",new char[]{});
-        Responses responses_obj = new Responses(2);
+
 
         responses_obj.addPlayerResponse(pl2, "true",0);
         responses_obj.addPlayerResponse(pl2, "false",0);
@@ -31,9 +44,6 @@ class ResponsesTest {
 
     @Test
     void addPlayerResponse() {
-        Player pl1 = new Player("dummy1",new char[]{});
-        Player pl2 = new Player("dummy2",new char[]{});
-        Responses responses_obj = new Responses(2);
 
         responses_obj.addPlayerResponse(pl2, "true",0);
         responses_obj.addPlayerResponse(pl1, "false",0);
@@ -48,9 +58,6 @@ class ResponsesTest {
 
     @Test
     void getPlayerAtPos() {
-        Player pl1 = new Player("dummy1",new char[]{});
-        Player pl2 = new Player("dummy2",new char[]{});
-        Responses responses_obj = new Responses(2);
 
         responses_obj.addPlayerResponse(pl2, "true",0);
         responses_obj.addPlayerResponse(pl1, "false",0);
@@ -62,9 +69,6 @@ class ResponsesTest {
 
     @Test
     void getResponseAtPos(){
-        Player pl1 = new Player("dummy1",new char[]{});
-        Player pl2 = new Player("dummy2",new char[]{});
-        Responses responses_obj = new Responses(2);
 
         responses_obj.addPlayerResponse(pl2, "true",0);
         responses_obj.addPlayerResponse(pl1, "false",0);
@@ -76,9 +80,6 @@ class ResponsesTest {
 
     @Test
     void addPlayerResponseTwoTimes() {
-        Player pl1 = new Player("dummy1",new char[]{});
-        Player pl2 = new Player("dummy2",new char[]{});
-        Responses responses_obj = new Responses(2);
 
         responses_obj.addPlayerResponse(pl2, "10",0);
         responses_obj.addPlayerResponse(pl1, "20",0);

@@ -2,34 +2,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QuestionImageTest {
 
     @Test
-    void getResponses() {
-    }
-
-    @Test
-    void getQuestion() {
-    }
-
-    @Test
-    void getType() {
-    }
-
-    @Test
-    void debugShowInfo() {
-    }
-
-    @Test
-    void getRightResponse() {
-    }
-
-    @Test
     void getImageName() {
-        Question obj = new QuestionImage("TEST","Type",new ArrayList<>(),"image.jpg");
-        assertEquals(obj instanceof QuestionImage,true);
-        assertEquals( ((QuestionImage)obj).getImageName(),"image.jpg");
+        Question[] te = new Question[2];
+        te[0] = new Question("Question","Type",new ArrayList<>());
+        te[1] = new QuestionImage("QuestionImage","Type",new ArrayList<>(), "image.jpg");
+        assertEquals( ((QuestionImage) te[1]).getImageName(),"image.jpg");
     }
 }
