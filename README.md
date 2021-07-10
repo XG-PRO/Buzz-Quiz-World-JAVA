@@ -1,3 +1,6 @@
+IMPORTANT NOTE:
+The final release incorporates the same game with a new GUI instead of terminal. Scoreboards now exist as well as 2 players support (same keybaord). The game also supports 3 new question types as well as a dynamic question and point system. Download the game and lauch it for more info and fun!
+
 ##BUZZ 
 <b>The Buzz Quiz Game<b><br>
 
