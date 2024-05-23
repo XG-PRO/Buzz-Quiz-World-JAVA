@@ -3,7 +3,7 @@
 An object-oriented Java application that utilizes Java Swing to portray an immersive quiz game akin to the popular game Buzz Quiz World.
 
 
-Written by @XG-PRO and @konmaz in July 2021
+Written by [@XG-PRO](https://github.com/XG-PRO) and [@konmaz](https://github.com/konmaz) in July 2021
 
 ![Splash](images/splash.jpg)
 
@@ -59,15 +59,15 @@ There are 5 types of rounds selected at random. The following is explained by se
      
 ![](images/bet.png)
  *   Quick Answer gives double points to the faster player to answer correctly. **Exclusive to 2 players**
- *   Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter. **Exclusive to 2 players.**
-     
+ *   Stop The Counter gives as many points to the players who answer correctly as the time remaining on the counter.
+
 <img src="images/counter.gif" alt="Counter">
 <!--- ![](images/counter.gif) -->
 
-*   Thermometer presents questions until a player answers 5 correctly. The first one to do so gains 5000 points.
-     
+*   Thermometer presents questions until a player answers 5 correctly. The first one to do so gains 5000 points.  **Exclusive to 2 players.**
+
 ![](images/thermometer.png)
-## Code Structure
+# Code Structure
 
 Multiple comments and explanations have been put inside each file. A lot of different files for different jobs have been created to utilize object-oriented programming and class hierarchy efficiently
 
