@@ -3,7 +3,7 @@
 An object-oriented Java application that utilizes Java Swing to portray an immersive quiz game akin to the popular game Buzz Quiz World.
 
 
-Written by [@XG-PRO](https://github.com/XG-PRO) and [@konmaz](https://github.com/konmaz) in July 2021
+Written by [@XG-PRO](https://github.com/XG-PRO) and [@konmaz](https://github.com/konmaz) in January 2021
 
 ![Splash](images/splash.jpg)
 
