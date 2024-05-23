@@ -8,7 +8,7 @@ Written by [@XG-PRO](https://github.com/XG-PRO) and [@konmaz](https://github.com
 ![Splash](images/splash.jpg)
 
 ## Installation
-* Download and run the BuzzQuiz.exe file from the releases. Ensure you have the Java JDK installed.
+* Download and run the BuzzQuiz.exe file from the releases. Ensure you have an appropriate Java JDK installed (Java 8 or later).
 The program also creates a scores.dat file to track leaderboards in the same directory as the .exe file.
 
 ## Features
@@ -55,7 +55,7 @@ When all rounds end, results are shown
 
 There are 5 types of rounds selected at random. The following is explained by selecting the Info option in-game:
  *   Right Answer gives 1000 points for a right answer and 0 to a wrong one.
- *   Bet allows you to bet points and gain double the amount if answered correctly.
+ *   Bet allows you to bet points and gain back double the amount if answered correctly.
      
 ![](images/bet.png)
  *   Quick Answer gives double points to the faster player to answer correctly. **Exclusive to 2 players**
@@ -69,13 +69,13 @@ There are 5 types of rounds selected at random. The following is explained by se
 ![](images/thermometer.png)
 # Code Structure
 
-Multiple comments and explanations have been put inside each file. A lot of different files for different jobs have been created to utilize object-oriented programming and class hierarchy efficiently
+Multiple comments and explanations have been put inside each file. A lot of different files for different jobs have been created to utilize object-oriented programming and class inheritance efficiently
 
 ### Game.java
 
-Starts immediately after main.java launches and contains the entire structure of the game. It builds questions, players, rounds, and the GUI frame. It then launches play() which starts the game.
+Starts immediately after main.java launches and contains the entire structure of the game. It builds questions, players, rounds, and the GUI frame. It then runs play() which starts the game.
 
-It also recursively reads and present questions until all rounds are finished.
+It also recursively reads and presents questions until all rounds are finished.
 
 Here you can change the number of rounds in play(), as well as add new players in setNumberOfPlayers().
 
@@ -94,7 +94,7 @@ Below is the basic structure of the panels used in the game:
 
 Extends GUI.java
 
-Contains the actions to show game-related logic on screen. This includes timers, questions and responses, as well as change rounds.
+Contains the actions to show game-related logic on screen. This includes timers, questions and responses, as well as changing rounds.
 
 ### GUI_Main.java
 
@@ -105,8 +105,8 @@ updates points and draws players' names and colors.
 
 ### Score.java
 
-This class contains the score of each player on all rounds played while the game was running.
-It also converts said scores to strings to be stores and displayed correctly.
+This class contains the score of each player on all rounds played while the game is running.
+It also converts said scores to strings to be stored and displayed correctly.
 
 It is later used in Highscores.java
 
@@ -114,17 +114,19 @@ It is later used in Highscores.java
 
 It contains trees with data about player names, wins and scores. It also sorts them out and saves them on a local file (scores.dat).
 
-At any points, it can be called to present the scores in game.
+At any point, it can be called to present the highscores in game.
 
 ### Player.java
 
-Represents a player. Each player has his own keyboard keys, name, points and appropriate functions for accessing said values outside class inheritance.
+Represents a player. Each player has his own keyboard keys, name, points and appropriate functions for accessing and changing said values.
 
 ### Question.java
 
-This class constructs the basic structure of each question to be used in the quiz  after gathering information from the file that was read from Game.java
+This class constructs the basic structure of each question to be used in the quiz after gathering information from the file that was read from Game.java
 
 It contains a name, a type and a responses array.
+
+It is used in Questions.java
 
 ### QuestionImage.java
 
@@ -136,7 +138,7 @@ This class handles the logic and usable functions regarding the questions of the
 
 It uses a hashmap to store all questions read from the .tsv file in Game.java and shuffles the questions.
 
-It also removes the questions answered while tha game is played
+It also removes the questions answered while the game is played
 
 It also checks if a question has an image to create it and include it respectively.
 
@@ -145,7 +147,7 @@ Also, it handles presenting questions either randomly or via a selected type fro
 ### Responses.java
 
 A helper class that keeps the order in which the players have answered.
-For example if "Player 2" has answered before "Player 1", he will be added first in the array and vice versa.
+For example if "Player 2" has answered before "Player 1", he will be added first in the priority array and vice versa.
 
 ### Round.java
 
@@ -166,7 +168,7 @@ The final java class. It is mainly used for debugging purposes, randomization an
 
 
 
-# Regarding release 2.3.2:\
+# Regarding release 2.3.2:
 \
 A scores.dat files is created in the same directory as the .exe file to keep track of scores. Old files can be transferred as well.\
 This is the final release reuploaded, as old releases where negated due to forking and reuploading.\
@@ -174,7 +176,8 @@ This is the final release reuploaded, as old releases where negated due to forki
 ------------------------------------------------------------
 Adding additional questions can be done to the source code by simply opening the packageQuestions/quiz.tsv file and adding them manually
 images can be included into packageQuestions/images and can be added to quiz.tsv by replacing the "NoImage" cell with the image's filename
-IMPORTANT: If you don't add an image, include the "NoImage" besides the answer
+
+**IMPORTANT**: If you don't add an image, include the "NoImage" besides the answer
 
 ------------------------------------------------------------
 Have fun with the game!
